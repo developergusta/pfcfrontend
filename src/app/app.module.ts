@@ -36,7 +36,6 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { EditComponent } from './profile/edit/edit.component';
 import { EventsComponent } from './profile/events/events.component';
 import { TicketsComponent } from './profile/tickets/tickets.component';
-import { SelectTicketComponent } from './eventos/select-ticket/select-ticket.component';
 import { SelectCategoryComponent } from './eventos/select-category/select-category.component';
 import { EditComponent as EditEventProfileComponent } from './profile/events/edit/edit.component';
 import { AngularFireModule } from '@angular/fire';
@@ -58,7 +57,6 @@ import { environment } from 'src/environments/environment';
       EditEventProfileComponent,
       EventsComponent,
       TicketsComponent,
-      SelectTicketComponent,
       SelectCategoryComponent,
    ],
    imports: [
