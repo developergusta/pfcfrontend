@@ -6,6 +6,8 @@ import { SectionsComponent } from './sections.component';
 import { ButtonsSectionComponent } from './buttons-section/buttons-section.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FeaturedSectionComponent } from './featured-section/featured-section.component';
+import { RouterModule } from '@angular/router';
+
 
 
 
@@ -19,7 +21,8 @@ import { FeaturedSectionComponent } from './featured-section/featured-section.co
   ],
   imports: [
     CommonModule,
-    NgbModule
+    NgbModule,
+    RouterModule 
   ],
   exports: [ SectionsComponent ]
 })

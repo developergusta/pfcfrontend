@@ -1,5 +1,4 @@
 import { SelectCategoryComponent } from './eventos/select-category/select-category.component';
-import { SelectTicketComponent } from './eventos/select-ticket/select-ticket.component';
 import { TicketsComponent } from './profile/tickets/tickets.component';
 import { EventsComponent } from './profile/events/events.component';
 import { EditComponent } from './profile/edit/edit.component';
@@ -32,7 +31,6 @@ const routes: Routes = [
     children: [
       { path: '', component: EventosComponent },
       { path: ':id/category', component: SelectCategoryComponent },
-      { path: 'ticket', component: SelectTicketComponent },
     ]
   },
   { path: 'eventos', component: EventosComponent },

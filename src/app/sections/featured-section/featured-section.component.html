@@ -11,11 +11,11 @@
     <div class="row">
       <div class="col col-lg-4 mb-5" *ngFor="let item of eventos">
         <div class="property-card">
-          <a [routerLink]="['/eventos/category']">
+          <a [routerLink]="['/eventos/' + item.eventId + '/category']">
             <div
               *ngIf="item.images"
               class="property-image"
-              [style.backgroundImage]="'url(' + item.images.src + ')'"
+              [style.backgroundImage]="'url(' + item.images[0].src + ')'"
             >
               <div class="property-image-title">
                 <!-- Optional <h5>Card Title</h5> If you want it, turn on the CSS also. -->
