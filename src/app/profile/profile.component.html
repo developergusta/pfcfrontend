@@ -1,0 +1,242 @@
+<main class="profile-page">
+  <section class="section-profile-cover section-shaped my-0">
+    <!-- Circles background -->
+    <div class="shape shape-style-1 shape-primary alpha-4">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <!-- SVG separator -->
+    <div class="separator separator-bottom separator-skew">
+      <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
+        xmlns="http://www.w3.org/2000/svg">
+        <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
+      </svg>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="card card-profile shadow mt--300">
+        <div class="px-4">
+          <div class="row justify-content-center">
+            <div class="col-lg-3 order-lg-2">
+              <div class="card-profile-image">
+                <a href="javascript:void(0)">
+                  <img src="{{user.image.src}}" class="rounded-circle">
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-4 order-lg-3 text-lg-right align-self-lg-center">
+              <div class="card-profile-actions py-4 mt-lg-0">
+                <a href="javascript:void(0)" class="btn btn-sm btn-info mr-4" (click)="getTickets()">Meus ingressos</a>
+                <a [routerLink]="['/profile/edit']" class="btn btn-sm btn-default float-right">
+                  Editar perfil
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-4 order-lg-1">
+              <div class="card-profile-stats d-flex justify-content-center">
+                <div>
+                  <span class="heading">22</span>
+                  <span class="description">Meus Tickets</span>
+                </div>
+                <!-- <div>
+                  <span class="heading">10</span>
+                  <span class="description">Photos</span>
+                </div>
+                <div>
+                  <span class="heading">89</span>
+                  <span class="description">Comments</span>
+                </div> -->
+              </div>
+            </div>
+          </div>
+          <div class="text-center mt-5">
+            <h3>{{user.name}}
+              <span class="font-weight-light">, {{idade}}</span>
+            </h3>
+            <div class="h6 font-weight-300"><i class="ni location_pin mr-2"></i>{{getFirstAddress().city}},
+              {{getFirstAddress().country}}</div>
+            <div class="h6 mt-4"><i class="ni business_briefcase-24 mr-2"></i>_
+            </div>
+            <div><i class="ni education_hat mr-2"></i>Usuário novo</div>
+          </div>
+          <div class="mt-5 py-5 border-top text-center">
+            <div class="row justify-content-center">
+              <div class="col-lg-9">
+                <button class="btn btn-lg btn-warning" type="button" (click)="openPDF()">
+                  <span class="btn-inner--icon">
+                    <i class="fas fa-file-pdf mr-2"></i>
+                  </span>
+                  Exportar relatório
+                </button>
+                <button class="btn btn-lg btn-info" type="button" (click)="getTickets()">
+                  <span class="btn-inner--icon">
+                    <i class="fas fa-ticket-alt mr-2"></i>
+                  </span>
+                  Meus Tickets
+                </button>
+                <button class="btn btn-lg btn-success" type="button" (click)="createModalEvent(criar)">
+                  <span class="btn-inner--icon">
+                    <i class="fas fa-calendar-week mr-2"></i>
+                  </span>
+                  Criar Evento
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+
+
+<div bsModal #criar="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">CRIE SEU EVENTO</h4>
+        <button type="button" class="close pull-right" (click)="criar.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form *ngIf="eventProgress === 0">
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label>Título do evento</label>
+              <input type="text" name="titleEvent" class="form-control form-control-alternative"
+                [(ngModel)]="evento.titleEvent" [ngModelOptions]="{standalone: true}" required minlength="3">
+              <div *ngIf="evento.titleEvent.length < 4" class="invalid-feedback">
+                Título deve ter no mínimo 4 Caracteres.
+              </div>
+              <div *ngIf="evento.titleEvent.length > 50" class="invalid-feedback">
+                Título deve ter no máximo 50 Caracteres.
+              </div>
+            </div>
+            <div class="form-group col-md-12">
+              <label>Descrição do evento</label>
+              <textarea type="text" class="form-control form-control-alternative" [(ngModel)]="evento.description"
+                [ngModelOptions]="{standalone: true}" required></textarea>
+            </div>
+            <div class="form-group col-md-12">
+              <label>Categoria</label>
+              <input type="text" class="form-control form-control-alternative" [(ngModel)]="evento.category"
+                [ngModelOptions]="{standalone: true}" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-8">
+              <label>País</label>
+              <input type="text" class="form-control form-control-alternative" [(ngModel)]="evento.address.country"
+                [ngModelOptions]="{standalone: true}" required minlength="3" placeholder="">
+            </div>
+            <div class="form-group col-md-4">
+              <label>CEP</label>
+              <input type="text" class="form-control form-control-alternative" [(ngModel)]="evento.address.zipCode"
+                [ngModelOptions]="{standalone: true}" required mask="00000-000" (change)="buscaCEP()" placeholder="">
+            </div>
+            <div class="form-group col-md-4">
+              <label>Estado</label>
+              <input type="text" class="form-control form-control-alternative" [(ngModel)]="evento.address.state"
+                [ngModelOptions]="{standalone: true}" required minlength="2" placeholder="">
+            </div>
+            <div class="form-group col-md-8">
+              <label>Cidade</label>
+              <input type="text" class="form-control form-control-alternative" [(ngModel)]="evento.address.city"
+                [ngModelOptions]="{standalone: true}" placeholder="">
+            </div>
+            <div class="form-group col-md-8">
+              <label>Logradouro</label>
+              <input type="text" class="form-control form-control-alternative" [(ngModel)]="evento.address.street"
+                [ngModelOptions]="{standalone: true}" placeholder="">
+            </div>
+            <div class="form-group col-md-4">
+              <label>Número</label>
+              <input type="number" class="form-control form-control-alternative" [(ngModel)]="evento.address.num"
+                [ngModelOptions]="{standalone: true}" placeholder="">
+            </div>
+            <div class="form-group col-md-12">
+              <label>Complemento</label>
+              <input type="text" class="form-control form-control-alternative" [(ngModel)]="evento.address.complement"
+                [ngModelOptions]="{standalone: true}" placeholder="">
+            </div>
+            <div class="form-group col-md-4">
+              <label>Data de INÍCIO</label>
+              <input type="text" class="form-control form-control-alternative" bsDatepicker
+                [(ngModel)]="evento.dateStart" [ngModelOptions]="{standalone: true}"
+                value="{{dateStart | DateFormatPipe}}" [bsConfig]="{ dateInputFormat : 'DD/MM/YYYY' }" placeholder="">
+            </div>
+            <div class="form-group col-md-2">
+              <label>Hora INICIO</label>
+              <input type="time" placeholder="" class="form-control form-control-alternative"
+                (change)="updtHorario1($event)">
+            </div>
+            <div class="form-group col-md-4">
+              <label>Data do FIM</label>
+              <input type="text" class="form-control form-control-alternative" bsDatepicker [(ngModel)]="evento.dateEnd"
+                [ngModelOptions]="{standalone: true}" value="{{dateEnd | DateFormatPipe}}"
+                [bsConfig]="{ dateInputFormat : 'DD/MM/YYYY' }" placeholder="">
+            </div>
+            <div class="form-group col-md-2">
+              <label>Hora FIM</label>
+              <input type="time" placeholder="" class="form-control form-control-alternative"
+                (change)="updtHorario1($event)">
+            </div>
+            <div class="form-group col-md-4">
+              <label>Qtd máxima de pessoas</label>
+              <input type="number" placeholder="" class="form-control form-control-alternative"
+                [(ngModel)]="evento.capacity" [ngModelOptions]="{standalone: true}" min="1" max="1000000">
+            </div>
+          </div>
+        </form>
+        <div class="progress-wrapper" *ngIf="eventProgress > 0">
+          <div class="progress-info">
+            <div class="progress-label">
+              <span>Salvando evento</span>
+            </div>
+            <div class="progress-percentage">
+              <span>{{eventProgress}}%</span>
+            </div>
+          </div>
+          <ngb-progressbar type="default" [(value)]="eventProgress"></ngb-progressbar>
+        </div>
+        <div *ngIf="eventProgress === 100">
+          <ngb-alert type="warning" [dismissible]="true">
+            <ng-container>
+              <div class="alert-inner--icon">
+                <i class="ni ni-bell-55"></i>
+              </div>
+            </ng-container>
+            <span class="alert-inner--text"> <strong>
+                <h3>Atenção!</h3>
+              </strong>
+              <p>É essencial editar o evento preenchendo com o preço dos ingressos, lotes e categorias (se houver) de ingressos, antes que seja publicado
+              </p>
+            </span>
+          </ngb-alert>
+          <button class="btn btn-lg btn-success" type="button" [routerLink]="getEventEditUrl()">
+            <span class="btn-inner--icon">
+              <i class="fas fa-calendar-week mr-2"></i>
+            </span>
+            EDITAR EVENTO
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer d-flex">
+        <button class="btn btn-secondary disabled" (click)="criar.hide()" [disabled]="eventProgress > 0">
+          Fechar
+        </button>
+        <button class="btn btn-primary ml-auto" (click)="salvarAlteracao(criar)" [disabled]="eventProgress > 0">
+          Salvar Alterações
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

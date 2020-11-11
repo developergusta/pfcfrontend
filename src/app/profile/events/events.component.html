@@ -1,0 +1,58 @@
+<main class="profile-page">
+  <section class="section-profile-cover section-shaped my-0">
+    <!-- Circles background -->
+    <div class="shape shape-style-1 shape-primary alpha-4">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <!-- SVG separator -->
+    <div class="separator separator-bottom separator-skew">
+      <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
+        xmlns="http://www.w3.org/2000/svg">
+        <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
+      </svg>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="card card-profile shadow mt--300">
+        <div class="px-4">
+          <div class="row d-flex justify-content-start">
+            <div class="col-lg-4 order-lg-1">
+              <div clas s="picsum-img-wrapper col-md-3" >
+                <img src="https://img.icons8.com/officel/80/000000/circled-left-2.png" alt="Online"
+                  class="img-fluid rounded-circle" style="width: 90px;cursor: pointer;" [routerLink]="['/profile']">
+              </div>
+            </div>
+          </div>
+          <div class="text-center mt-5">
+          </div>
+          <div class="mt-5 py-5 border-top text-center">
+            <div class="row justify-content-center">
+              <div class="col-lg-9">
+                <input type="button" value="Download PDF" class="btn btn-lg btn-success">
+                <button class="btn btn-lg btn-info" type="button" >
+                  <span class="btn-inner--icon">
+                    <i class="fas fa-ticket-alt mr-2"></i>
+                  </span>
+                  Meus Tickets
+                </button>
+                <button class="btn btn-lg btn-success" type="button" >
+                  <span class="btn-inner--icon">
+                    <i class="fas fa-calendar-week mr-2"></i>
+                  </span>
+                  Criar Evento
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

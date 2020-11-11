@@ -1,0 +1,104 @@
+<nav id="navbar-main"
+  class="navbar navbar-main navbar-expand-lg navbar-transparent navbar-light headroom headroom--top headroom--pinned"
+  *ngIf="showMenu()">
+  <div class="container">
+    <a class="navbar-brand mr-lg-5" [routerLink]="['/home']">
+      <img src="./assets/img/logo/ticket2u_logo.png">
+    </a>
+    <button class="navbar-toggler" type="button" (click)="isCollapsed = !isCollapsed"
+      [attr.aria-expanded]="!isCollapsed" aria-controls="navbar_global">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse" id="navbar_global" [ngbCollapse]="isCollapsed">
+      <div class="navbar-collapse-header">
+        <div class="row">
+          <div class="col-6 collapse-brand">
+            <a [routerLink]="['/home']">
+              <img src="./assets/img/logo/ticket2u_logo.png">
+            </a>
+          </div>
+          <div class="col-6 collapse-close">
+            <button type="button" class="navbar-toggler" (click)="isCollapsed = !isCollapsed"
+              [attr.aria-expanded]="!isCollapsed" aria-controls="navbar_global">
+              <span></span>
+              <span></span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <h3 class="heading-title text-warning mb-0">Ticket 2U</h3>
+      <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
+        <li class="nav-item dropdown">
+          <a class="nav-link no-caret" data-toggle="dropdown" role="button">
+            <i class="ni ni-collection d-lg-none"></i>
+            <span class="nav-link-inner--text">Menu</span>
+          </a>
+          <div class="dropdown-menu">
+            <a [routerLink]="['/profile']" class="dropdown-item">Perfil</a>
+            <a *ngIf="!logged" [routerLink]="['/login']" class="dropdown-item">Login</a>
+            <a *ngIf="!logged" [routerLink]="['/register']" class="dropdown-item">Registrar-se</a>
+            <a [routerLink]="['/eventos']" class="dropdown-item">Eventos</a>
+          </div>
+        </li>
+      </ul>
+      <ul class="navbar-nav align-items-lg-center ml-lg-auto">
+        <li class="nav-item d-none d-lg-block ml-lg-4" *ngIf="!logged">
+          <a [routerLink]="['/login']" target="_blank" class="btn btn-neutral btn-icon">
+            <span class="btn-inner--icon">
+              <i class="fa fa-user mr-2"></i>
+            </span>
+            <span class="nav-link-inner--text">Login</span>
+          </a>
+        </li>
+        <li class="nav-item d-none d-lg-block ml-lg-4" *ngIf="logged && !isPerfil()" [routerLink]="['/profile']">
+          <button class="btn btn-info btn-icon">
+            <span class="btn-inner--icon">
+              <i class="fa fa-user mr-2"></i>
+            </span>
+            <span class="nav-link-inner--text">Perfil</span>
+          </button>
+        </li>
+        <li class="nav-item d-none d-lg-block ml-lg-4" *ngIf="logged && isPerfil()" [routerLink]="['/eventos']">
+          <button class="btn btn-warning btn-icon">
+            <span class="btn-inner--icon">
+              <i class="fas fa-calendar mr-2"></i>
+            </span>
+            <span class="nav-link-inner--text">Eventos</span>
+          </button>
+        </li>
+        <li class="nav-item d-none d-lg-block ml-lg-4" *ngIf="logged" (click)="openModal(logout)">
+          <button class="btn btn-danger btn-icon">
+            <span class="btn-inner--icon">
+              <i class="fa fa-user mr-2"></i>
+            </span>
+            <span class="nav-link-inner--text">Logout</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div bsModal #logout="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">DESEJA SAIR DA SUA CONTA?</h4>
+        <button type="button" class="close pull-right" (click)="logout.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer d-flex">
+        <button class="btn btn-secondary" (click)="logout.hide()">
+          Fechar
+        </button>
+        <button class="btn btn-primary ml-auto" (click)="confirmLogout(logout)">
+          Sim
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

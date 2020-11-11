@@ -1,0 +1,111 @@
+<div class="position-relative">
+  <h2>
+    {{titulo}}
+  </h2>
+  <!-- <div class="d-flex">
+    <div class="form-inline mr-auto">
+      <div class="form-group mb-2">
+        <label class="mr-2">Filtro:</label> <input type="text" class="form-control mr-2" placeholder="buscar"
+          [(ngModel)]="filtroLista">
+      </div>
+    </div>
+    <div>
+      <button class="btn btn-outline-primary" (click)="novoEvento(cadastro)">
+        <i class="fa fa-plus-circle"></i>&nbsp;
+        Novo Evento
+      </button>
+    </div>
+  </div> -->
+  <!-- <h3>Filtro: {{filtroLista}}</h3> -->
+  <table class="table table-striped">
+    <thead class="thead-light">
+      <tr>
+        <th>
+          Imagens
+        </th>
+        <th>ID</th>
+        <th>Título</th>
+        <th>Categoria</th>
+        <th>Local</th>
+        <th>Data</th>
+        <th>Capacidade max.</th>
+        <th>Lote</th>
+        <th colspan="2">Opções</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="eventos && eventos.length">
+      <tr *ngFor="let evento of eventos">
+          <td>
+            <button class="btn btn-nfo" ngbTooltip="Visualizar imagens" placement="top">
+              <i class="fas fa-images"></i>
+            </button>
+          </td>
+          <td>{{evento.eventId}}</td>
+          <td>{{evento.titleEvent}}</td>
+          <td>{{evento.category}}</td>
+          <td>{{evento.address.city}} - {{evento.address.state}} </td>
+          <td>{{evento.dateStart | date: 'short': '-3000': 'pt-BR'}}</td>
+          <td>{{evento.capacity}}</td>
+          <td>
+            <div *ngIf="!evento.lots.length">
+              Não Informado
+            </div>
+            <div *ngIf="evento.lots.length === 1">
+              Lote único
+            </div>
+            <div *ngIf="evento.lots.length > 1">
+              {{evento.lots.length}}
+            </div>
+          </td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-sm btn-success" placement="top" ngbTooltip="Aprovar"
+                tooltip="Aprovar" (click)="aprovarEvento(evento, confirm, 'APROVAR')">
+                <i class="fas fa-check"></i>
+              </button>
+              <button class="btn btn-sm btn-danger btn-tooltip" placement="top" tooltip="Negar" placement="top"
+                ngbTooltip="Negar" (click)="negarEvento(evento, confirm)">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </td>
+      </tr>
+    </tbody>
+    <tfoot *ngIf="!eventos">
+      <tr>
+        <td colspan="7" class="text-center">
+          <h4>
+            Nenhum evento aprovado encontrado!
+          </h4>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div bsModal #confirm="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">
+            Deletando Evento
+          </h4>
+          <button type="button" class="close pull-right" (click)="confirm.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- <p>{{bodyDeletarEvento}}</p> -->
+        </div>
+        <div class="modal-footer btn-group d-flex">
+          <button type="button" class="btn btn-outline-primary" (click)="confirm.hide()">
+            CENCELAR
+          </button>
+          <button type="button" class="btn btn-outline-danger" (click)="confirmApproval(confirm)">
+            DELETAR
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

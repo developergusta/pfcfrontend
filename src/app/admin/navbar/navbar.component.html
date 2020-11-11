@@ -1,0 +1,95 @@
+<nav class="navbar navbar-expand-md fixed-top navbar-dark flex-fill">
+  <!-- <button class="sidebar-toggler ml-4" type="button">
+    <i class="fa fa-navicon"></i>
+  </button> -->
+  <!-- header -->
+  <div class="navbar-header pl-2 pr-2 ml-3 text-center">
+    <a class="navbar-brand m-0 w-100" href="#">
+      <!-- <i class="fa fa-flash mr-1"></i> -->
+      <img src="./assets/img/logo/ticket2u_logo.png" alt="lightning logo" width="35px">
+      <span class="ml-1">Ticket 2U</span>
+    </a>
+  </div>
+  <!-- sidebar toggler -->
+  <div class="sidebar-toggler ml-auto mr-3">
+    <a class="btn nav-link" (click)="toggleSidebar()"><i class="fa fa-bars"></i></a>
+  </div>
+  <!-- right menu toggler -->
+  <div class="nav-toggler-right mr-4 d-md-none">
+    <button class="" type="button" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed"
+      aria-controls="collapseBasic">
+      <!-- <span class="navbar-toggler-icon"></span> -->
+      <img src="https://cdn.iconscout.com/icon/free/png-512/laptop-user-1-1179329.png" class="img-fluid" alt="">
+    </button>
+    <span class="user-profile nav-alert bg-danger"></span>
+  </div>
+  <!-- left box -->
+  <ul class="navbar-nav flex-fill mt-1 align-items-center left-nav">
+    <li class="nav-item navicon">
+      <a class="btn nav-link" (click)="toggleSidebarPin()"><i class="fa fa-bars"></i></a>
+    </li>
+    <li class="nav-item flex-fill">
+      <input class="form-control navbar-search" type="text" placeholder="Search . . .">
+    </li>
+  </ul>
+
+  <!-- right menu -->
+  <div class="collapse navbar-collapse right-nav" id="collapseBasic" collapse="isCollapsed">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="btn nav-link">
+          <i class="far fa-bell"></i>
+          <span class="link-text">Alerts</span>
+          <!-- <span class="badge badge-pill ba dge-danger">3</span> -->
+          <span class="nav-alert notifications"></span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="btn nav-link">
+          <i class="far fa-envelope"></i>
+          <span class="link-text">Messages</span>
+          <!-- <span class="badge badge-pill badge-success">5</span> -->
+          <span class="nav-alert messages"></span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="btn nav-link">
+          <i class="far fa-user"></i>
+          <span class="link-text">Profile</span>
+        </a>
+      </li>
+      <li class="nav-item d-none d-lg-block ml-lg-4" (click)="openModal(logout)" >
+        <button class="btn btn-danger btn-icon">
+          <span class="btn-inner--icon">
+            <i class="fa fa-user mr-2"></i>
+          </span>
+          <span class="nav-link-inner--text">Logout</span>
+        </button>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div bsModal #logout="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">DESEJA SAIR DA SUA CONTA?</h4>
+        <button type="button" class="close pull-right" (click)="logout.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer d-flex">
+        <button class="btn btn-secondary" (click)="logout.hide()">
+          Fechar
+        </button>
+        <button class="btn btn-primary ml-auto" (click)="confirmLogout(logout)">
+          Sim
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

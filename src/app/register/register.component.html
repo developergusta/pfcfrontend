@@ -1,0 +1,242 @@
+<main>
+  <section class="section section-shaped section-lg">
+    <div class="shape shape-style-1 bg-gradient-default">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="container pt-lg-md">
+      <div class="row justify-content-center">
+        <div class="col-lg-5">
+          <div class="card bg-secondary shadow border-0">
+            <div class="card-header bg-white pb-5">
+              <div class="text-muted text-center mb-3">
+                <small>Entre com</small>
+              </div>
+              <div class="text-center">
+                <a href="javascript:void(0)" class="btn btn-neutral btn-icon">
+                  <span class="btn-inner--icon">
+                    <img src="./assets/img/icons/common/google.svg">
+                  </span>
+                  <span class="btn-inner--text">Google</span>
+                </a>
+              </div>
+            </div>
+            <div class="card-body px-lg-5 py-lg-5">
+              <div class="text-center text-muted mb-4">
+                <small>Ou entre com suas credenciais</small>
+              </div>
+              <form [formGroup]="registerForm">
+                <div class="form-group" [ngClass]="{'focused':focus===true}" >
+                  <div class=" input-group input-group-alternative mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                    </div>
+                    <input class="form-control form-control-alternative"
+                      [ngClass]="{'is-invalid': registerForm.get('name').errors && registerForm.get('name').touched}"
+                      placeholder="Name" type="text" (focus)="focus=true" (blur)="focus=false"
+                      formControlName="name">
+                      <div *ngIf="registerForm.get('name').hasError('required') && registerForm.get('name').touched" class="invalid-feedback">Campo obrigatório</div>
+                      <div *ngIf="registerForm.get('name').hasError('minlength') && registerForm.get('name').touched" class="invalid-feedback">Mínimo 2 caracteres</div>
+                      <div *ngIf="registerForm.get('name').hasError('maxlength') && registerForm.get('name').touched" class="invalid-feedback">Máximo 255 caracteres</div>
+                  </div>
+                </div>
+                <div class="form-group" [ngClass]="{'focused':focus===true}">
+                  <div class="input-group input-group-alternative mb-3">
+                    <div class="input-group-prepend">
+                      <div class="input-group is-invalid">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
+                        </div>
+                        <input class="form-control form-control-alternative" placeholder="Data de nascimento" bsDatepicker [minDate]="minDate" [maxDate]="maxDate"
+                          (focus)="focus2=true" (blur)="focus2=false"
+                          type="text" autocomplete="off" formControlName="dateBirth"
+                          [ngClass]="{'is-invalid': registerForm.get('dateBirth').errors && registerForm.get('dateBirth').touched}">
+                          <div *ngIf="registerForm.get('dateBirth').hasError('required') && registerForm.get('dateBirth').touched" class="invalid-feedback">Campo obrigatório</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                  <div class="input-group input-group-alternative mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="ni ni-circle-08"></i></span>
+                    </div>
+                    <input class="form-control form-control-alternative" placeholder="CPF" type="text" (focus)="focus1=true"
+                      (blur)="focus1=false" formControlName="cpf" [ngClass]="{'is-invalid': registerForm.get('cpf').errors && registerForm.get('cpf').touched}">
+                      <div *ngIf="registerForm.get('cpf').hasError('required') && registerForm.get('cpf').touched" class="invalid-feedback">Campo obrigatório</div>
+                      <div *ngIf="registerForm.get('cpf').hasError('maxlength') && registerForm.get('cpf').touched" class="invalid-feedback">Máximo 14 caracteres</div>
+                  </div>
+                </div>
+                <div class="form-group" [ngClass]="{'focused':focus1===true}">
+                  <div class="input-group input-group-alternative mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="ni ni-circle-08"></i></span>
+                    </div>
+                    <input class="form-control form-control-alternative" placeholder="RG" type="text" (focus)="focus1=true" (blur)="focus1=false"
+                      formControlName="rg" [ngClass]="{'is-invalid': registerForm.get('rg').errors && registerForm.get('rg').touched}">
+                      <div *ngIf="registerForm.get('rg').hasError('required') && registerForm.get('rg').touched" class="invalid-feedback">Campo obrigatório</div>
+                      <div *ngIf="registerForm.get('rg').hasError('maxlength') && registerForm.get('rg').touched" class="invalid-feedback">Máximo 12 caracteres</div>
+                  </div>
+                </div>
+                <!--div class="form-group" [ngClass]="{'focused':focus1===true}" formGroupName="image">
+                  <div class="input-group input-group-alternative mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="ni ni-circle-08"></i></span>
+                    </div>
+                    <input class="form-control form-control-alternative" placeholder="Imagem" type="text" (focus)="focus1=true"
+                      (blur)="focus1=false" formControlName="src" [(ngModel)]="user.image" [ngClass]="{'is-invalid': registerForm.get('image.src').errors && registerForm.get('image.src').touched}">
+                      <div *ngIf="registerForm.get('image.src').hasError('maxlength') && registerForm.get('image.src').touched" class="invalid-feedback">Máximo 255 caracteres</div>
+                  </div>
+                </!--div>
+                <div class="form-group" [ngClass]="{'focused':focus1===true}" formGroupName="phone">
+                  <div class="input-group input-group-alternative mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                    </div>
+                    <input class="form-control form-control-alternative" placeholder="Telefone" type="text" (focus)="focus1=true"
+                      (blur)="focus1=false" formControlName="number" [ngClass]="{'is-invalid': registerForm.get('phone.number').errors && registerForm.get('phone.number').touched}">
+                      <div *ngIf="registerForm.get('phone.number').hasError('required') && registerForm.get('phone.number').touched" class="invalid-feedback">Campo obrigatório</div>
+                      <div *ngIf="registerForm.get('phone.number').hasError('minlength') && registerForm.get('phone.number').touched" class="invalid-feedback">Mínimo 8 caracteres</div>
+                      <div *ngIf="registerForm.get('phone.number').hasError('maxlength') && registerForm.get('phone.number').touched" class="invalid-feedback">Máximo 255 caracteres</div>
+                  </div>
+                </--div>
+                <div class="form-group" [ngClass]="{'focused':focus1===true}" formGroupName="address">
+                  <div class="input-group input-group-alternative mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="ni ni-pin-3"></i></span>
+                    </div>
+                    <input class="form-control form-control-alternative" placeholder="CEP" type="text" (focus)="focus1=true"
+                      (blur)="focus1=false" formControlName="zipCode" [ngClass]="{'is-invalid': registerForm.get('address.zipCode').errors && registerForm.get('address.zipCode').touched}">
+                      <div *ngIf="registerForm.get('address.zipCode').hasError('maxlength') && registerForm.get('address.zipCode').touched" class="invalid-feedback">Máximo 20 caracteres</div>
+                  </div>
+                </div>
+                <div class="form-group" [ngClass]="{'focused':focus1===true}" formGroupName="address">
+                  <div class="input-group input-group-alternative mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="ni ni-pin-3"></i></span>
+                    </div>
+                    <input class="form-control form-control-alternative" placeholder="Logradouro" type="text" (focus)="focus1=true"
+                      (blur)="focus1=false" formControlName="street" [ngClass]="{'is-invalid': registerForm.get('address.street').errors && registerForm.get('address.street').touched}">
+                      <div *ngIf="registerForm.get('address.street').hasError('required') && registerForm.get('address.street').touched" class="invalid-feedback">Campo obrigatório</div>
+                      <div *ngIf="registerForm.get('address.street').hasError('maxlength') && registerForm.get('address.street').touched" class="invalid-feedback">Máximo 255 caracteres</div>
+                  </div>
+                </div>
+                <div class="form-group" [ngClass]="{'focused':focus1===true}" formGroupName="address">
+                  <div class="input-group input-group-alternative mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="ni ni-pin-3"></i></span>
+                    </div>
+                    <input class="form-control form-control-alternative" placeholder="Complemento" type="text" (focus)="focus1=true"
+                      (blur)="focus1=false" formControlName="complement" [ngClass]="{'is-invalid': registerForm.get('address.complement').errors && registerForm.get('address.complement').touched}">
+                      <div *ngIf="registerForm.get('address.complement').hasError('maxlength') && registerForm.get('address.complement').touched" class="invalid-feedback">Máximo 255 caracteres</div>
+                  </div>
+                </div>
+                <div class="form-group" [ngClass]="{'focused':focus1===true}" formGroupName="address">
+                  <div class="input-group input-group-alternative mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="ni ni-pin-3"></i></span>
+                    </div>
+                    <input class="form-control form-control-alternative" placeholder="Número" type="number" (focus)="focus1=true"
+                      (blur)="focus1=false" formControlName="number" [ngClass]="{'is-invalid': registerForm.get('address.number').errors && registerForm.get('address.number').touched}">
+                      <div *ngIf="registerForm.get('address.number').hasError('required') && registerForm.get('address.number').touched" class="invalid-feedback">Campo obrigatório</div>
+                      <div *ngIf="registerForm.get('address.number').hasError('min') && registerForm.get('address.number').touched" class="invalid-feedback">Número de residência inválido</div>
+                      <div *ngIf="registerForm.get('address.number').hasError('max') && registerForm.get('address.number').touched" class="invalid-feedback">Número de residência inválido</div>
+                  </div>
+                </div>
+                <div class="form-group" [ngClass]="{'focused':focus1===true}" formGroupName="address">
+                  <div class="input-group input-group-alternative mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="ni ni-pin-3"></i></span>
+                    </div>
+                    <input class="form-control form-control-alternative" placeholder="País" type="text" (focus)="focus1=true"
+                      (blur)="focus1=false" formControlName="country" [ngClass]="{'is-invalid': registerForm.get('address.country').errors && registerForm.get('address.country').touched}">
+                      <div *ngIf="registerForm.get('address.country').hasError('required') && registerForm.get('address.country').touched" class="invalid-feedback">Campo obrigatório</div>
+                      <div *ngIf="registerForm.get('address.country').hasError('minlength') && registerForm.get('address.country').touched" class="invalid-feedback">Mínimo 3 caracteres</div>
+                      <div *ngIf="registerForm.get('address.country').hasError('maxlength') && registerForm.get('address.country').touched" class="invalid-feedback">Máximo 45 caracteres</div>
+                  </div>
+                </div>
+                <div class="form-group" [ngClass]="{'focused':focus1===true}" formGroupName="address">
+                  <div class="input-group input-group-alternative mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="ni ni-pin-3"></i></span>
+                    </div>
+                    <input class="form-control form-control-alternative" placeholder="Estado" type="text" (focus)="focus1=true"
+                      (blur)="focus1=false" formControlName="state" [ngClass]="{'is-invalid': registerForm.get('address.state').errors && registerForm.get('address.state').touched}">
+                      <div *ngIf="registerForm.get('address.state').hasError('required') && registerForm.get('address.state').touched" class="invalid-feedback">Campo obrigatório</div>
+                      <div *ngIf="registerForm.get('address.state').hasError('minlength') && registerForm.get('address.state').touched" class="invalid-feedback">Mínimo 2 caracteres</div>
+                      <div *ngIf="registerForm.get('address.state').hasError('maxlength') && registerForm.get('address.state').touched" class="invalid-feedback">Máximo 255 caracteres</div>
+                  </div>
+                </div>
+                <div-- class="form-group" [ngClass]="{'focused':focus1===true}" formGroupName="address">
+                  <div class="input-group input-group-alternative mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="ni ni-pin-3"></i></span>
+                    </div>
+                    <input class="form-control form-control-alternative" placeholder="Cidade" type="text" (focus)="focus1=true"
+                      (blur)="focus1=false" formControlName="city" [ngClass]="{'is-invalid': registerForm.get('address.city').errors && registerForm.get('address.city').touched}">
+                      <div *ngIf="registerForm.get('address.city').hasError('required') && registerForm.get('address.city').touched" class="invalid-feedback">Campo obrigatório</div>
+                      <div *ngIf="registerForm.get('address.city').hasError('minlength') && registerForm.get('address.city').touched" class="invalid-feedback">Mínimo 2 caracteres</div>
+                      <div *ngIf="registerForm.get('address.city').hasError('maxlength') && registerForm.get('address.city').touched" class="invalid-feedback">Máximo 255 caracteres</div>
+                  </div>
+                </div-->
+                <div class="form-group" [ngClass]="{'focused':focus1===true}" formGroupName="login">
+                  <div class="input-group input-group-alternative mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                    </div>
+                    <input class="form-control form-control-alternative" placeholder="Email" type="email" (focus)="focus1=true"
+                      (blur)="focus1=false" formControlName="email" [ngClass]="{'is-invalid': registerForm.get('login.email').errors && registerForm.get('login.email').touched}">
+                      <div *ngIf="registerForm.get('login.email').hasError('required') && registerForm.get('login.email').touched" class="invalid-feedback">Campo obrigatório</div>
+                      <div *ngIf="registerForm.get('login.email').hasError('email') && registerForm.get('login.email').touched" class="invalid-feedback">Deve ser um login.email válido</div>
+                      <div *ngIf="registerForm.get('login.email').hasError('maxlength') && registerForm.get('login.email').touched" class="invalid-feedback">Máximo 255 caracteres</div>
+                  </div>
+                </div>
+                <div class="form-group" [ngClass]="{'focused':focus2===true}" formGroupName="login">
+                  <div class="input-group input-group-alternative">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                    </div>
+                    <input class="form-control form-control-alternative" placeholder="Senha" type="password" (focus)="focus2=true"
+                      (blur)="focus2=false" formControlName="pass" [ngClass]="{'is-invalid': registerForm.get('login.pass').errors && registerForm.get('login.pass').touched}">
+                      <div *ngIf="registerForm.get('login.pass').hasError('required') && registerForm.get('login.pass').touched" class="invalid-feedback">Campo obrigatório</div>
+                      <div *ngIf="registerForm.get('login.pass').hasError('minlength') && registerForm.get('login.pass').touched" class="invalid-feedback">Mínimo 5 caracteres</div>
+                      <div *ngIf="registerForm.get('login.pass').hasError('maxlength') && registerForm.get('login.pass').touched" class="invalid-feedback">Máximo 200 caracteres</div>
+                  </div>
+                </div>
+                <div class="text-muted font-italic">
+                  <small>password strength:
+                    <span class="text-success font-weight-700">strong</span>
+                  </small>
+                </div>
+                <div class="row my-4">
+                  <div class="col-12">
+                    <div class="custom-control custom-control-alternative custom-checkbox">
+                      <input class="custom-control-input" id="customCheckRegister" type="checkbox"
+                        formControlName="name">
+                      <label class="custom-control-label" for="customCheckRegister">
+                        <span>Eu concordo com os
+                          <a href="javascript:void(0)">termos</a>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-center">
+                  <button (click)="createAcount()" type="button" class="btn btn-primary mt-4" >Criar conta</button>
+                </div>
+              </form>
+              <p>{{registerForm.value | json}} </p>
+              <p>{{registerForm.status}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

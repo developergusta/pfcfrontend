@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "pfc-ticket2u": {
+      "hosting": {
+        "Ticket2U-App": [
+          "pfc-ticket2u"
+        ]
+      }
+    }
+  }
+}

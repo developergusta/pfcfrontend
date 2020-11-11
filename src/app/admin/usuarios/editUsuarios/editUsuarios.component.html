@@ -1,0 +1,190 @@
+<form [formGroup]="userForm">
+  <div class="row">
+    <div class="col-md-8">
+      <nav ngbNav #nav="ngbNav" class="nav-tabs">
+        <ng-container ngbNavItem>
+          <a ngbNavLink>Usuario</a>
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label>Nome</label>
+              <input type="text" class="form-control" [(ngModel)]="user.name"
+                [ngClass]="{'is-invalid': userForm.get('name').errors && userForm.get('name').touched}"
+                formControlName="name" placeholder="Insira o name">
+              <div *ngIf="userForm.get('name').hasError('required') && userForm.get('name').touched" class="invalid-feedback">
+                Nome é obrigatório.
+              </div>
+              <div *ngIf="userForm.get('name').hasError('minlength') && userForm.get('name').touched" class="invalid-feedback">
+                Nome deve ter no mínimo 2 Caracters.
+              </div>
+              <div *ngIf="userForm.get('name').hasError('maxlength') && userForm.get('name').touched" class="invalid-feedback">
+                Nome deve ter no máximo 255 Caracters.
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-8">
+              <label>CPF</label>
+              <input type="text" class="form-control" [(ngModel)]="user.cpf" [ngClass]="{'is-invalid': userForm.get('local').errors && userForm.get('local').touched}" formControlName="local" placeholder="">
+              <div *ngIf="userForm.get('local').hasError('required') && userForm.get('local').touched" class="invalid-feedback">
+                CPF é obrigatório.
+              </div>
+            </div>
+            <div class="form-group col-md-8">
+              <label>RG</label>
+              <input type="text" class="form-control" [(ngModel)]="user.rg"
+              [ngClass]="{'is-invalid': userForm.get('rg').errors && userForm.get('rg').touched}" formControlName="local" placeholder="">
+              <div *ngIf="userForm.get('rg').hasError('maxlength') && userForm.get('rg').touched" class="invalid-feedback">
+                RG deve ter no máximo 13 Caracters.
+              </div>
+            </div>
+            <div class="form-group col-md-4">
+              <label>Data de nascimento</label>
+              <input type="text" class="form-control" [(ngModel)]="user.dateBirth" bsDatepicker
+                value="{{user.dateBirth | DateFormatPipe}}" [bsConfig]="{ dateInputFormat : 'DD/MM/YYYY' }"
+                [ngClass]="{'is-invalid': userForm.get('dateBirth').errors && userForm.get('dateBirth').touched}" formControlName="dateBirth" placeholder="">
+              <div *ngIf="userForm.get('dateBirth').hasError('required') && userForm.get('dateBirth').touched" class="invalid-feedback">
+                Data e hora é obrigatório.
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container ngbNavItem>
+          <a ngbNavLink>Endereços</a>
+          <div>
+            <div formArrayName="addresses" *ngFor="let address of addresses.controls; let i=index">
+              <fieldset [formGroupName]="i" class="form-group">
+                <legend class="d-flex justify-content-between capitalize">
+                  {{ addresses.get(i+'.nome').value === '' ?
+                    'Enderecos' :
+                    addresses.get(i+'.nome').value
+                  }}
+                  <button class="btn btn-sm btn-warning mb-1" (click)="removerEndereco(i)">Remover</button>
+                </legend>
+                <div class="row">
+                  <div class="form-group col-md-4">
+                    <label>Logradouro</label>
+                    <input type="text" class="form-control"
+                      [ngClass]="{'is-invalid': addresses.get(i+'.street').errors && addresses.get(i+'.street').touched}"
+                      formControlName="street" placeholder="Rua ...">
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>CEP</label>
+                    <input type="text" class="form-control"
+                      [ngClass]="{'is-invalid': addresses.get(i+'.zipCode').errors && addresses.get(i+'.zipCode').touched}"
+                      formControlName="zipCode" placeholder="00000-000">
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Número</label>
+                    <input type="text" class="form-control"
+                      [ngClass]="{'is-invalid': addresses.get(i+'.num').errors && addresses.get(i+'.num').touched}"
+                      formControlName="num" placeholder="000">
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Preço</label>
+                    <input type="text" currencyMask
+                      [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', align: 'left' }" class="form-control"
+                      [ngClass]="{'is-invalid': addresses.get(i+'.preco').errors && addresses.get(i+'.preco').touched}"
+                      formControlName="preco" placeholder="R$ 0,00">
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Data Início</label>
+                    <input type="text" class="form-control" formControlName="dataInicio" placeholder="01/01/2019">
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Data Fim</label>
+                    <input type="text" class="form-control" formControlName="dataFim" placeholder="01/01/2019">
+                  </div>
+
+                </div>
+              </fieldset>
+            </div>
+            <button (click)="adicionarEndereco()" class="btn btn-outline-primary">
+              Adicionar Endereço
+            </button>
+          </div>
+        </ng-container>
+        <ng-container ngbNavItem>
+          <a ngbNavLink>Telefones</a>
+          <div>
+            <div formArrayName="phones" *ngFor="let phone of phones.controls; let j=index">
+              <fieldset [formGroupName]="j" class="form-group">
+                <legend class="d-flex justify-content-between capitalize">
+                  {{ phones.get(j+'.nome').value === '' ?
+                    'Phones' :
+                    phones.get(j+'.nome').value
+                  }}
+                  <button class="btn btn-sm btn-warning mb-1" (click)="removerTelefone(j)">Remover</button>
+                </legend>
+                <div class="row">
+                  <div class="form-group col-md-4">
+                    <label>Tipo</label>
+                    <input type="text" class="form-control"
+                      [ngClass]="{'is-invalid': phones.get(j+'.type').errors && phones.get(j+'.nome').touched}"
+                      formControlName="nome" placeholder="Lote">
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Quantidade</label>
+                    <input type="text" class="form-control"
+                      [ngClass]="{'is-invalid': phones.get(j+'.quantidade').errors && phones.get(j+'.quantidade').touched}"
+                      formControlName="quantidade" placeholder="000">
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Preço</label>
+                    <input type="text" currencyMask
+                      [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', align: 'left' }" class="form-control"
+                      [ngClass]="{'is-invalid': phones.get(j+'.preco').errors && phones.get(j+'.preco').touched}"
+                      formControlName="preco" placeholder="R$ 0,00">
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+            <button (click)="adicionarTelefone()" class="btn btn-outline-primary">
+              Adicionar Telefone
+            </button>
+          </div>
+        </ng-container>
+      </nav>
+      <div class="row">
+        <div class="col-md-12 d-flex justify-content-end">
+          <!-- {{userForm.value | json}} -->
+          <button [disabled]="!userForm.valid" class="btn btn-success my-2" (click)="salvarUsuario()">Salvar
+            Alterações</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-row">
+        <div class="form-group col-md-9">
+          <input type="file" #file (change)="onFileChange($event, $event.target.files)" class="form-control is-invalid"
+            formControlName="imagemURL" placeholder="" style="display: none">
+        </div>
+      </div>
+      <div class="card profile-card-2">
+        <div class="card-img-block">
+          <img [src]="imagemURL" class="img-fluid" (click)="file.click()" style="cursor: pointer; width: 350px;"
+            alt="Card image cap" />
+        </div>
+        <div class="card-body pt-3">
+          <h4>{{user.name}}</h4>
+          <p class="card-text" *ngFor="let address of addresses; let e=index;" >
+            <b>Endereço{{e}}:</b> {{ address.street }}
+            <br>
+          </p>
+          <p class="card-text">
+            <b>Data de nascimento:</b> {{user.dateBirth | DateTimeFormatPipe}}
+          </p>
+          <hr>
+          <p class="card-text" *ngFor="let phone of phones; let p=index;" >
+            <b>Tipo do telefone {{p}}:</b> {{phone.type}}
+            <br>
+            <b>Número do telefone {{p}}:</b> {{phone.num}}
+          </p>
+          <p class="card-text">
+            <b>Login</b><br>
+            <small class="text-muted">e-mail: {{user.login.email}}</small>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,253 @@
+<div class="position-relative">
+  <h2>
+    {{titulo}}
+  </h2>
+  <div class="d-flex">
+    <div class="form-inline mr-auto">
+      <div class="form-group mb-2">
+        <label class="mr-2">Filtro:</label> <input type="text" class="form-control mr-2" placeholder="buscar"
+          [(ngModel)]="filtroLista">
+      </div>
+    </div>
+    <div>
+      <button class="btn btn-outline-primary" (click)="newUser(cadastro)">
+        <i class="fa fa-plus-circle"></i>&nbsp;
+        Novo user
+      </button>
+    </div>
+  </div>
+  <h3>Filtro: {{filtroLista}}</h3>
+  <table class="table table-striped">
+    <thead class="thead-light">
+      <tr>
+        <th>
+          <button class="btn btn-outline-primary" (click)="alternarImagem()">
+            <i class="{{mostrarImagem ? 'fa fa-eye-slash' : 'fa fa-eye'}}"></i>
+          </button>
+        </th>
+        <th>Nome</th>
+        <th>CPF</th>
+        <th>Data/nasc.</th>
+        <th>Endereço</th>
+        <th>Data/cad.</th>
+        <th>Email</th>
+        <th>Perfil</th>
+        <th colspan="2">Opções</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="users && users.length">
+      <tr *ngFor="let user of users">
+        <td>
+          <img *ngIf="mostrarImagem" src="http://localhost:5000/resources/images/{{user.image.src}}"
+          [style.width.px]="imagemLargura" [style.margin.px]="imagemMargem">
+        </td>
+        <td>{{user.name}}</td>
+        <td>{{user.cpf}}</td>
+        <td>{{user.dateBirth | date: 'shortDate': '-3000': 'pt-BR'}}</td>
+        <td *ngIf="user.addresses.length > 0">
+          <p *ngFor="let address of user.addresses">
+            {{address.street}}, {{address.num}} {{address.city}} - {{address.state}}
+          </p>
+        </td>
+        <td *ngIf="user.addresses.length == 0">Endereço não informado
+        </td>
+        <td>{{user.registerTime | date: 'fullTime': '-3000': 'pt-BR'}}</td>
+        <td>{{user.login.email}}</td>
+        <td>{{user.login.perfil}}</td>
+        <!--td>
+          <div *ngIf="!user.lots.length">
+            Não Informado
+          </div>
+          <div *ngIf="user.lots.length === 1">
+            Lote único
+          </div>
+          <div *ngIf="user.lots.length > 1">
+            {{user.lots.length}}
+          </div>
+        </td-->
+        <td>
+          <div class="btn-group">
+            <button class="btn btn-sm btn-success" placement="top" ngbTooltip="Edição Simples" tooltip="Edição Simples"
+              (click)="editUser(user, cadastro)">
+              <i class="fa fa-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-danger btn-tooltip" placement="top" tooltip="Excluir" placement="top"
+              ngbTooltip="Excluir" (click)="excludeUser(user, confirm)">
+              <i class="fa fa-eraser"></i>
+            </button>
+            <button [routerLink]="['/admin/usuario', user.userId, 'edit']" tooltip="Edição Detalhada" placement="top" ngbTooltip="Edição detalhada"
+              class="btn btn-sm btn-warning">
+              <i class="fa fa-edit"></i>
+            </button>
+          </div>
+        </td>
+        <td>
+
+        </td>
+      </tr>
+    </tbody>
+    <tfoot *ngIf="!users">
+      <tr>
+        <td colspan="7" class="text-center">
+          <h4>
+            Nenhum usuário encontrado!
+          </h4>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div bsModal #cadastro="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 id="dialog-sizes-name1" class="modal-title pull-left">Cadastro / Alteração</h4>
+          <button type="button" class="close pull-right" (click)="cadastro.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="userForm">
+            <div class="form-row">
+              <div class="form-group col-md-12">
+                <label>Nome do usuário</label>
+                <input type="text" class="form-control" formControlName="name"
+                  [ngClass]="{'is-invalid': userForm.get('name').errors && userForm.get('name').touched}">
+                <div *ngIf="userForm.get('name').hasError('required') && userForm.get('name').touched"
+                  class="invalid-feedback">
+                  Nome é obrigatório.
+                </div>
+                <div *ngIf="userForm.get('name').hasError('minlength') && userForm.get('name').touched"
+                  class="invalid-feedback">
+                  Nome deve ter no mínimo 2 Caracters.
+                </div>
+                <div *ngIf="userForm.get('name').hasError('maxlength') && userForm.get('name').touched"
+                  class="invalid-feedback">
+                  Nome deve ter no máximo 255 Caracters.
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label>Data de nascimento</label>
+                <input type="text" class="form-control" formControlName="dateBirth" bsDatepicker
+                  value="{{dateBirth | DateFormatPipe}}" [(ngModel)]="dateBirth"
+                  [bsConfig]="{ dateInputFormat : 'DD/MM/YYYY' }" [minDate]="minDate" [maxDate]="maxDate"
+                  [ngClass]="{'is-invalid': userForm.get('dateBirth').errors && userForm.get('dateBirth').touched}"
+                  placeholder="">
+                <div *ngIf="userForm.get('dateBirth').hasError('required') && userForm.get('dateBirth').touched"
+                  class="invalid-feedback">
+                  Data de nascimento obrigatória.
+                </div>
+              </div>
+              <div class="form-group col-md-8">
+                <label>CPF do usuário</label>
+                <input type="text" class="form-control" formControlName="cpf"
+                  [ngClass]="{'is-invalid': userForm.get('cpf').errors && userForm.get('cpf').touched}">
+                <div *ngIf="userForm.get('cpf').hasError('required') && userForm.get('cpf').touched"
+                  class="invalid-feedback">
+                  CPF é obrigatório.
+                </div>
+                <div *ngIf="userForm.get('cpf').hasError('maxlength') && userForm.get('cpf').touched"
+                  class="invalid-feedback">
+                  CPF deve ter no máximo 14 caracters.
+                </div>
+              </div>
+            </div>
+            {{userForm.value | json}}
+            <div class="form-row">
+              <div class="form-group col-md-5" formGroupName="image">
+                <label>Imagem</label>
+                <table>
+                  <tr>
+                    <td>
+                      <button class="btn btn-info" (click)="file.click()">Selecionar imagem</button>
+                      <input type="file" #file placeholder="" (change)="onFileChange($event)"
+                        class="form-control is-invalid" formControlName="src"
+                        [ngClass]="{'is-invalid': userForm.get('image.src').errors && userForm.get('image.src').touched}" style="display: none;">
+                    </td>
+                  </tr>
+                </table>
+                <div *ngIf="userForm.get('image.src').hasError('required') && userForm.get('image.src').touched"
+                  class="invalid-feedback">
+                  Imagem é obrigatória
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-12" formGroupName="login">
+                <label>Email</label>
+                <input type="text" placeholder="" class="form-control is-invalid" formControlName="email"
+                  [ngClass]="{'is-invalid': userForm.get('login.email').errors && userForm.get('login.email').touched}">
+                <div *ngIf="userForm.get('login.email').hasError('required') && userForm.get('login.email').touched"
+                  class="invalid-feedback">
+                  Email é obrigatório
+                </div>
+                <div *ngIf="userForm.get('login.email').hasError('email') && userForm.get('login.email').touched"
+                  class="invalid-feedback">
+                  Deve ser um email válido
+                </div>
+                <div *ngIf="userForm.get('login.email').hasError('maxLength') && userForm.get('login.email').touched"
+                  class="invalid-feedback">
+                  Máximo de 255 caracteres
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-12" formGroupName="login">
+                <label>Senha</label>
+                <input type="password" placeholder="" class="form-control is-invalid" formControlName="pass"
+                  [ngClass]="{'is-invalid': userForm.get('login.pass').errors && userForm.get('login.pass').touched}">
+                <div *ngIf="userForm.get('login.pass').hasError('required')  && userForm.get('login.pass').touched"
+                  class="invalid-feedback">
+                  Senha é obrigatória
+                </div>
+                <div *ngIf="userForm.get('login.pass').hasError('maxLength') && userForm.get('login.pass').touched"
+                  class="invalid-feedback">
+                  Máximo de 200 caracteres
+                </div>
+                <div *ngIf="userForm.get('login.pass').hasError('minLength') && userForm.get('login.pass').touched"
+                  class="invalid-feedback">
+                  Mínimo de 5 caracteres
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer d-flex">
+          <button class="btn btn-secondary" (click)="cadastro.hide()">
+            Fechar
+          </button>
+          <button class="btn btn-primary ml-auto" [disabled]="!userForm.valid" (click)="salvarAlteracao(cadastro)">
+            Salvar Alterações
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div bsModal #confirm="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">
+            Deletando user
+          </h4>
+          <button type="button" class="close pull-right" (click)="confirm.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>{{bodyDeletarUsuario}}</p>
+        </div>
+        <div class="modal-footer btn-group d-flex">
+          <button type="button" class="btn btn-outline-primary" (click)="confirm.hide()">
+            CENCELAR
+          </button>
+          <button type="button" class="btn btn-outline-danger" (click)="confirmDelete(confirm)">
+            DELETAR
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

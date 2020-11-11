@@ -1,0 +1,18 @@
+<app-navbar *ngIf="!showAdmin()"></app-navbar>
+<router-outlet *ngIf="!showAdmin()"></router-outlet>
+<app-footer *ngIf="!showAdmin()"></app-footer>
+
+<div class="all-source" *ngIf="showAdmin()">
+  <div class="wrapper default-theme" [ngClass]="getClasses()">
+    <app-navbar-admin></app-navbar-admin>
+    <main>
+      <app-sidebar></app-sidebar>
+      <div class="pages container-fluid pt-4 pb-4 pl-4 pr-4">
+        <router-outlet></router-outlet>
+        <hr>
+        <app-footer-admin></app-footer-admin>
+      </div>
+      <div class="overlay" (click)="toggleSidebar()"></div>
+    </main>
+  </div>
+</div>

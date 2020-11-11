@@ -1,0 +1,275 @@
+<main>
+  <div class="position-relative">
+    <!-- Hero for FREE version -->
+    <section class="section section-lg section-hero section-shaped">
+      <!-- Background circles -->
+      <div class="shape shape-style-1 shape-primary">
+        <span class="span-150"></span>
+        <span class="span-50"></span>
+        <span class="span-50"></span>
+        <span class="span-75"></span>
+        <span class="span-100"></span>
+        <span class="span-75"></span>
+        <span class="span-50"></span>
+        <span class="span-100"></span>
+        <span class="span-50"></span>
+        <span class="span-100"></span>
+      </div>
+      <div class="container shape-container d-flex align-items-center py-lg">
+        <div class="col px-0">
+          <div class="row align-items-center justify-content-center">
+            <div class="col-lg-6 text-center">
+              <img src="./assets/img/logo/ticket2u_logo.png" style="width: 250px;" class="img-fluid">
+              <p class="lead text-white">O mais novo sistema para venda de ingressos voltado para o público jovem!</p>
+              <div class="btn-wrapper mt-5">
+                <a [routerLink]="['/eventos']" class="btn btn-lg btn-slack btn-icon mb-3 mb-sm-0">
+                  <span class="btn-inner--icon"><i class="fa fa-ticket"></i></span>
+                  <span class="btn-inner--text">Comprar ingressos</span>
+                </a>
+                <a class="btn btn-lg btn-github btn-icon mb-3 mb-sm-0" (click)="createModalEvent(criar)">
+                  <span class="btn-inner--icon"><i class="fa fa-calendar-check-o"></i></span>
+                  <span class="btn-inner--text">
+                    <span class="text-success">Criar</span> seu evento</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- SVG separator -->
+      <div class="separator separator-bottom separator-skew zindex-100">
+        <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
+          xmlns="http://www.w3.org/2000/svg">
+          <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
+        </svg>
+      </div>
+    </section>
+    <app-sections></app-sections>
+  </div>
+</main>
+
+<div bsModal #criar="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">CRIE SEU EVENTO</h4>
+        <button type="button" class="close pull-right" (click)="criar.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="eventForm">
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label>Título do evento</label>
+              <input type="text" class="form-control" formControlName="titleEvent"
+                [ngClass]="{'is-invalid': eventForm.get('titleEvent').errors && eventForm.get('titleEvent').touched}">
+              <div *ngIf="eventForm.get('titleEvent').hasError('required') && eventForm.get('titleEvent').touched"
+                class="invalid-feedback">
+                Título é obrigatório.
+              </div>
+              <div *ngIf="eventForm.get('titleEvent').hasError('minlength') && eventForm.get('titleEvent').touched"
+                class="invalid-feedback">
+                Título deve ter no mínimo 4 Caracters.
+              </div>
+              <div *ngIf="eventForm.get('titleEvent').hasError('maxlength') && eventForm.get('titleEvent').touched"
+                class="invalid-feedback">
+                Título deve ter no máximo 50 Caracters.
+              </div>
+            </div>
+            <div class="form-group col-md-12">
+              <label>Descrição do evento</label>
+              <input type="text" class="form-control" formControlName="description"
+                [ngClass]="{'is-invalid': eventForm.get('description').errors && eventForm.get('description').touched}">
+              <div *ngIf="eventForm.get('description').hasError('required')
+              && eventForm.get('description').touched" class="invalid-feedback">
+                Descrição é obrigatória.
+              </div>
+              <div *ngIf="eventForm.get('description').hasError('minlength') && eventForm.get('description').touched"
+                class="invalid-feedback">
+                Descrição deve ter no mínimo 4 Caracters.
+              </div>
+              <div *ngIf="eventForm.get('description').hasError('maxlength') && eventForm.get('description').touched"
+                class="invalid-feedback">
+                Descrição deve ter no máximo 1000 Caracters.
+              </div>
+            </div>
+            <div class="form-group col-md-12">
+              <label>Categoria</label>
+              <input type="text" class="form-control" formControlName="category"
+                [ngClass]="{'is-invalid': eventForm.get('category').errors && eventForm.get('category').touched}">
+              <div *ngIf="eventForm.get('category').hasError('required') && eventForm.get('category').touched"
+                class="invalid-feedback">
+                Categoria é obrigatório.
+              </div>
+              <div *ngIf="eventForm.get('category').hasError('minlength') && eventForm.get('category').touched"
+                class="invalid-feedback">
+                Categoria deve ter no mínimo 4 Caracters.
+              </div>
+              <div *ngIf="eventForm.get('category').hasError('maxlength') && eventForm.get('category').touched"
+                class="invalid-feedback">
+                Categoria deve ter no máximo 50 Caracters.
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-8" formGroupName="address">
+              <label>País</label>
+              <input type="text" class="form-control" formControlName="country"
+                [ngClass]="{'is-invalid': eventForm.get('address.country').errors && eventForm.get('address.country').touched}"
+                placeholder="">
+              <div
+                *ngIf="eventForm.get('address.country').hasError('required') && eventForm.get('address.country').touched"
+                class="invalid-feedback">
+                País é um campo obrigatório.
+              </div>
+              <div
+                *ngIf="eventForm.get('address.country').hasError('minlength') && eventForm.get('address.country').touched"
+                class="invalid-feedback">
+                Mínimo de caracteres: 3
+              </div>
+              <div
+                *ngIf="eventForm.get('address.country').hasError('maxlength') && eventForm.get('address.country').touched"
+                class="invalid-feedback">
+                Máximo de caracteres: 45
+              </div>
+            </div>
+            <div class="form-group col-md-4" formGroupName="address">
+              <label>CEP</label>
+              <input type="text" class="form-control" formControlName="zipCode" mask="00000-000" (change)="buscaCEP()"
+                [ngClass]="{'is-invalid': eventForm.get('address.zipCode').errors && eventForm.get('address.zipCode').touched}"
+                placeholder="">
+              <div
+                *ngIf="eventForm.get('address.zipCode').hasError('required') && eventForm.get('address.zipCode').touched"
+                class="invalid-feedback">
+                CEP é obrigatório.
+              </div>
+            </div>
+            <div class="form-group col-md-6" formGroupName="address">
+              <label>Estado</label>
+              <input type="text" class="form-control" formControlName="state"
+                [ngClass]="{'is-invalid': eventForm.get('address.state').errors && eventForm.get('address.state').touched}"
+                placeholder="">
+              <div *ngIf="eventForm.get('address.state').hasError('required') && eventForm.get('address.state').touched"
+                class="invalid-feedback">
+                Estado é um campo obrigatório.
+              </div>
+              <div *ngIf="eventForm.get('address.state').hasError('minlength') && eventForm.get('address.state').touched"
+                class="invalid-feedback">
+                Mínimo de caracteres: 2
+              </div>
+              <div *ngIf="eventForm.get('address.state').hasError('maxlength') && eventForm.get('address.state').touched"
+                class="invalid-feedback">
+                Máximo de caracteres: 255
+              </div>
+            </div>
+            <div class="form-group col-md-6" formGroupName="address">
+              <label>Cidade</label>
+              <input type="text" class="form-control" formControlName="city"
+                [ngClass]="{'is-invalid': eventForm.get('address.city').errors && eventForm.get('address.city').touched}"
+                placeholder="">
+              <div *ngIf="eventForm.get('address.city').hasError('required') && eventForm.get('address.city').touched"
+                class="invalid-feedback">
+                Cidade é um campo obrigatório.
+              </div>
+              <div *ngIf="eventForm.get('address.city').hasError('minlength') && eventForm.get('address.city').touched"
+                class="invalid-feedback">
+                Mínimo de caracteres: 2
+              </div>
+              <div *ngIf="eventForm.get('address.city').hasError('minlength') && eventForm.get('address.city').touched"
+                class="invalid-feedback">
+                Máximo de caracteres: 255
+              </div>
+            </div>
+            <div class="form-group col-md-8" formGroupName="address">
+              <label>Logradouro</label>
+              <input type="text" class="form-control" formControlName="street"
+                [ngClass]="{'is-invalid': eventForm.get('address.street').errors && eventForm.get('address.street').touched}"
+                placeholder="">
+              <div
+                *ngIf="eventForm.get('address.street').hasError('required') && eventForm.get('address.street').touched"
+                class="invalid-feedback">
+                Logradouro é obrigatório.
+              </div>
+              <div
+                *ngIf="eventForm.get('address.street').hasError('maxlength') && eventForm.get('address.street').touched"
+                class="invalid-feedback">
+                Máximo de caracteres: 255
+              </div>
+            </div>
+            <div class="form-group col-md-4" formGroupName="address">
+              <label>Número</label>
+              <input type="number" class="form-control" formControlName="num"
+                [ngClass]="{'is-invalid': eventForm.get('address.num').errors && eventForm.get('address.num').touched}"
+                placeholder="">
+              <div *ngIf="eventForm.get('address.num').hasError('required') && eventForm.get('address.num').touched"
+                class="invalid-feedback">
+                Número é obrigatório.
+              </div>
+              <div *ngIf="eventForm.get('address.num').hasError('min') && eventForm.get('address.num').touched"
+                class="invalid-feedback">
+                Número deve ser positivo ou 0 para S/N
+              </div>
+              <div *ngIf="eventForm.get('address.num').hasError('max') && eventForm.get('address.num').touched"
+                class="invalid-feedback">
+                Número muito grande
+              </div>
+            </div>
+            <div class="form-group col-md-12" formGroupName="address">
+              <label>Complemento</label>
+              <input type="text" class="form-control" formControlName="complement"
+                [ngClass]="{'is-invalid': eventForm.get('address.complement').errors && eventForm.get('address.complement').touched}"
+                placeholder="">
+            </div>
+              <div class="form-group col-md-4">
+                <label>Data / hora de INÍCIO</label>
+                <input type="text" class="form-control" formControlName="dateStart" bsDatepicker
+                  value="{{dateStart | DateTimeFormatPipe}}" [(ngModel)]="dateStart"
+                  [bsConfig]="{ dateInputFormat : 'DD/MM/YYYY hh:mm' }"
+                  [ngClass]="{'is-invalid': eventForm.get('dateStart').errors && eventForm.get('dateStart').touched}"
+                  placeholder="">
+                <div *ngIf="eventForm.get('dateStart').hasError('required') && eventForm.get('dateStart').touched"
+                  class="invalid-feedback">
+                  Data e hora é obrigatório.
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label>Data / Hora do FIM</label>
+                <input type="text" class="form-control" formControlName="dateEnd" bsDatepicker
+                  value="{{dateEnd | DateTimeFormatPipe}}" [(ngModel)]="dateEnd"
+                  [bsConfig]="{ dateInputFormat : 'DD/MM/YYYY hh:mm' }"
+                  [ngClass]="{'is-invalid': eventForm.get('dateEnd').errors && eventForm.get('dateEnd').touched}"
+                  placeholder="">
+                <div *ngIf="eventForm.get('dateEnd').hasError('required') && eventForm.get('dateEnd').touched"
+                  class="invalid-feedback">
+                  Data e hora é obrigatório.
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label>Qtd máxima de pessoas</label>
+                <input type="number" placeholder="" class="form-control is-invalid" formControlName="capacity"
+                  [ngClass]="{'is-invalid': eventForm.get('capacity').errors && eventForm.get('capacity').touched}">
+                <div *ngIf="eventForm.get('capacity').hasError('required') && eventForm.get('capacity').touched"
+                  class="invalid-feedback">
+                  Capacidade máxima é obrigatória
+                </div>
+                <div *ngIf="eventForm.get('capacity').hasError('max') && eventForm.get('capacity').touched"
+                  class="invalid-feedback">
+                  Máximo de pessoas é de 1.000.000 (um milhão)
+                </div>
+              </div>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer d-flex">
+        <button class="btn btn-secondary" (click)="criar.hide()">
+          Fechar
+        </button>
+        <button class="btn btn-primary ml-auto" [disabled]="!eventForm.valid" (click)="salvarAlteracao(criar)">
+          Salvar Alterações
+        </button>
+      </div>
+      {{eventForm.value | json}}
+    </div>
+  </div>
+</div>
