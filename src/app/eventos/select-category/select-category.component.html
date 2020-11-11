@@ -10,42 +10,106 @@
         >
       </div>
       <ngb-tabset
+        #tabs
         [justify]="'center'"
         class="custom-tab-content flex-column flex-md-row"
         type="pills"
+        *ngIf="lot"
       >
-        <ngb-tab>
+        <ngb-tab id="tab-category">
           <ng-template ngbTabTitle>
             <i class="ni ni-bell-55 mr-2"></i> Categoria
           </ng-template>
           <ng-template ngbTabContent>
-            <div class="card card-categories">
+            <h5>
+              Lote {{ lot.dateStart | date: "EEE dd/MM" }} -
+              {{ lot.dateEnd | date: "EEE dd/MM" }}
+            </h5>
+            <div
+              class="card card-categories"
+              *ngFor="let item of lot.lotCategories"
+              (click)="confirmOrder(item)"
+            >
               <div class="card-body">
                 <p class="card-text">
-                  Categoria X - R$150,00 <i class="ni ni-bold-right"></i>
-                </p>
-              </div>
-            </div>
-            <div class="card card-categories">
-              <div class="card-body">
-                <p class="card-text">
-                  Categoria X - R$150,00 <i class="ni ni-bold-right"></i>
+                  {{ item.desc }} - R${{ item.priceCategory | number: "1.2-2" }}
+                  <i class="ni ni-bold-right"></i>
                 </p>
               </div>
             </div>
           </ng-template>
         </ngb-tab>
-        <ngb-tab>
+        <ngb-tab [disabled]="!selectedLotCategory" id="tab-confirm">
           <ng-template ngbTabTitle>
             <i class="ni ni-calendar-grid-58 mr-2"></i> Confirmar
+            <span *ngIf="selectedLotCategory">{{
+              selectedLotCategory.desc
+            }}</span>
           </ng-template>
           <ng-template ngbTabContent>
-            <p class="description">
-              Raw denim you probably haven't heard of them jean shorts Austin.
-              Nesciunt tofu stumptown aliqua, retro synth master cleanse.
-              Mustache cliche tempor, williamsburg carles vegan helvetica.
-              Reprehenderit butcher retro keffiyeh dreamcatcher synth.
-            </p>
+            <div class="description desc-confirm">
+              <div class="item">
+                <div class="name">
+                  {{ selectedLotCategory.desc }} R${{
+                    selectedLotCategory.priceCategory
+                  }}
+                </div>
+                <div class="quantity">
+                  <div class="form-group">
+                    <select
+                      class="form-control"
+                      id="quantity"
+                      [(ngModel)]="quantity"
+                    >
+                      <option
+                        [value]="q"
+                        *ngFor="let q of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+                      >
+                        {{ q }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="item">
+                <div class="name">Total de Ingressos</div>
+                <div class="total">
+                  {{
+                    selectedLotCategory.priceCategory * quantity
+                      | number: "1.2-2"
+                  }}
+                </div>
+              </div>
+              <div class="item">
+                <div class="name">Total</div>
+                <div class="total">
+                  {{
+                    loggedUser.credit -
+                      selectedLotCategory.priceCategory * quantity
+                      | number: "1.2-2"
+                  }}
+                </div>
+              </div>
+              <button
+                class="btn btn-lg btn-slack btn-icon mb-3 mb-sm-0 mt-3"
+                [disabled]="
+                  loggedUser.credit -
+                    selectedLotCategory.priceCategory * quantity <
+                  0
+                "
+              >
+                <span class="btn-inner--icon"
+                  ><i class="fa fa-ticket"></i
+                ></span>
+                <span class="btn-inner--text">{{
+                  loggedUser.credit -
+                    selectedLotCategory.priceCategory * quantity <
+                  0
+                    ? "Créditos Insuficientes"
+                    : "Comprar ingressos"
+                }}</span>
+              </button>
+            </div>
           </ng-template>
         </ngb-tab>
       </ngb-tabset>

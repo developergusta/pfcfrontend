@@ -102,8 +102,8 @@ export class EventoService {
     return userLogged.userId;
   }
 
-  getSelectedEvent(){
-    return JSON.parse(sessionStorage.getItem('eventSelected'));
+  getSelectedEvent(eventId: string){
+    return this.http.get<Evento>(`${this.baseURL}/${eventId}`).toPromise();
   }
 
   setSelectedEvent(eventObj: Evento){

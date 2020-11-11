@@ -18,7 +18,7 @@ export class FeaturedSectionComponent implements OnInit {
 
   async getTodayEvent() {
     const result:any = await this._eventoService.getTodayEvent();
-    console.log(result)
+    this.eventos = result;
   }
 
 }

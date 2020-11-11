@@ -65,15 +65,10 @@
         </li>
       </ul>
       <ul class="navbar-nav align-items-lg-center ml-lg-auto">
-        <li class="nav-item d-none d-lg-block ml-lg-4" *ngIf="logged">
-          <a target="_blank">
-            <span class="btn-inner--icon">
-              <i class="fa fa-money"></i>
-            </span>
-            <span class="nav-link-inner--text" style="color: white"
-              >Seu Saldo: R$</span
-            >
-          </a>
+        <li class="nav-item d-none d-lg-block ml-lg-4" *ngIf="loggedUser">
+          <span class="nav-link-inner--text" style="color: white"
+            >Seu Saldo: R$ {{ loggedUser.credit | number: "1.2-2" }}</span
+          >
         </li>
         <li class="nav-item d-none d-lg-block ml-lg-4" *ngIf="!logged">
           <a

@@ -31,7 +31,7 @@ const routes: Routes = [
     path: 'eventos',
     children: [
       { path: '', component: EventosComponent },
-      { path: 'category', component: SelectCategoryComponent },
+      { path: ':id/category', component: SelectCategoryComponent },
       { path: 'ticket', component: SelectTicketComponent },
     ]
   },

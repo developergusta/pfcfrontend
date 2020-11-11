@@ -15,6 +15,7 @@ export class NavbarComponent implements OnInit {
   public perfil = false;
   private lastPoppedUrl: string;
   private yScrollStack: number[] = [];
+  loggedUser;
 
   constructor(public location: Location, private router: Router, private toastr: ToastrService, public userService: UsuarioService ) {
   }
@@ -41,6 +42,7 @@ export class NavbarComponent implements OnInit {
    });
 
    this.logged = await this.loggedIn();
+   this.getLoggedUser();
   }
 
   isHome(): boolean {
@@ -70,6 +72,11 @@ export class NavbarComponent implements OnInit {
   async loggedIn() {
     const loggedin = await this.userService.isUserLoggedIn();
     return loggedin;
+  }
+
+  async getLoggedUser() {
+    const user = await this.userService.getUserLogged();
+    this.loggedUser = JSON.parse(user)
   }
 
   entrar() {
