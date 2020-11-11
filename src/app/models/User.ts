@@ -1,3 +1,4 @@
+import { Evento } from 'src/app/models/Evento';
 import { Ticket } from './Ticket';
 import { Image } from './Image';
 import { Address } from './Address';
@@ -17,6 +18,7 @@ export class User {
   imageId?: number;
   image?: Image;
   login?: Login;
+  events?: Evento[];
   tickets?: Ticket[];
   phones?: Phone[];
   addresses?: Address[];
