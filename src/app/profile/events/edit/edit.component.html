@@ -31,6 +31,154 @@
             </div>
           </div>
           <div class="text-center mt-5">
+            <input type="file" accept="image/*" (change)="onFileChanged($event)" style="display: none" #fileInput [(ngModel)]="user.image.src">
+            <button class="btn btn-lg btn-info" type="button" (click)="fileInput.click()">Alterar Imagem</button>
+            <hr>
+            <div class="form-row">
+              <div class="form-group col-md-8">
+                <label>Título do evento</label>
+                <input type="text" name="titleEvent" class="form-control form-control-alternative"
+                  [(ngModel)]="evento.titleEvent" [ngModelOptions]="{standalone: true}" required minlength="3">
+                <div *ngIf="evento.titleEvent.length < 2" class="invalid-feedback">
+                  Título deve ter no mínimo 2 Caracteres.
+                </div>
+                <div *ngIf="evento.titleEvent.length > 255" class="invalid-feedback">
+                  Título deve ter no máximo 255 Caracteres.
+                </div>
+              </div>
+              <div class="form-group col-md-8">
+                <label>Descrição do evento</label>
+                <input type="text" name="titleEvent" class="form-control form-control-alternative"
+                  [(ngModel)]="evento.titleEvent" [ngModelOptions]="{standalone: true}" required minlength="3">
+                <div *ngIf="evento.titleEvent.length < 2" class="invalid-feedback">
+                  Título deve ter no mínimo 2 Caracteres.
+                </div>
+                <div *ngIf="evento.titleEvent.length > 255" class="invalid-feedback">
+                  Título deve ter no máximo 255 Caracteres.
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-8">
+                <label>CPF</label>
+                <input type="text" name="titleEvent" class="form-control form-control-alternative"
+                  [(ngModel)]="evento.category" mask="000.000.000-00" [ngModelOptions]="{standalone: true}" required
+                  minlength="3">
+                <div *ngIf="evento.category.length < 2" class="invalid-feedback">
+                  Categoria deve ter no mínimo 11 Caracteres.
+                </div>
+                <div *ngIf="evento.category.length > 14" class="invalid-feedback">
+                  Categoria deve ter no máximo 14 Caracteres.
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label>RG</label>
+                <input type="text" name="titleEvent" class="form-control form-control-alternative" [(ngModel)]="user.rg"
+                  [ngModelOptions]="{standalone: true}" required minlength="3">
+                <div *ngIf="user.rg.length < 2" class="invalid-feedback">
+                  RG deve ter no mínimo 2 Caracteres.
+                </div>
+                <div *ngIf="user.rg.length > 14" class="invalid-feedback">
+                  RG deve ter no máximo 14 Caracteres.
+                </div>
+              </div>
+            </div>
+            <div *ngFor="let phon of this.user.phones; let i= index ;" class="h6 font-weight-300">
+              <div class="border border-light rounded">
+                <div class="form-row">
+                  <div class="form-group col-md-5">
+                    <div class="form-group">
+                      <label for="sel1">Tipo de telefone:</label>
+                      <select class="form-control" id="sel1" [(ngModel)]="phon.type">
+                        <option *ngFor="let opt of options" value="{{opt.id}}" [ngValue]="opt.id" >{{opt.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <div class="form-group">
+                      <label>Número</label>
+                      <input type="text" class="form-control form-control-alternative" [(ngModel)]="phon.number"
+                        [ngModelOptions]="{standalone: true}" required minlength="3" mask="(00) 00000-0000" placeholder="(00) 00000-0000">
+                    </div>
+                  </div>
+                  <div class="form-group col-md-3  d-flex align-items-center">
+                    <button class="btn btn-lg btn-danger" type="button" (click)="excluirTelefone(modalConfirm, i)">
+                      <span class="btn-inner--icon">
+                        <i class="fas fa-times mr-2"></i>
+                      </span>
+                      Excluir Telefone
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn btn-lg btn-info" type="button" (click)="criarCategoriaLote()">
+              <span class="btn-inner--icon">
+                <i class="fas fa-plus mr-2"></i>
+              </span>
+              Adicionar Telefone
+            </button>
+
+            <div *ngFor="let addr of this.user.addresses; let i= index ;" class="h6 font-weight-300">
+              <button class="btn btn-lg btn-danger float-left" type="button" (click)="excluirEndereco(modalConfirm, i)">
+                <span class="btn-inner--icon">
+                  <i class="fas fa-times mr-2"></i>
+                </span>
+                Excluir Endereço
+              </button>
+              <div class="border border-light rounded">
+                <div class="form-row">
+                  <div class="form-group col-md-8">
+                    <label>País</label>
+                    <input type="text" class="form-control form-control-alternative" [(ngModel)]="addr.country"
+                      [ngModelOptions]="{standalone: true}" required minlength="3" placeholder="">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <label>Estado</label>
+                    <input type="text" class="form-control form-control-alternative" [(ngModel)]="addr.state"
+                      [ngModelOptions]="{standalone: true}" required minlength="2" placeholder="">
+                  </div>
+                  <div class="form-group col-md-8">
+                    <label>Cidade</label>
+                    <input type="text" class="form-control form-control-alternative" [(ngModel)]="addr.city"
+                      [ngModelOptions]="{standalone: true}" placeholder="">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-8">
+                    <label>Logradouro</label>
+                    <input type="text" class="form-control form-control-alternative" [(ngModel)]="addr.street"
+                      [ngModelOptions]="{standalone: true}" placeholder="">
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Número</label>
+                    <input type="number" class="form-control form-control-alternative" [(ngModel)]="addr.num"
+                      [ngModelOptions]="{standalone: true}" placeholder="">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-12">
+                    <label>Complemento</label>
+                    <input type="text" class="form-control form-control-alternative" [(ngModel)]="addr.complement"
+                      [ngModelOptions]="{standalone: true}" placeholder="">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-lg btn-info" type="button" (click)="criarLote()">
+              <span class="btn-inner--icon">
+                <i class="fas fa-plus mr-2"></i>
+              </span>
+              Adicionar Endereço
+            </button>
+            <button class="btn btn-lg btn-success" type="button" (click)="salvarAlteracoes(modalConfirm)">
+              SALVAR ALTERAÇÕES
+            </button>
+            <div class="h6 mt-4"><i class="ni business_briefcase-24 mr-2"></i>
+            </div>
           </div>
           <div class="mt-5 py-5 border-top text-center">
             <div class="row justify-content-center">
@@ -56,3 +204,36 @@
     </div>
   </section>
 </main>
+
+
+<div bsModal #modalConfirm="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 *ngIf="reference == 0" id="dialog-sizes-name1" class="modal-title pull-left">DESEJA EXCLUIR ESTE ENDEREÇO?</h4>
+        <h4 *ngIf="reference == 1" id="dialog-sizes-name1" class="modal-title pull-left">DESEJA EXCLUIR ESTE TELEFONE?</h4>
+        <h4 *ngIf="reference == 2" id="dialog-sizes-name1" class="modal-title pull-left">DESEJA SALVAR AS ALTERAÇÕES?</h4>
+        <button type="button" class="close pull-right" (click)="modalConfirm.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer d-flex">
+        <button class="btn btn-secondary" (click)="modalConfirm.hide()">
+          Fechar
+        </button>
+        <button *ngIf="reference == 0" class="btn btn-primary ml-auto" (click)="confirmaExclusaoLote(modalConfirm)">
+          Sim, confirmar.
+        </button>
+        <button *ngIf="reference == 1" class="btn btn-primary ml-auto" (click)="confirmaExclusaoCategoriaLote(modalConfirm)">
+          Sim, confirmar.
+        </button>
+        <button *ngIf="reference == 2" class="btn btn-primary ml-auto" (click)="confirmaEdicao(modalConfirm)">
+          Sim, confirmar.
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
