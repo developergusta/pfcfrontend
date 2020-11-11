@@ -131,5 +131,8 @@
       }
     }
   },
-  "defaultProject": "Ticket2U-App"
+  "defaultProject": "Ticket2U-App",
+  "cli": {
+    "analytics": false
+  }
 }

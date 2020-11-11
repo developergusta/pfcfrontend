@@ -3,18 +3,18 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Evento } from '../models/Evento';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventoService {
-  baseURL = 'https://ticket2u.azurewebsites.net/Event';
 
   constructor(private http: HttpClient,
               private userService: UsuarioService) { }
 
   async getAllEvento() {
-    const result = await this.http.get<Evento[]>(this.baseURL).toPromise();
+    const result = await this.http.get<Evento[]>(environment.baseURL).toPromise();
     console.log(result);
     return result;
   }
@@ -49,7 +49,7 @@ export class EventoService {
 
   async getEventosByUserId(){
     try {
-      const result = await this.http.get<Evento[]>(`${this.baseURL}/getEventsByUserId/${this.getUserIdLogged()}`).toPromise();
+      const result = await this.http.get<Evento[]>(`${environment.baseURL}/getEventsByUserId/${this.getUserIdLogged()}`).toPromise();
       console.log(result);
       return result;
     } catch (error) {
@@ -58,11 +58,11 @@ export class EventoService {
   }
 
   getEventoByTema(tema: string): Observable<Evento[]> {
-    return this.http.get<Evento[]>(`${this.baseURL}/getByTema/${tema}`);
+    return this.http.get<Evento[]>(`${environment.baseURL}/getByTema/${tema}`);
   }
 
   getEventoById(id: number): Observable<Evento> {
-    return this.http.get<Evento>(`${this.baseURL}/${id}`);
+    return this.http.get<Evento>(`${environment.baseURL}/${id}`);
   }
 
   postUpload(file: File, name: string) {
@@ -70,20 +70,20 @@ export class EventoService {
     const formData = new FormData();
     formData.append('file', fileToUplaod, name);
 
-    return this.http.post(`${this.baseURL}/upload`, formData);
+    return this.http.post(`${environment.baseURL}/upload`, formData);
   }
 
   postEvento(evento: Evento) {
     console.log(evento);
-    return this.http.post(this.baseURL, evento);
+    return this.http.post(environment.baseURL, evento);
   }
 
   putEvento(evento: Evento) {
-    return this.http.put(`${this.baseURL}/${evento.eventId}`, evento);
+    return this.http.put(`${environment.baseURL}/${evento.eventId}`, evento);
   }
 
   deleteEvento(id: number) {
-    return this.http.delete(`${this.baseURL}/${id}`);
+    return this.http.delete(`${environment.baseURL}/${id}`);
   }
 
   getUserIdLogged(){
