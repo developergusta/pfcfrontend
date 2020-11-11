@@ -144,6 +144,7 @@ export class EditComponent implements OnInit {
     // );
   }
 
+
   async confirmaEdicao(template: any){
     try {
       this.user.image.src = 'http://localhost:5000/Resources/Images/'.concat(this.user.image.src);
