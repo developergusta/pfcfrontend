@@ -1,20 +1,38 @@
-<section class="section section-events ">
-  <hr>
+<section class="section section-events">
+  <hr />
 </section>
 <div class="container py-md">
   <div class="row justify-content-between align-items-center">
     <div class="col-lg-6 mb-6 mb-lg-0">
       <div class="mb-3">
-        <small class="text-uppercase font-weight-bold">Selecione o tipo de ingresso</small>
+        <small class="text-uppercase font-weight-bold"
+          >Selecione o tipo de ingresso</small
+        >
       </div>
-      <ngb-tabset [justify]="'center'" class="custom-tab-content flex-column flex-md-row" type="pills">
+      <ngb-tabset
+        [justify]="'center'"
+        class="custom-tab-content flex-column flex-md-row"
+        type="pills"
+      >
         <ngb-tab>
           <ng-template ngbTabTitle>
             <i class="ni ni-bell-55 mr-2"></i> Categoria
           </ng-template>
           <ng-template ngbTabContent>
-            <p class="description">Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia
-              cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+            <div class="card card-categories">
+              <div class="card-body">
+                <p class="card-text">
+                  Categoria X - R$150,00 <i class="ni ni-bold-right"></i>
+                </p>
+              </div>
+            </div>
+            <div class="card card-categories">
+              <div class="card-body">
+                <p class="card-text">
+                  Categoria X - R$150,00 <i class="ni ni-bold-right"></i>
+                </p>
+              </div>
+            </div>
           </ng-template>
         </ngb-tab>
         <ngb-tab>
@@ -22,21 +40,34 @@
             <i class="ni ni-calendar-grid-58 mr-2"></i> Confirmar
           </ng-template>
           <ng-template ngbTabContent>
-            <p class="description">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu
-              stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica.
-              Reprehenderit butcher retro keffiyeh dreamcatcher synth.</p>
+            <p class="description">
+              Raw denim you probably haven't heard of them jean shorts Austin.
+              Nesciunt tofu stumptown aliqua, retro synth master cleanse.
+              Mustache cliche tempor, williamsburg carles vegan helvetica.
+              Reprehenderit butcher retro keffiyeh dreamcatcher synth.
+            </p>
           </ng-template>
         </ngb-tab>
       </ngb-tabset>
     </div>
     <div class="col-lg-6 mb-lg-auto">
-      <div class="rounded shadow-lg overflow-hidden transform-perspective-right">
+      <div
+        class="rounded shadow-lg overflow-hidden transform-perspective-right"
+      >
         <ngb-carousel interval="2000">
           <ng-template ngbSlide>
-            <img class="img-fluid" src="assets/img/theme/img-1-1200x1000.jpg" alt="First slide">
+            <img
+              class="img-fluid"
+              src="assets/img/theme/img-1-1200x1000.jpg"
+              alt="First slide"
+            />
           </ng-template>
           <ng-template ngbSlide>
-            <img class="img-fluid" src="assets/img/theme/img-2-1200x1000.jpg" alt="Second slide">
+            <img
+              class="img-fluid"
+              src="assets/img/theme/img-2-1200x1000.jpg"
+              alt="Second slide"
+            />
           </ng-template>
         </ngb-carousel>
       </div>

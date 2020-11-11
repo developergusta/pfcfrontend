@@ -1,14 +1,22 @@
-<section class="section section-events ">
-  <hr>
+<section class="section section-events">
+  <hr />
 </section>
 <div class="form-row input-search-events">
   <div class="col-lg-4 col-sm-6">
-    <div class="form-group" [ngClass]="{'focused':focus1===true}">
+    <div class="form-group" [ngClass]="{ focused: focus1 === true }">
       <div class="input-group input-group-alternative mb-4">
         <div class="input-group-prepend">
-          <span class="input-group-text"><i class="ni ni-zoom-split-in"></i></span>
+          <span class="input-group-text"
+            ><i class="ni ni-zoom-split-in"></i
+          ></span>
         </div>
-        <input class="form-control" placeholder="Estou procurando o evento..." type="text" (focus)="focus1=true" (blur)="focus1=false">
+        <input
+          class="form-control"
+          placeholder="Estou procurando o evento..."
+          type="text"
+          (focus)="focus1 = true"
+          (blur)="focus1 = false"
+        />
       </div>
     </div>
   </div>
@@ -16,17 +24,21 @@
 <section class="section pb-0 section-components">
   <div class="container">
     <div class="row">
-      <div class="col col-lg-4" *ngFor="let item of eventos">
-        <div class="property-card" >
+      <div class="col col-lg-4 mb-5" *ngFor="let item of eventos">
+        <div class="property-card">
           <a [routerLink]="['/eventos/category']">
-            <div class="property-image" [style.backgroundImage]="'url('+ item.images[0].src +')'">
+            <div
+              class="property-image"
+              [style.backgroundImage]="'url(' + item.images[0].src + ')'"
+            >
               <div class="property-image-title">
                 <!-- Optional <h5>Card Title</h5> If you want it, turn on the CSS also. -->
               </div>
-            </div></a>
+            </div></a
+          >
           <div class="property-description">
-            <h5> {{item.titleEvent}}</h5>
-            <p>{{item.description}}</p>
+            <h5>{{ item.titleEvent }}</h5>
+            <p>{{ item.description }}</p>
           </div>
           <a href="#">
             <div class="property-social-icons">

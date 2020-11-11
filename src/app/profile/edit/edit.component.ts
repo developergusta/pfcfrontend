@@ -197,11 +197,11 @@ export class EditComponent implements OnInit {
     nomeArquivo[2] = nomeArquivo[2].replace(/.jpeg/i, '_' + this.user.userId + '.jpeg');
     this.user.image.src = nomeArquivo[2];
 
-    this.userService.postUpload(this.selectedFile, nomeArquivo[2]).then(
-      response => {
-        this.user.image.src = "http://localhost:5000/Resources/Images/" + response ;
-      }
-    );
+    // this.userService.postUpload(this.selectedFile, nomeArquivo[2]).then(
+    //   response => {
+    //     this.user.image.src = "http://localhost:5000/Resources/Images/" + response ;
+    //   }
+    // );
   }
 
   async confirmaEdicao(template: any){

@@ -5,6 +5,7 @@ import { AlertsSectionComponent } from './alerts-section/alerts-section.componen
 import { SectionsComponent } from './sections.component';
 import { ButtonsSectionComponent } from './buttons-section/buttons-section.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FeaturedSectionComponent } from './featured-section/featured-section.component';
 
 
 
@@ -13,7 +14,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AlertsSectionComponent,
     SectionsComponent,
     ButtonsSectionComponent,
-    CategoriesSectionComponent
+    CategoriesSectionComponent,
+    FeaturedSectionComponent
   ],
   imports: [
     CommonModule,

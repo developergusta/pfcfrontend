@@ -142,26 +142,26 @@ export class UsuariosAdminComponent implements OnInit {
 
   uploadImagem() {
     this.dataAtual = new Date().getMilliseconds().toString();
-    if (this.modoSalvar === 'post') {
-      const nomeArquivo = this.userForm.value.image.src.split('\\', 3);
-      this.userForm.value.image.src = nomeArquivo[2] + this.dataAtual;
+    // if (this.modoSalvar === 'post') {
+    //   const nomeArquivo = this.userForm.value.image.src.split('\\', 3);
+    //   this.userForm.value.image.src = nomeArquivo[2] + this.dataAtual;
 
-      this.userService.postUpload(this.file, nomeArquivo[2])
-        .then(
-          () => {
-            this.dataAtual = new Date().getMilliseconds().toString();
-            this.getUsuarios();
-          }
-        );
-    } else {
-      this.userForm.value.image.src = this.fileNameToUpdate;
-      this.userService.postUpload(this.file, this.fileNameToUpdate)
-        .then(
-          () => {
-            this.getUsuarios();
-          }
-        );
-    }
+    //   this.userService.uploadFile(this.file)
+    //     .then(
+    //       () => {
+    //         this.dataAtual = new Date().getMilliseconds().toString();
+    //         this.getUsuarios();
+    //       }
+    //     );
+    // } else {
+    //   this.userForm.value.image.src = this.fileNameToUpdate;
+    //   this.userService.uploadFile(this.file)
+    //     .then(
+    //       () => {
+    //         this.getUsuarios();
+    //       }
+    //     );
+    // }
   }
 
   confirmDelete(template: any) {

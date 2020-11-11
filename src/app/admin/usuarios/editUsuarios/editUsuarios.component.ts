@@ -134,13 +134,13 @@ export class EditUsuariosAdminComponent implements OnInit {
 
   uploadImagem() {
     if (this.userForm.get('imagemURL').value !== '') {
-      this.userService.postUpload(this.file, this.fileNameToUpdate)
-        .then(
-          () => {
-            this.dataAtual = new Date().getMilliseconds().toString();
-            this.imagemURL = `http://localhost:5000/resources/images/${this.user.image.src}?_ts=${this.dataAtual}`;
-          }
-        );
+      // this.userService.postUpload(this.file, this.fileNameToUpdate)
+      //   .then(
+      //     () => {
+      //       this.dataAtual = new Date().getMilliseconds().toString();
+      //       this.imagemURL = `http://localhost:5000/resources/images/${this.user.image.src}?_ts=${this.dataAtual}`;
+      //     }
+      //   );
     }
   }
 

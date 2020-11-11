@@ -1,25 +1,41 @@
-<nav id="navbar-main"
+<nav
+  id="navbar-main"
   class="navbar navbar-main navbar-expand-lg navbar-transparent navbar-light headroom headroom--top headroom--pinned"
-  *ngIf="showMenu()">
+  *ngIf="showMenu()"
+>
   <div class="container">
     <a class="navbar-brand mr-lg-5" [routerLink]="['/home']">
-      <img src="./assets/img/logo/ticket2u_logo.png">
+      <img src="./assets/img/logo/ticket2u_logo.png" />
     </a>
-    <button class="navbar-toggler" type="button" (click)="isCollapsed = !isCollapsed"
-      [attr.aria-expanded]="!isCollapsed" aria-controls="navbar_global">
+    <button
+      class="navbar-toggler"
+      type="button"
+      (click)="isCollapsed = !isCollapsed"
+      [attr.aria-expanded]="!isCollapsed"
+      aria-controls="navbar_global"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="navbar-collapse collapse" id="navbar_global" [ngbCollapse]="isCollapsed">
+    <div
+      class="navbar-collapse collapse"
+      id="navbar_global"
+      [ngbCollapse]="isCollapsed"
+    >
       <div class="navbar-collapse-header">
         <div class="row">
           <div class="col-6 collapse-brand">
             <a [routerLink]="['/home']">
-              <img src="./assets/img/logo/ticket2u_logo.png">
+              <img src="./assets/img/logo/ticket2u_logo.png" />
             </a>
           </div>
           <div class="col-6 collapse-close">
-            <button type="button" class="navbar-toggler" (click)="isCollapsed = !isCollapsed"
-              [attr.aria-expanded]="!isCollapsed" aria-controls="navbar_global">
+            <button
+              type="button"
+              class="navbar-toggler"
+              (click)="isCollapsed = !isCollapsed"
+              [attr.aria-expanded]="!isCollapsed"
+              aria-controls="navbar_global"
+            >
               <span></span>
               <span></span>
             </button>
@@ -35,22 +51,47 @@
           </a>
           <div class="dropdown-menu">
             <a [routerLink]="['/profile']" class="dropdown-item">Perfil</a>
-            <a *ngIf="!logged" [routerLink]="['/login']" class="dropdown-item">Login</a>
-            <a *ngIf="!logged" [routerLink]="['/register']" class="dropdown-item">Registrar-se</a>
+            <a *ngIf="!logged" [routerLink]="['/login']" class="dropdown-item"
+              >Login</a
+            >
+            <a
+              *ngIf="!logged"
+              [routerLink]="['/register']"
+              class="dropdown-item"
+              >Registrar-se</a
+            >
             <a [routerLink]="['/eventos']" class="dropdown-item">Eventos</a>
           </div>
         </li>
       </ul>
       <ul class="navbar-nav align-items-lg-center ml-lg-auto">
+        <li class="nav-item d-none d-lg-block ml-lg-4" *ngIf="logged">
+          <a target="_blank">
+            <span class="btn-inner--icon">
+              <i class="fa fa-money"></i>
+            </span>
+            <span class="nav-link-inner--text" style="color: white"
+              >Seu Saldo: R$</span
+            >
+          </a>
+        </li>
         <li class="nav-item d-none d-lg-block ml-lg-4" *ngIf="!logged">
-          <a [routerLink]="['/login']" target="_blank" class="btn btn-neutral btn-icon">
+          <a
+            [routerLink]="['/login']"
+            target="_blank"
+            class="btn btn-neutral btn-icon"
+          >
             <span class="btn-inner--icon">
               <i class="fa fa-user mr-2"></i>
             </span>
             <span class="nav-link-inner--text">Login</span>
           </a>
         </li>
-        <li class="nav-item d-none d-lg-block ml-lg-4" *ngIf="logged && !isPerfil()" [routerLink]="['/profile']">
+        <li
+          class="nav-item d-none d-lg-block ml-lg-4"
+          *ngIf="logged && !isPerfil()"
+          [routerLink]="['/profile']"
+        >
           <button class="btn btn-info btn-icon">
             <span class="btn-inner--icon">
               <i class="fa fa-user mr-2"></i>
@@ -58,7 +99,11 @@
             <span class="nav-link-inner--text">Perfil</span>
           </button>
         </li>
-        <li class="nav-item d-none d-lg-block ml-lg-4" *ngIf="logged && isPerfil()" [routerLink]="['/eventos']">
+        <li
+          class="nav-item d-none d-lg-block ml-lg-4"
+          *ngIf="logged && isPerfil()"
+          [routerLink]="['/eventos']"
+        >
           <button class="btn btn-warning btn-icon">
             <span class="btn-inner--icon">
               <i class="fas fa-calendar mr-2"></i>
@@ -66,7 +111,11 @@
             <span class="nav-link-inner--text">Eventos</span>
           </button>
         </li>
-        <li class="nav-item d-none d-lg-block ml-lg-4" *ngIf="logged" (click)="openModal(logout)">
+        <li
+          class="nav-item d-none d-lg-block ml-lg-4"
+          *ngIf="logged"
+          (click)="openModal(logout)"
+        >
           <button class="btn btn-danger btn-icon">
             <span class="btn-inner--icon">
               <i class="fa fa-user mr-2"></i>
@@ -79,18 +128,30 @@
   </div>
 </nav>
 
-<div bsModal #logout="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+<div
+  bsModal
+  #logout="bs-modal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="dialog-sizes-name1"
+>
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 id="dialog-sizes-name1" class="modal-title pull-left">DESEJA SAIR DA SUA CONTA?</h4>
-        <button type="button" class="close pull-right" (click)="logout.hide()" aria-label="Close">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">
+          DESEJA SAIR DA SUA CONTA?
+        </h4>
+        <button
+          type="button"
+          class="close pull-right"
+          (click)="logout.hide()"
+          aria-label="Close"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-
-      </div>
+      <div class="modal-body"></div>
       <div class="modal-footer d-flex">
         <button class="btn btn-secondary" (click)="logout.hide()">
           Fechar

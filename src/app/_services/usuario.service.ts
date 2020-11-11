@@ -14,6 +14,7 @@ import { environment } from 'src/environments/environment';
 })
 export class UsuarioService {
 
+  baseURL = environment.baseURL +  '/Usuario';
   jwtHelper = new JwtHelperService();
   decodedToken: any;
   user: User = new User();
@@ -28,7 +29,7 @@ export class UsuarioService {
 
   login(model: any) {
     return this.http
-      .post(`${environment.baseURL}/Login`, model).pipe(
+      .post(`${this.baseURL}/Login`, model).pipe(
         map((response: any) => {
           const user = response;
           if (user) {
@@ -54,7 +55,7 @@ export class UsuarioService {
 
   register(model: any) {
     console.log(model);
-    return this.http.post(`${environment.baseURL}`, model);
+    return this.http.post(`${this.baseURL}`, model);
   }
 
   getUserLogged(){
@@ -63,12 +64,12 @@ export class UsuarioService {
   }
 
   async createAccount(account: any) {
-    const result = await this.http.post<any>(`${environment.baseURL}`, account).toPromise();
+    const result = await this.http.post<any>(`${this.baseURL}`, account).toPromise();
     return result;
   }
 
   async updateUser(user: User) {
-    const result = this.http.put(`${environment.baseURL}/${user.userId}`, user)
+    const result = this.http.put(`${this.baseURL}/${user.userId}`, user)
     .toPromise().
     then(
         () => this.toast.success('Atualizado com sucesso')
@@ -80,22 +81,22 @@ export class UsuarioService {
   }
 
   async recoverPass(cpf: string) {
-    const result = await this.http.post<any>(`${environment.baseURL}/RecoverPass`, cpf).toPromise();
+    const result = await this.http.post<any>(`${this.baseURL}/RecoverPass`, cpf).toPromise();
     return result;
   }
 
   async alternPass(users: User[]) {
-    const result = await this.http.post<any>(`${environment.baseURL}/AlternPass`, users).toPromise();
+    const result = await this.http.post<any>(`${this.baseURL}/AlternPass`, users).toPromise();
     return result;
   }
 
   async deleteUser(id: number) {
-    const result = await this.http.delete(`${environment.baseURL}/Delete/${id}`).toPromise() ;
+    const result = await this.http.delete(`${this.baseURL}/Delete/${id}`).toPromise() ;
     return result;
   }
 
   async getUsersList(){
-    const result = this.http.get<User[]>(environment.baseURL).toPromise();
+    const result = this.http.get<User[]>(this.baseURL).toPromise();
 
     return result;
   }
@@ -109,13 +110,13 @@ export class UsuarioService {
   }
 
   async getUserById(id: number){
-    const result = await this.http.get<User>(`${environment.baseURL}/${id}`).toPromise();
+    const result = await this.http.get<User>(`${this.baseURL}/${id}`).toPromise();
     return result;
   }
 
   uploadFile(event) {
     const file = event.target.files[0];
-    const filePath = 'name-your-file-path-here ';
+    const filePath = 'name-your-file-path-here';
     const task = this.storage.upload(filePath, file);
   }
 
@@ -125,7 +126,7 @@ export class UsuarioService {
   }
 
   async getMyTickets(id: number){
-    const result = await this.http.get(`${environment.baseURL}/MyTickets/${id}`).toPromise() ;
+    const result = await this.http.get(`${this.baseURL}/MyTickets/${id}`).toPromise() ;
     return result;
   }
 
