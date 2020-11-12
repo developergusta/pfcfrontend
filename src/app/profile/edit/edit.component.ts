@@ -11,6 +11,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Evento } from 'src/app/models/Evento';
 import * as moment from 'moment';
 import { stringify } from '@angular/compiler/src/util';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { catchError, finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit',
@@ -45,7 +47,8 @@ export class EditComponent implements OnInit {
     private router: Router,
     private userService: UsuarioService,
     private fb: FormBuilder,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private storage: AngularFireStorage
   ) { }
 
   async ngOnInit() {
@@ -190,23 +193,25 @@ export class EditComponent implements OnInit {
     }
   }
 
-  uploadImagem(){
+   async uploadImagem(){
+    
     const nomeArquivo = this.user.image.src.split('\\', 3);
     nomeArquivo[2] = nomeArquivo[2].replace(/.png/i, '_' + this.user.userId + '.png');
     nomeArquivo[2] = nomeArquivo[2].replace(/.jpg/i, '_' + this.user.userId + '.jpg');
     nomeArquivo[2] = nomeArquivo[2].replace(/.jpeg/i, '_' + this.user.userId + '.jpeg');
-    this.user.image.src = nomeArquivo[2];
+ 
 
-    // this.userService.postUpload(this.selectedFile, nomeArquivo[2]).then(
-    //   response => {
-    //     this.user.image.src = "http://localhost:5000/Resources/Images/" + response ;
-    //   }
-    // );
+    const file = this.selectedFile[0];
+    const filePath = this.user.userId.toString();
+    const fileRef = this.storage.ref(`${filePath}/${nomeArquivo[2]}`);
+    const task =  this.storage.upload(`${filePath}/${nomeArquivo[2]}`, file);
+    task.snapshotChanges().pipe(
+        finalize(() =>  fileRef.getDownloadURL().subscribe(item => this.user.image.src = item) )
+     ).subscribe()
   }
 
   async confirmaEdicao(template: any){
     try {
-      this.user.image.src = 'http://localhost:5000/Resources/Images/'.concat(this.user.image.src);
       await this.userService.updateUser(this.user);
       template.hide();
       this.getUser();
