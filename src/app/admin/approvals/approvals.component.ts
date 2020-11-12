@@ -18,12 +18,13 @@ export class ApprovalsAdminComponent implements OnInit {
   eventos: Evento[];
   evento: Evento;
   type: boolean;
+  referencia: boolean;
 
   async ngOnInit() {
 
     try {
       // this.validation();
-      
+
       this.eventos = await this.getEventosPendentes();
       let data = await this.getEventosPendentes();
       data.forEach((item, index, object) => {
@@ -46,12 +47,15 @@ export class ApprovalsAdminComponent implements OnInit {
     this.openModal(template);
     this.evento = evento;
     this.type = true;
+    this.referencia = true;
   }
 
   negarEvento(evento: Evento, template: any) {
     this.openModal(template);
     this.evento = evento;
     this.type = false;
+    this.referencia = true;
+
   }
 
   confirmApproval(confirm: boolean){

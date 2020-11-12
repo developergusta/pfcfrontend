@@ -1,3 +1,4 @@
+import { Evento } from 'src/app/models/Evento';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -11,6 +12,7 @@ import { UsuarioService } from 'src/app/_services/usuario.service';
 })
 export class EventsComponent implements OnInit {
 
+  events: Evento[];
   constructor(
     private eventoService: EventoService,
     private router: Router,
