@@ -10,9 +10,8 @@ import { EventoService } from 'src/app/_services/evento.service';
 import { ToastrService } from 'ngx-toastr';
 import { Evento } from 'src/app/models/Evento';
 import * as moment from 'moment';
-import { stringify } from '@angular/compiler/src/util';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { catchError, finalize } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit',
