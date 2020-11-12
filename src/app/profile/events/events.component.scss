@@ -1,0 +1,21 @@
+.card-categories {
+  width: 100%;
+  cursor: pointer;
+  margin-bottom: 2rem;
+  .card-body {
+    padding: 1rem;
+    .card-text {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.desc-confirm {
+  display: flex;
+  flex-direction: column;
+}
