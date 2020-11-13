@@ -23,26 +23,10 @@ export class UsuarioService {
   hoje = new Date();
 
   constructor(private http: HttpClient
-    , private toast: ToastrService
-    , private storage: AngularFireStorage
-    ) { }
+            , private toast: ToastrService
+            , private storage: AngularFireStorage
+              ) { }
 
-  login(model: any) {
-    return this.http
-      .post(`${this.baseURL}/Login`, model).pipe(
-        map((response: any) => {
-          const user = response;
-          if (user) {
-            this.decodedToken = this.jwtHelper.decodeToken(user.token);
-            sessionStorage.setItem('token', user.token);
-            sessionStorage.setItem('user', JSON.stringify(user.user));
-            sessionStorage.setItem('email', this.decodedToken.email);
-            this.role = this.decodedToken.role;
-            this.name = this.decodedToken.unique_name;
-          }
-        })
-      );
-  }
 
   getToken(): any{
     return sessionStorage.getItem('token');
@@ -117,7 +101,7 @@ export class UsuarioService {
   uploadFile(event) {
     const file = event.target.files[0];
     const filePath = 'name-your-file-path-here';
-    const task = this.storage.upload(filePath, file);
+    this.storage.upload(filePath, file);
   }
 
   getAuthorizationToken() {
