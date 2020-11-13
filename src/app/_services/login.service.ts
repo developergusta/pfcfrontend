@@ -41,4 +41,15 @@ export class LoginService {
         })
       );
   }
+
+
+  async recoverPass(cpf: string) {
+    const result = await this.http.post<any>(`${this.baseURL}/RecoverPass`, cpf).toPromise();
+    return result;
+  }
+
+  async alternPass(users: User[]) {
+    const result = await this.http.post<any>(`${this.baseURL}/AlternPass`, users).toPromise();
+    return result;
+  }
 }

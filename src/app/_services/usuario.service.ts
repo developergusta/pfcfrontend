@@ -64,16 +64,6 @@ export class UsuarioService {
     return result;
   }
 
-  async recoverPass(cpf: string) {
-    const result = await this.http.post<any>(`${this.baseURL}/RecoverPass`, cpf).toPromise();
-    return result;
-  }
-
-  async alternPass(users: User[]) {
-    const result = await this.http.post<any>(`${this.baseURL}/AlternPass`, users).toPromise();
-    return result;
-  }
-
   async deleteUser(id: number) {
     const result = await this.http.delete(`${this.baseURL}/Delete/${id}`).toPromise() ;
     return result;

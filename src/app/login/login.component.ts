@@ -1,3 +1,4 @@
+import { LoginService } from './../_services/login.service';
 import { ToastrService } from 'ngx-toastr';
 import { UsuarioService } from './../_services/usuario.service';
 import { Component, OnInit } from '@angular/core';
@@ -14,7 +15,8 @@ export class LoginComponent implements OnInit {
   focus1;
   model: any = {};
   constructor(
-      private usuarioService: UsuarioService
+      private usuarioService: UsuarioService,
+      private loginService: LoginService
     , public router: Router
     , private toast: ToastrService
     , private fb: FormBuilder) { }
@@ -34,7 +36,7 @@ export class LoginComponent implements OnInit {
   login(): any {
     if (this.registerForm.valid){
       this.model = Object.assign({}, this.registerForm.value);
-      this.usuarioService.login(this.model)
+      this.loginService.login(this.model)
       .subscribe(
         () => {
           this.toast.success('Você está logado');
