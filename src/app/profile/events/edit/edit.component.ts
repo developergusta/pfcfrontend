@@ -4,10 +4,14 @@ import { Evento } from 'src/app/models/Evento';
 import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from 'src/app/_services/usuario.service';
-import { Router, ActivatedRoute  } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { EventoService } from 'src/app/_services/evento.service';
 import { User } from 'src/app/models/User';
 import { FormGroup } from '@angular/forms';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { finalize } from 'rxjs/operators';
+import { CorreiosService } from 'src/app/_services/correios.service';
+
 
 @Component({
   selector: 'app-edit',
@@ -17,7 +21,7 @@ import { FormGroup } from '@angular/forms';
 export class EditComponent implements OnInit {
 
   evento = new Evento();
-
+  eventProgress = 0;
   hr1: {
     hour: 0,
     minute: 0
@@ -27,94 +31,117 @@ export class EditComponent implements OnInit {
     minute: 0
   };
   options = new Array();
-  now = new Date();
-  idade: number;
-  user: User = new User();
-  eventos: Evento[];
   eventForm: FormGroup;
-  index: number;
+  indexLot: number;
+  indexLotCatg: number;
   reference: number;
-  selectedFile: File;
+  selectedFiles: File[];
   fileNameToUpdate: string;
+  now = new Date();
+  dateStart = new Date(this.now.getFullYear(), this.now.getMonth(), this.now.getDate() + 1);
+  dateEnd = new Date(this.now.getFullYear(), this.now.getMonth(), this.now.getDate() + 1);
   constructor(
+    private correios: CorreiosService,
     private eventoService: EventoService,
     private route: ActivatedRoute,
     private userService: UsuarioService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private storage: AngularFireStorage
   ) { }
 
-  ngOnInit(): void {
-    this.getEventFromUrl();
+  async ngOnInit() {
+    await this.getEventFromUrl();
+    this.carregarOpcoesCategoria();
   }
 
 
-  async getEvento() {
-    this.evento = JSON.parse(window.sessionStorage.getItem('evento'));
-    this.evento = await this.eventoService.getEventoById(this.evento.eventId).toPromise();
-    console.log(this.evento);
+  carregarOpcoesCategoria() {
+    this.options = [
+      { id: 'Futebol', name: 'Futebol' },
+      { id: 'Basquete', name: 'Basquete' },
+      { id: 'OutrosEsportes', name: 'Outros Esportes' },
+      { id: 'MuseuExposicoes', name: 'Museu e Exposições' },
+      { id: 'Reveillon', name: 'Reveillón' },
+      { id: 'Musica', name: 'Música' },
+      { id: 'Infantil', name: 'Infantil' },
+      { id: 'CursosWorkshops', name: 'Cursos e Workshops' },
+      { id: 'Drive-in', name: 'Drive-In' },
+      { id: 'Online', name: 'Online' }];
   }
 
-  getEventFromUrl(){
-    this.route.params.subscribe( params => {
+  updtHorario1(event: any) {
+    let hour = Number(event.target.value.substring(0, 2));
+    let minute = Number(event.target.value.substring(3, 5));
+
+    this.evento.dateStart.setHours(hour, minute);
+  }
+
+  updtHorario2(event: any) {
+    let hour = Number(event.target.value.substring(0, 2));
+    let minute = Number(event.target.value.substring(3, 5));
+
+    this.evento.dateEnd.setHours(hour, minute);
+  }
+
+  async getEventFromUrl() {
+    await this.route.params.subscribe(params => {
       this.evento.eventId = parseInt(params.id, 10);
-      this.eventoService.getEventoById(this.evento.eventId).toPromise().then( evt => {
-        this.evento = evt;
-        console.log(this.evento);
-      } ) ;
     });
-
+    await this.eventoService.getEventoById(this.evento.eventId).then( evt => {
+      this.evento = evt;
+    });
     // this.evento.eventId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
     // console.log(parseInt(this.route.snapshot.paramMap.get('id'), 10));
   }
 
-  criarLote(){
-    if (this.user.addresses != null){
+  criarLote() {
+    if (this.evento.lots != null) {
       const lot = new Lot();
       lot.id = 0;
       this.evento.lots.push(lot);
     }
-    else{
+    else {
       this.evento.lots = new Array();
       this.evento.lots[0] = new Lot();
     }
   }
 
-  criarCategoriaLote(){
-    if (this.user.phones != null){
+  criarCategoriaLote(indexLot: number) {
+    if (this.evento.lots[indexLot].lotCategories != null) {
       const lotCateg = new LotCategory();
       lotCateg.id = 0;
-      // this.evento.lots[].lotCategories.push(lotCateg);
+      this.evento.lots[indexLot].lotCategories.push(lotCateg);
       console.log(this.evento);
     }
-    else{
-      // this.evento.lots[].lotCategories = new Array();
-      // this.evento.lots[].lotCategories[0] = new LotCategory();
+    else {
+      this.evento.lots[indexLot].lotCategories = new Array();
+      this.evento.lots[indexLot].lotCategories[0] = new LotCategory();
     }
   }
 
-  confirmaExclusaoLote(template: any){
-    this.evento.lots.splice(this.index);
+  confirmaExclusaoLote(template: any) {
+    this.evento.lots.splice(this.indexLot);
     template.hide();
   }
 
-  confirmaExclusaoCategoriaLote(template: any, indexLot: number){
-    this.evento.lots[indexLot].lotCategories.splice(this.index);
+  confirmaExclusaoCategoriaLote(template: any, indexLot: number) {
+    this.evento.lots[indexLot].lotCategories.splice(this.indexLotCatg);
     template.hide();
   }
 
-  excluirEndereco(template: any, index: number){
+  excluirLote(template: any, index: number) {
     this.reference = 0;
-    this.index = index;
+    this.indexLot = index;
     this.openModal(template);
   }
 
-  excluirTelefone(template: any, index: number){
+  excluirCategoriaLote(template: any, index: number) {
     this.reference = 1;
-    this.index = index;
+    this.indexLotCatg = index;
     this.openModal(template);
   }
 
-  salvarAlteracoes(template: any){
+  salvarAlteracoes(template: any) {
     this.reference = 2;
     this.openModal(template);
   }
@@ -123,35 +150,58 @@ export class EditComponent implements OnInit {
     template.show();
   }
 
-  onFileChanged(event){
+  onFileChanged(event) {
     if (event.target.files && event.target.files.length) {
-      this.selectedFile = event.target.files;
-      this.uploadImagem();
+      if (event.target.files.length > 5) {
+        this.toastr.error('Só é permitido inserir no máximo 5 imagens por evento');
+      } else {
+        debugger
+        for (let i = 0; i < event.target.files.length; i++) {
+          this.evento.images[i].src = event.target.files[i];
+        }
+        this.selectedFiles = event.target.files;
+        this.uploadImagem();
+      }
     }
   }
 
-  uploadImagem(){
-    const nomeArquivo = this.user.image.src.split('\\', 3);
-    nomeArquivo[2] = nomeArquivo[2].replace(/.png/i, '_' + this.user.userId + '.png');
-    nomeArquivo[2] = nomeArquivo[2].replace(/.jpg/i, '_' + this.user.userId + '.jpg');
-    nomeArquivo[2] = nomeArquivo[2].replace(/.jpeg/i, '_' + this.user.userId + '.jpeg');
-    this.user.image.src = nomeArquivo[2];
+  async uploadImagem() {
 
-    // this.userService.postUpload(this.selectedFile, nomeArquivo[2]).then(
-    //   response => {
-    //     this.user.image.src = "http://localhost:5000/Resources/Images/" + response ;
-    //   }
-    // );
+    for (let i = 0; i < this.selectedFiles.length; i++) {
+      const nomeArquivo = this.evento.eventId.toString();
+
+      const file = this.selectedFiles[i];
+      const filePath = 'event/' + this.evento.eventId.toString();
+      const fileRef = this.storage.ref(`${filePath}/${nomeArquivo}`);
+      const task = this.storage.upload(`${filePath}/${nomeArquivo}`, file);
+      task.snapshotChanges().pipe(
+        finalize(() => fileRef.getDownloadURL().subscribe(item => this.evento.images[i].src = item))
+      ).subscribe();
+    }
   }
 
+  buscaCEP() {
+    let cep = this.evento.address.zipCode;
+    if (cep != null && cep !== '') {
+      this.correios.consultaCep(cep).then(n => {
+        this.populateAddress(n);
+      });
+      // this.eventForm.get('address.city').setValue('abc');
+    }
+  }
 
-  async confirmaEdicao(template: any){
+  populateAddress(address: any) {
+    this.evento.address.city = address.localidade;
+    this.evento.address.state = address.uf;
+    this.evento.address.street = address.logradouro;
+  }
+
+  async confirmaEdicao(template: any) {
     try {
-      this.user.image.src = 'http://localhost:5000/Resources/Images/'.concat(this.user.image.src);
-      await this.userService.updateUser(this.user);
+      await this.eventoService.updateEvento(this.evento);
       template.hide();
-      this.getEvento();
-    } catch  {
+      this.getEventFromUrl();
+    } catch {
       console.log('Erro ao fazer o update');
     }
   }

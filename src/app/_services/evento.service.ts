@@ -1,3 +1,4 @@
+import { Ticket } from './../models/Ticket';
 import { UsuarioService } from './usuario.service';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -22,19 +23,15 @@ export class EventoService {
 
   async getEventosAprovados(){
     try {
-    const data = await this.getAllEvento();
-    data.forEach( (item, index, object) => {
-      if (item.status === 'PENDENTE'){
-        object.splice(index, 1);
-      }
-    });
-    return data;
+      const result = await this.http.get<Evento[]>(`${this.baseURL}/Approved`).toPromise();
+      console.log(result);
+      return result;
     } catch (error) {
       console.log(error);
     }
   }
 
-  async getEventosPendentes(){
+  async getEventosPendentes1(){
     try {
     const data = await this.getAllEvento();
     data.forEach( (item, index, object) => {
@@ -48,9 +45,19 @@ export class EventoService {
     }
   }
 
-  async getEventosByUserId(){
+  async getEventosPendentes(){
     try {
-      const result = await this.http.get<Evento[]>(`${this.baseURL}/getEventsByUserId/${this.getUserIdLogged()}`).toPromise();
+      const result = await this.http.get<Evento[]>(`${this.baseURL}/NotApproved`).toPromise();
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getEventosByUserId(id: number){
+    try {
+      const result = await this.http.get<Evento[]>(`${this.baseURL}/EventsByUserId/${this.getUserIdLogged()}`).toPromise();
       console.log(result);
       return result;
     } catch (error) {
@@ -72,8 +79,9 @@ export class EventoService {
     return this.http.get<Evento[]>(`${this.baseURL}/getByTema/${tema}`);
   }
 
-  getEventoById(id: number): Observable<Evento> {
-    return this.http.get<Evento>(`${this.baseURL}/${id}`);
+  async getEventoById(id: number) {
+    const result = await this.http.get<Evento>(`${this.baseURL}/${id}`).toPromise();
+    return result;
   }
 
   postUpload(file: File, name: string) {
@@ -89,7 +97,7 @@ export class EventoService {
     return this.http.post(this.baseURL, evento);
   }
 
-  putEvento(evento: Evento) {
+  updateEvento(evento: Evento) {
     return this.http.put(`${this.baseURL}/${evento.eventId}`, evento);
   }
 

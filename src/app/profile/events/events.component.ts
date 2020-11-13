@@ -1,3 +1,5 @@
+import { TicketService } from './../../_services/ticket.service';
+import { User } from 'src/app/models/User';
 import { Evento } from 'src/app/models/Evento';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -12,15 +14,27 @@ import { UsuarioService } from 'src/app/_services/usuario.service';
 })
 export class EventsComponent implements OnInit {
 
+  user: User;
   events: Evento[];
   constructor(
     private eventoService: EventoService,
     private router: Router,
     private userService: UsuarioService,
-    private toastr: ToastrService
+    private ticketService: TicketService,
   ) { }
 
   ngOnInit(): void {
+    this.getUser();
+    this.getEventos();
+  }
+
+  getUser(){
+    const user = this.userService.getUserLogged();
+    this.user = JSON.parse(user);
+  }
+
+  async getEventos(){
+    this.events = await this.eventoService.getEventosByUserId(this.user.userId);
   }
 
 }

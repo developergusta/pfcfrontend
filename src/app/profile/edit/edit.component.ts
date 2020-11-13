@@ -57,15 +57,18 @@ export class EditComponent implements OnInit {
       this.user.dateBirth = new Date(this.user.dateBirth);
       this.calculaIdade();
       this.fileNameToUpdate = this.user.image.src.toString();
-      this.options = [
-      {id: 1, name: 'Residencial'},
-      {id: 2, name: 'Celular'},
-      {id: 3, name: 'Comercial'} ];
+      this.carregarOpcoesTelefone();
     } catch (error) {
       console.log(error);
     }
   }
 
+  carregarOpcoesTelefone() {
+    this.options = [
+      { id: 1, name: 'Residencial' },
+      { id: 2, name: 'Celular' },
+      { id: 3, name: 'Comercial' }];
+  }
 
   async getUser() {
     this.user = JSON.parse(window.sessionStorage.getItem('user'));
@@ -97,7 +100,7 @@ export class EditComponent implements OnInit {
     });
   }
 
-  calculaIdade(){
+  calculaIdade() {
     const hoje = moment(this.now);
     const nasc = moment(this.user.dateBirth);
     const idade = moment.duration(hoje.diff(nasc));
@@ -129,54 +132,54 @@ export class EditComponent implements OnInit {
     this.user.addresses[i].street = address.logradouro;
   }
 
-  criarEndereco(){
-    if (this.user.addresses != null){
+  criarEndereco() {
+    if (this.user.addresses != null) {
       const addr = new Address();
       addr.addressId = 0;
       this.user.addresses.push(addr);
     }
-    else{
+    else {
       this.user.addresses = new Array();
       this.user.addresses[0] = new Address();
     }
   }
 
-  criarTelefone(){
-    if (this.user.phones != null){
+  criarTelefone() {
+    if (this.user.phones != null) {
       const phon = new Phone();
       phon.phoneId = 0;
       this.user.phones.push(phon);
       console.log(this.user);
     }
-    else{
+    else {
       this.user.phones = new Array();
       this.user.phones[0] = new Phone();
     }
   }
 
-  confirmaExclusaoEndereco(template: any){
+  confirmaExclusaoEndereco(template: any) {
     this.user.addresses.splice(this.index);
     template.hide();
   }
 
-  confirmaExclusaoTelefone(template: any){
+  confirmaExclusaoTelefone(template: any) {
     this.user.phones.splice(this.index);
     template.hide();
   }
 
-  excluirEndereco(template: any, index: number){
+  excluirEndereco(template: any, index: number) {
     this.reference = 0;
     this.index = index;
     this.openModal(template);
   }
 
-  excluirTelefone(template: any, index: number){
+  excluirTelefone(template: any, index: number) {
     this.reference = 1;
     this.index = index;
     this.openModal(template);
   }
 
-  salvarAlteracoes(template: any){
+  salvarAlteracoes(template: any) {
     this.reference = 2;
     this.openModal(template);
   }
@@ -185,36 +188,36 @@ export class EditComponent implements OnInit {
     template.show();
   }
 
-  onFileChanged(event){
+  onFileChanged(event) {
     if (event.target.files && event.target.files.length) {
       this.selectedFile = event.target.files;
       this.uploadImagem();
     }
   }
 
-   async uploadImagem(){
-    
+  async uploadImagem() {
+
     const nomeArquivo = this.user.image.src.split('\\', 3);
     nomeArquivo[2] = nomeArquivo[2].replace(/.png/i, '_' + this.user.userId + '.png');
     nomeArquivo[2] = nomeArquivo[2].replace(/.jpg/i, '_' + this.user.userId + '.jpg');
     nomeArquivo[2] = nomeArquivo[2].replace(/.jpeg/i, '_' + this.user.userId + '.jpeg');
- 
+
 
     const file = this.selectedFile[0];
     const filePath = this.user.userId.toString();
     const fileRef = this.storage.ref(`${filePath}/${nomeArquivo[2]}`);
-    const task =  this.storage.upload(`${filePath}/${nomeArquivo[2]}`, file);
+    const task = this.storage.upload(`${filePath}/${nomeArquivo[2]}`, file);
     task.snapshotChanges().pipe(
-        finalize(() =>  fileRef.getDownloadURL().subscribe(item => this.user.image.src = item) )
-     ).subscribe()
+      finalize(() => fileRef.getDownloadURL().subscribe(item => this.user.image.src = item))
+    ).subscribe()
   }
 
-  async confirmaEdicao(template: any){
+  async confirmaEdicao(template: any) {
     try {
       await this.userService.updateUser(this.user);
       template.hide();
       this.getUser();
-    } catch  {
+    } catch {
       console.log('Erro ao fazer o update');
     }
   }

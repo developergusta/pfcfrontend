@@ -18,7 +18,7 @@ import { jsPDF } from 'jspdf';
 })
 export class ProfileComponent implements OnInit {
 
-
+  events: Evento[];
   hr1: {
     hour: 0,
     minute: 0
@@ -33,7 +33,7 @@ export class ProfileComponent implements OnInit {
   now = new Date();
   idade: number;
   dateStart = new Date(this.now.getFullYear(), this.now.getMonth(), this.now.getDate());
-  dateEnd = new Date(this.now.getFullYear() - 14, this.now.getMonth(), this.now.getDate());
+  dateEnd = new Date(this.now.getFullYear(), this.now.getMonth(), this.now.getDate());
   evento: Evento = {
     titleEvent: '',
     category: '',
@@ -70,6 +70,7 @@ export class ProfileComponent implements OnInit {
       this.getUser();
       this.validation();
       this.calculaIdade();
+      this.getEventos();
     } catch (error) {
 
     }
@@ -262,8 +263,8 @@ export class ProfileComponent implements OnInit {
     doc.save("a4.pdf");
   }
 
-  getMyEvents() {
-
+  async getEventos(){
+    this.user.events = await this.eventoService.getEventosByUserId(this.user.userId);
   }
 
   startTimer() {

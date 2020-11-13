@@ -65,7 +65,7 @@
         </li>
       </ul>
       <ul class="navbar-nav align-items-lg-center ml-lg-auto">
-        <li class="nav-item d-none d-lg-block ml-lg-4" *ngIf="loggedUser">
+        <li class="nav-item d-none d-lg-block ml-lg-4" *ngIf="logged">
           <span class="nav-link-inner--text" style="color: white"
             >Seu Saldo: R$ {{ loggedUser.credit | number: "1.2-2" }}</span
           >

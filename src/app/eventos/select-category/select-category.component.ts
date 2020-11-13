@@ -47,7 +47,7 @@ export class SelectCategoryComponent implements OnInit {
 
    async getLoggedUser() {
     const user = await this.userService.getUserLogged();
-    this.loggedUser = JSON.parse(user)
+    this.loggedUser = JSON.parse(user);
   }
- 
+
 }

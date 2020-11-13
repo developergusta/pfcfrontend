@@ -63,7 +63,7 @@ export class ApprovalsAdminComponent implements OnInit {
   }
 
   confirmar(template: any) {
-      this.eventoService.putEvento(this.evento).subscribe(
+      this.eventoService.updateEvento(this.evento).subscribe(
         () => {
           template.hide();
           this.getEventosPendentes();

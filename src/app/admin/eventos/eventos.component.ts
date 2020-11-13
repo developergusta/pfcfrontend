@@ -118,7 +118,7 @@ export class EventosAdminComponent implements OnInit {
 
         //this.uploadImagem();
 
-        this.eventoService.putEvento(this.evento).subscribe(
+        this.eventoService.updateEvento(this.evento).subscribe(
           () => {
             template.hide();
             this.getEventosAprovados();

@@ -27,7 +27,7 @@ export class TicketsComponent implements OnInit {
   }
 
   getEventInfo(eventId: number){
-    this.eventoService.getEventoById(eventId).toPromise().then(
+    this.eventoService.getEventoById(eventId).then(
       resp => this.event = resp
     );
   }

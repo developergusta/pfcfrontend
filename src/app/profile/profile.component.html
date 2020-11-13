@@ -36,7 +36,7 @@
                 <a [routerLink]="['/profile/edit']" class="btn btn-sm btn-default float-right">
                   Editar perfil
                 </a>
-                <a *ngIf="user"  [routerLink]="['/profile/events']" class="btn btn-sm btn-danger float-right">
+                <a *ngIf="user.events"  [routerLink]="['/profile/events']" class="btn btn-sm btn-danger float-right">
                   Meus Eventos
                 </a>
               </div>

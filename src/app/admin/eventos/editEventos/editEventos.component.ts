@@ -43,7 +43,7 @@ export class EditEventosAdminComponent implements OnInit {
   carregarEvento() {
     const idEvento = +this.router.snapshot.paramMap.get('id');
     this.eventoService.getEventoById(idEvento)
-      .subscribe(
+      .then(
         (evento: Evento) => {
           // this.evento = Object.assign({}, evento);
           // evento.images.forEach( (x, index) => {
