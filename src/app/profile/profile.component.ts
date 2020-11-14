@@ -55,6 +55,7 @@ export class ProfileComponent implements OnInit {
   eventForm: FormGroup;
   interval: any;
   eventProgress = 0;
+  optionsCateg = new Array();
 
 
   constructor(
@@ -67,13 +68,28 @@ export class ProfileComponent implements OnInit {
 
   async ngOnInit() {
     try {
-      this.getUser();
+      await this.getUser();
       this.validation();
       this.calculaIdade();
-      this.getEventos();
+      await this.getEventos();
+      await this.carregarOpcoesCategoria();
     } catch (error) {
 
     }
+  }
+
+  async carregarOpcoesCategoria() {
+    this.optionsCateg = [
+      { id: 'Futebol', name: 'Futebol' },
+      { id: 'Basquete', name: 'Basquete' },
+      { id: 'OutrosEsportes', name: 'Outros Esportes' },
+      { id: 'MuseuExposicoes', name: 'Museu e Exposições' },
+      { id: 'Reveillon', name: 'Reveillón' },
+      { id: 'Musica', name: 'Música' },
+      { id: 'Infantil', name: 'Infantil' },
+      { id: 'CursosWorkshops', name: 'Cursos e Workshops' },
+      { id: 'Drive-in', name: 'Drive-In' },
+      { id: 'Online', name: 'Online' }];
   }
 
   updtHorario1(event: any) {
@@ -171,9 +187,12 @@ export class ProfileComponent implements OnInit {
   }
 
 
-  getUser() {
+  async getUser() {
     this.user = JSON.parse(window.sessionStorage.getItem('user'));
-    console.log(this.user)
+    this.user = await this.userService.getUserById(this.user.userId);
+    this.user.dateBirth = new Date(this.user.dateBirth);
+    this.user.dateBirth.setMonth(this.evento.dateStart.getMonth() - 1);
+    console.log(this.user);
   }
 
   getFirstAddress() {
@@ -231,29 +250,7 @@ export class ProfileComponent implements OnInit {
   ];
 
   public openPDF(): void {
-    let doc = new jsPDF();
-    doc.setFontSize(20);
-    doc.text("Ficha do produto", 65, 15);
-
-    doc.rect(10, 20, 30, 8, "FD");
-    doc.rect(10, 28, 30, 8, "FD");
-    doc.rect(10, 36, 30, 8, "FD");
-    doc.rect(40, 20, 160, 8, "F");
-    doc.rect(40, 28, 160, 8, "F");
-    doc.rect(40, 36, 160, 8, "F");
-
-    doc.setFontSize(12);
-    doc.setTextColor(255, 255, 255);
-    doc.text(this.user.name, 12, 25);
-    doc.text("Nome", 12, 33);
-    doc.text("Preço", 12, 41);
-
-    doc.setTextColor(255, 255, 255);
-    doc.text("001", 42, 25);
-    doc.text("Notebook 14' i7 8GB 1TB", 42, 33);
-    doc.text("R$ 2400,00", 42, 41);
-
-    doc.save("a4.pdf");
+    
   }
 
   public downloadPDF(): void {

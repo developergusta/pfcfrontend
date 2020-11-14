@@ -52,7 +52,7 @@ export class EditComponent implements OnInit {
 
   async ngOnInit() {
     try {
-      this.getUser();
+      await this.getUser();
       this.validation();
       this.user.dateBirth = new Date(this.user.dateBirth);
       this.calculaIdade();
@@ -107,15 +107,6 @@ export class EditComponent implements OnInit {
     this.idade = Math.trunc(idade.asYears());
   }
 
-  alterarImagem() {
-    if (this.user.tickets.length > 0) {
-
-    }
-    else {
-      this.toastr.error('Você ainda não comprou nenhum ingresso');
-    }
-  }
-
   buscaCEP(i: number) {
     let cep = this.user.addresses[i].zipCode;
     if (cep != null && cep !== '') {
@@ -142,6 +133,7 @@ export class EditComponent implements OnInit {
       this.user.addresses = new Array();
       this.user.addresses[0] = new Address();
     }
+    console.log(this.user)
   }
 
   criarTelefone() {
@@ -188,10 +180,10 @@ export class EditComponent implements OnInit {
     template.show();
   }
 
-  onFileChanged(event) {
+  async onFileChanged(event) {
     if (event.target.files && event.target.files.length) {
       this.selectedFile = event.target.files;
-      this.uploadImagem();
+      await this.uploadImagem();
     }
   }
 
@@ -207,9 +199,10 @@ export class EditComponent implements OnInit {
     const filePath = this.user.userId.toString();
     const fileRef = this.storage.ref(`${filePath}/${nomeArquivo[2]}`);
     const task = this.storage.upload(`${filePath}/${nomeArquivo[2]}`, file);
+
     task.snapshotChanges().pipe(
       finalize(() => fileRef.getDownloadURL().subscribe(item => this.user.image.src = item))
-    ).subscribe()
+    ).subscribe();
   }
 
   async confirmaEdicao(template: any) {

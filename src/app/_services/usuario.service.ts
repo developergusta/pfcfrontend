@@ -53,6 +53,7 @@ export class UsuarioService {
   }
 
   async updateUser(user: User) {
+    debugger
     const result = this.http.put(`${this.baseURL}/${user.userId}`, user)
     .toPromise().
     then(

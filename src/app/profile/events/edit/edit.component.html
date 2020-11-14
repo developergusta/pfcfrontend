@@ -47,9 +47,22 @@
             </div>
           </div>
           <div class="text-center mt-5">
-            <input type="file" accept="image/*" (change)="onFileChanged($event)" style="display: none" #fileInput1 multiple>
+            <ngb-carousel [showNavigationArrows]="true" [showNavigationIndicators]="true" interval="12000"
+              [keyboard]="true" [pauseOnHover]="true" [wrap]="true" [activeId]="'secondSlide'"
+              *ngIf="evento.images">
+              <ng-template ngbSlide id="firstSlide">
+                <div class="row">
+                  <div class="picsum-img-wrapper col-sm-12 col-4 mt-5 mt-sm-0">
+                    <img src="https://img.icons8.com/cute-clipart/128/000000/music.png" alt="Música"
+                      class="img-fluid rounded-circle" style="height: 120px; cursor: pointer" />
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-carousel>
+            <input type="file" accept="image/*" (change)="onFileChanged($event)" style="display: none" #fileInput1
+              multiple>
             <button class="btn btn-lg btn-info" type="button" (click)="fileInput1.click()">Alterar Imagens</button>
-            <label *ngIf="!evento.images" >Ainda não há imagens</label>
+            <label *ngIf="!evento.images">Ainda não há imagens</label>
             <br><label>Insira no máximo 5</label>
             <hr>
             <div class="border border-light rounded">
@@ -58,25 +71,23 @@
                   <label>Título do evento</label>
                   <input type="text" name="titleEvent" class="form-control form-control-alternative"
                     [(ngModel)]="evento.titleEvent" [ngModelOptions]="{standalone: true}" required minlength="3">
-                  <div *ngIf="evento.titleEvent.length < 4" class="invalid-feedback">
-                    Título deve ter no mínimo 4 Caracteres.
-                  </div>
-                  <div *ngIf="evento.titleEvent.length > 50" class="invalid-feedback">
-                    Título deve ter no máximo 50 Caracteres.
-                  </div>
                 </div>
+              </div>
+              <div class="form-row">
                 <div class="form-group col-md-12">
                   <label>Descrição do evento</label>
                   <textarea type="text" class="form-control form-control-alternative" [(ngModel)]="evento.description"
                     [ngModelOptions]="{standalone: true}" required></textarea>
                 </div>
+              </div>
+              <div class="form-row">
                 <div class="form-group col-md-6">
                   <label for="sel1">Categoria</label>
                   <select class="form-control" id="sel1" [(ngModel)]="evento.category">
                     <option *ngFor="let opt of options" value="{{opt.id}}" [ngValue]="opt.id">{{opt.name}}</option>
                   </select>
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-6">
                   <label>Qtd máxima de pessoas</label>
                   <input type="number" placeholder="" class="form-control form-control-alternative"
                     [(ngModel)]="evento.capacity" [ngModelOptions]="{standalone: true}" min="1" max="1000000">
@@ -85,39 +96,39 @@
               <div class="form-row">
                 <div class="form-group col-md-8">
                   <label>País</label>
-                  <input type="text" class="form-control form-control-alternative" [(ngModel)]="evento.address.country"
+                  <input type="text" class="form-control form-control-alternative" [ngModel]="evento.address?.country" (ngModelChange)="evento.address.country = $event"
                     [ngModelOptions]="{standalone: true}" required minlength="3" placeholder="">
                 </div>
                 <div class="form-group col-md-4">
                   <label>CEP</label>
-                  <input type="text" class="form-control form-control-alternative" [(ngModel)]="evento.address.zipCode"
+                  <input type="text" class="form-control form-control-alternative" [ngModel]="evento.address?.zipCode" (ngModelChange)="evento.address.zipCode = $event"
                     [ngModelOptions]="{standalone: true}" required mask="00000-000" (change)="buscaCEP()"
                     placeholder="">
                 </div>
                 <div class="form-group col-md-4">
                   <label>Estado</label>
-                  <input type="text" class="form-control form-control-alternative" [(ngModel)]="evento.address.state"
+                  <input type="text" class="form-control form-control-alternative" [ngModel]="evento.address?.state"
                     [ngModelOptions]="{standalone: true}" required minlength="2" placeholder="">
                 </div>
                 <div class="form-group col-md-8">
                   <label>Cidade</label>
-                  <input type="text" class="form-control form-control-alternative" [(ngModel)]="evento.address.city"
+                  <input type="text" class="form-control form-control-alternative" [ngModel]="evento.address?.city"
                     [ngModelOptions]="{standalone: true}" placeholder="">
                 </div>
                 <div class="form-group col-md-8">
                   <label>Logradouro</label>
-                  <input type="text" class="form-control form-control-alternative" [(ngModel)]="evento.address.street"
+                  <input type="text" class="form-control form-control-alternative" [ngModel]="evento.address?.street"
                     [ngModelOptions]="{standalone: true}" placeholder="">
                 </div>
                 <div class="form-group col-md-4">
                   <label>Número</label>
-                  <input type="number" class="form-control form-control-alternative" [(ngModel)]="evento.address.num"
+                  <input type="number" class="form-control form-control-alternative" [ngModel]="evento.address?.num"
                     [ngModelOptions]="{standalone: true}" placeholder="">
                 </div>
                 <div class="form-group col-md-12">
                   <label>Complemento</label>
                   <input type="text" class="form-control form-control-alternative"
-                    [(ngModel)]="evento.address.complement" [ngModelOptions]="{standalone: true}" placeholder="">
+                    [ngModel]="evento.address?.complement" [ngModelOptions]="{standalone: true}" placeholder="">
                 </div>
                 <div class="form-group col-md-4">
                   <label>Data de INÍCIO</label>
@@ -129,6 +140,7 @@
                 <div class="form-group col-md-2">
                   <label>Hora INICIO</label>
                   <input type="time" placeholder="" class="form-control form-control-alternative"
+                    value="{{hora1}}"
                     (change)="updtHorario1($event)">
                 </div>
                 <div class="form-group col-md-4">
@@ -143,7 +155,6 @@
                     (change)="updtHorario1($event)">
                 </div>
               </div>
-              <div class="row">
               <div *ngFor="let lot of this.evento.lots; let i = index;" class="h6 font-weight-300">
                 <div class="border border-light rounded">
                   <div class="form-row">
@@ -161,14 +172,16 @@
                           [ngModelOptions]="{standalone: true}" required mask="00/00/0000" placeholder="00/00/0000">
                       </div>
                     </div>
-                    <button class="btn btn-lg btn-info" type="button" (click)="criarCategoriaLote(i)">
-                      <span class="btn-inner--icon">
-                        <i class="fas fa-plus mr-2"></i>
-                      </span>
-                      Adicionar Categoria de Lote
-                    </button>
-                    <div class="form-group col-md-3  d-flex align-items-center">
-                      <button class="btn btn-lg btn-danger" type="button" (click)="excluirLote(modalConfirm, i)">
+                    <div class="form-group col-md-4">
+                      <button class="btn btn-md btn-info" type="button" (click)="criarCategoriaLote(i)">
+                        <span class="btn-inner--icon">
+                          <i class="fas fa-plus mr-2"></i>
+                        </span>
+                        Adicionar Categoria de Lote
+                      </button>
+                    </div>
+                    <div class="form-group col-md-4 d-flex align-items-center">
+                      <button class="btn btn-sm btn-danger" type="button" (click)="excluirLote(modalConfirm, i)">
                         <span class="btn-inner--icon">
                           <i class="fas fa-times mr-2"></i>
                         </span>
@@ -178,7 +191,6 @@
                   </div>
                 </div>
               </div>
-            </div>
               <div class="border border-light rounded">
                 <button class="btn btn-lg btn-info" type="button" (click)="criarLote()">
                   <span class="btn-inner--icon">

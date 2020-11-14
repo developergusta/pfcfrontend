@@ -29,7 +29,7 @@ export class LoginService {
     return this.http
       .post(`${this.baseURL}`, model).pipe(
         map((response: any) => {
-          const user = response;
+          const user = response; 
           if (user) {
             this.decodedToken = this.jwtHelper.decodeToken(user.token);
             sessionStorage.setItem('token', user.token);

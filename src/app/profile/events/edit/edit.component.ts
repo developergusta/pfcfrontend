@@ -22,14 +22,8 @@ export class EditComponent implements OnInit {
 
   evento = new Evento();
   eventProgress = 0;
-  hr1: {
-    hour: 0,
-    minute: 0
-  };
-  hr2: {
-    hour: 0,
-    minute: 0
-  };
+  hora1 = '';
+  horarios = new Array();
   options = new Array();
   eventForm: FormGroup;
   indexLot: number;
@@ -52,6 +46,8 @@ export class EditComponent implements OnInit {
   async ngOnInit() {
     await this.getEventFromUrl();
     this.carregarOpcoesCategoria();
+    this.getHora1();
+    console.log(this.evento);
   }
 
 
@@ -84,14 +80,34 @@ export class EditComponent implements OnInit {
   }
 
   async getEventFromUrl() {
-    await this.route.params.subscribe(params => {
+    this.route.params.subscribe(params => {
       this.evento.eventId = parseInt(params.id, 10);
     });
-    await this.eventoService.getEventoById(this.evento.eventId).then( evt => {
-      this.evento = evt;
-    });
-    // this.evento.eventId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
-    // console.log(parseInt(this.route.snapshot.paramMap.get('id'), 10));
+    this.evento = await this.eventoService.getEventoById(this.evento.eventId);
+    this.evento.dateStart = new Date(this.evento.dateStart);
+    this.evento.dateStart.setMonth(this.evento.dateStart.getMonth() - 1);
+    this.evento.dateEnd = new Date(this.evento.dateEnd);
+    this.evento.dateEnd.setMonth(this.evento.dateEnd.getMonth() - 1);
+    if (!this.evento.lots.length) {
+      this.evento.lots.push(new Lot());
+      this.evento.lots[0].lotCategories.push(new LotCategory());
+    }
+    console.log(this.evento.dateStart);
+  }
+
+  getHora1() {
+    const hora = this.evento.dateStart.getHours();
+    const minuto = this.evento.dateStart.getMinutes();
+    let retorno = '';
+    if (hora < 10) {
+      retorno += '0';
+    }
+    retorno += hora.toString() + ':';
+    if (minuto < 10) {
+      retorno += '0';
+    }
+    retorno += minuto.toString();
+    this.hora1 = retorno;
   }
 
   criarLote() {
@@ -164,7 +180,6 @@ export class EditComponent implements OnInit {
       }
     }
   }
-
   async uploadImagem() {
 
     for (let i = 0; i < this.selectedFiles.length; i++) {
@@ -174,9 +189,12 @@ export class EditComponent implements OnInit {
       const filePath = 'event/' + this.evento.eventId.toString();
       const fileRef = this.storage.ref(`${filePath}/${nomeArquivo}`);
       const task = this.storage.upload(`${filePath}/${nomeArquivo}`, file);
-      task.snapshotChanges().pipe(
-        finalize(() => fileRef.getDownloadURL().subscribe(item => this.evento.images[i].src = item))
-      ).subscribe();
+
+      
+
+      // task.snapshotChanges().pipe(
+      //   finalize(() => fileRef.getDownloadURL().subscribe(item => this.evento.images[i].src = item))
+      // ).subscribe();
     }
   }
 

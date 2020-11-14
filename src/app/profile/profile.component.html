@@ -130,8 +130,9 @@
             </div>
             <div class="form-group col-md-12">
               <label>Categoria</label>
-              <input type="text" class="form-control form-control-alternative" [(ngModel)]="evento.category"
-                [ngModelOptions]="{standalone: true}" required>
+              <select class="form-control" id="sel1" [(ngModel)]="evento.category">
+                <option *ngFor="let opt of optionsCateg" value="{{opt.id}}" [ngValue]="opt.id">{{opt.name}}</option>
+              </select>
             </div>
           </div>
           <div class="form-row">
@@ -174,7 +175,7 @@
               <label>Data de INÍCIO</label>
               <input type="text" class="form-control form-control-alternative" bsDatepicker
                 [(ngModel)]="evento.dateStart" [ngModelOptions]="{standalone: true}"
-                value="{{dateStart | DateFormatPipe}}" [bsConfig]="{ dateInputFormat : 'DD/MM/YYYY' }" placeholder="">
+                [bsConfig]="{ dateInputFormat : 'DD/MM/YYYY' }" placeholder="">
             </div>
             <div class="form-group col-md-2">
               <label>Hora INICIO</label>
