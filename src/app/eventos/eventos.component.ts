@@ -15,12 +15,13 @@ export class EventosComponent implements OnInit {
   constructor(private eventoService: EventoService, private toastr: ToastrService, private modalService: BsModalService) { }
 
   titulo = 'Eventos';
+  focus1: boolean;
   dataEvento: string;
   eventosFiltrados: Evento[];
   eventos: Evento[];
   evento: Evento;
   modoSalvar = 'post';
-  focus1: boolean;
+  menorPreco: number;
 
   imagemLargura = 50;
   imagemMargem = 2;
@@ -52,9 +53,20 @@ export class EventosComponent implements OnInit {
         ],
         description: 'evento para curtir',
         capacity: 100000,
+        lots: [
+          {
+            id: 1,
+            dateStart: new Date(1),
+            dateEnd: new Date(5),
+            lotCategories: [
+              { desc: 'Meia', priceCategory: 20 },
+              { desc: 'Inteira', priceCategory: 40 },
+              { desc: 'Camarote', priceCategory: 50 },
+            ]
+          }
+        ],
         dateStart: new Date(1),
         dateEnd: new Date(5),
-        price: 100,
         eventId: 1
       },
       {
@@ -70,6 +82,18 @@ export class EventosComponent implements OnInit {
           }
         ],
         capacity: 1000,
+        lots: [
+          {
+            id: 1,
+            dateStart: new Date(1),
+            dateEnd: new Date(5),
+            lotCategories: [
+              { desc: 'Meia', priceCategory: 20 },
+              { desc: 'Inteira', priceCategory: 40 },
+              { desc: 'Camarote', priceCategory: 50 },
+            ]
+          }
+        ],
         dateStart: new Date(1),
         dateEnd: new Date(5),
         eventId: 2
@@ -87,6 +111,18 @@ export class EventosComponent implements OnInit {
           }
         ],
         capacity: 20000,
+        lots: [
+          {
+            id: 1,
+            dateStart: new Date(1),
+            dateEnd: new Date(5),
+            lotCategories: [
+              { desc: 'Meia', priceCategory: 20 },
+              { desc: 'Inteira', priceCategory: 40 },
+              { desc: 'Camarote', priceCategory: 50 },
+            ]
+          }
+        ],
         dateStart: new Date(1),
         dateEnd: new Date(5),
         eventId: 3
@@ -106,12 +142,36 @@ export class EventosComponent implements OnInit {
         capacity: 300,
         dateStart: new Date(1),
         dateEnd: new Date(5),
+        lots: [
+          {
+            id: 1,
+            dateStart: new Date(1),
+            dateEnd: new Date(5),
+            lotCategories: [
+              { desc: 'Meia', priceCategory: 20 },
+              { desc: 'Inteira', priceCategory: 40 },
+              { desc: 'Camarote', priceCategory: 50 },
+            ]
+          }
+        ],
         eventId: 4
       },
-    ]
+    ],
+    this.getMenorValor(1);
     } catch (error) {
       console.log(error);
     }
+  }
+
+  getMenorValor(id: number){
+    this.eventos.find( x => x.eventId = id )
+      .lots.find( x => x.dateStart < new Date() && x.dateEnd > new Date() )
+      .lotCategories.forEach( lotCateg => {
+        if ( lotCateg.priceCategory > this.menorPreco){
+          this.menorPreco = lotCateg.priceCategory;
+        }
+    });
+    return this.menorPreco;
   }
 
   get filtroLista(): string {

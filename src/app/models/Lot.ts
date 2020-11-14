@@ -2,10 +2,9 @@ import { LotCategory } from './LotCategory';
 export class Lot {
   constructor() {}
 
-  id: number;
-  price?: number;
+  id?: number;
   dateStart?: Date;
   dateEnd?: Date;
-  eventId: number;
+  eventId?: number;
   lotCategories?: LotCategory[];
 }

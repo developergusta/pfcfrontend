@@ -14,7 +14,6 @@ export class Evento {
   status?: string;
   dateStart?: Date;
   dateEnd?: Date;
-  price?: number;
   lots?: Lot[];
   address?: Address;
   user?: User;
