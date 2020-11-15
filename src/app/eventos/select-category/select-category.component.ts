@@ -56,6 +56,7 @@ export class SelectCategoryComponent implements OnInit {
     ticket.eventId = this.evento.eventId;
     ticket.lotId = this.selectedLotCategory.lotId;
     ticket.lotCategoryId = this.selectedLotCategory.lotCategoryId
+    ticket.userId = this.loggedUser.userId;
     const tickets = Array<Ticket>();
     for(let i = 0; i < this.quantity; i++){
       tickets.push(ticket);
