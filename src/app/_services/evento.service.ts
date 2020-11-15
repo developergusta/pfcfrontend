@@ -15,12 +15,7 @@ export class EventoService {
   constructor(private http: HttpClient,
               private userService: UsuarioService) { }
 
-  async getAllEvento() {
-    const result = await this.http.get<Evento[]>(this.baseURL).toPromise();
-    console.log(result);
-    return result;
-  }
-
+  
   async getEventosAprovados(){
     try {
       const result = await this.http.get<Evento[]>(`${this.baseURL}/Approved`).toPromise();
@@ -31,23 +26,19 @@ export class EventoService {
     }
   }
 
-  async getEventosPendentes1(){
+  async getEventosPendentes(){
     try {
-    const data = await this.getAllEvento();
-    data.forEach( (item, index, object) => {
-        if (item.status === 'APROVADO'){
-        object.splice(index);
-      }
-    });
-    return data;
+      const result = await this.http.get<Evento[]>(`${this.baseURL}/Pending`).toPromise();
+      console.log(result);
+      return result;
     } catch (error) {
       console.log(error);
     }
   }
 
-  async getEventosPendentes(){
+  async getEventosNegados(){
     try {
-      const result = await this.http.get<Evento[]>(`${this.baseURL}/NotApproved`).toPromise();
+      const result = await this.http.get<Evento[]>(`${this.baseURL}/Denied`).toPromise();
       console.log(result);
       return result;
     } catch (error) {
@@ -99,6 +90,14 @@ export class EventoService {
 
   updateEvento(evento: Evento) {
     return this.http.put(`${this.baseURL}/${evento.eventId}`, evento);
+  }
+
+  aprovarEvento(evento: Evento) {
+    return this.http.put(`${this.baseURL}/Approve/${evento.eventId}`, evento);
+  }
+
+  negarEvento(evento: Evento) {
+    return this.http.put(`${this.baseURL}/Deny/${evento.eventId}`, evento);
   }
 
   deleteEvento(id: number) {

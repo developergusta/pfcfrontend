@@ -24,21 +24,14 @@ export class ApprovalsAdminComponent implements OnInit {
 
     try {
       // this.validation();
-
       this.eventos = await this.getEventosPendentes();
-      let data = await this.getEventosPendentes();
-      data.forEach((item, index, object) => {
-        if (item.status === 'PENDENTE') {
-          object.splice(index, 1);
-        }
-      });
     } catch (error) {
       console.log(error);
     }
   }
 
   async getEventosPendentes() {
-    const result = await this.eventoService.getAllEvento();
+    const result = await this.eventoService.getEventosPendentes();
     return result;
     // localStorage.setItem('eventos', this.eventos.toString());
   }
@@ -58,10 +51,6 @@ export class ApprovalsAdminComponent implements OnInit {
 
   }
 
-  confirmApproval(confirm: boolean){
-
-  }
-
   confirmar(template: any) {
       this.eventoService.updateEvento(this.evento).subscribe(
         () => {
@@ -70,10 +59,10 @@ export class ApprovalsAdminComponent implements OnInit {
           if(this.type){
           this.toastr.success('Aprovado com Sucesso!');
           } else {
-          this.toastr.success('Aprovado com Sucesso!');
+          this.toastr.success('Evento foi negado...');
           }
         }, error => {
-          this.toastr.error(`Erro ao Editar: ${error}`);
+          this.toastr.error(`Erro ao aprovar/negar: ${error}`);
         }
       );
 

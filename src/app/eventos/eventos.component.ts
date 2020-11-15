@@ -190,7 +190,7 @@ export class EventosComponent implements OnInit {
   }
 
   async getEventos() {
-    const events = await this.eventoService.getAllEvento();
+    const events = await this.eventoService.getEventosAprovados();
     console.log(events);
     return events;
   }

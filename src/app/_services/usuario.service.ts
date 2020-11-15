@@ -95,11 +95,6 @@ export class UsuarioService {
     this.storage.upload(filePath, file);
   }
 
-  getAuthorizationToken() {
-    const token = sessionStorage.getItem('token');
-    return token;
-  }
-
   async getMyTickets(id: number){
     const result = await this.http.get(`${this.baseURL}/MyTickets/${id}`).toPromise() ;
     return result;
@@ -139,6 +134,11 @@ export class UsuarioService {
     }
 
     return true;
+  }
+
+  getAuthorizationToken() {
+    const token = sessionStorage.getItem('token');
+    return token;
   }
 
 }
