@@ -22,4 +22,12 @@ export class TicketService {
    return this.http.post(`${this.baseURL}/Buy`, tickets).toPromise();
     
   }
+
+  async aprovarCashback(evento: Evento) {
+    return this.http.put(`${this.baseURL}/Approve/${evento.eventId}`, evento);
+  }
+
+  async negarCashback(evento: Evento) {
+    return this.http.put(`${this.baseURL}/Approve/${evento.eventId}`, evento);
+  }
 }

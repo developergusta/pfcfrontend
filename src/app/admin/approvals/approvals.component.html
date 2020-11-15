@@ -100,10 +100,10 @@
           <button type="button" class="btn btn-outline-primary" (click)="confirm.hide()">
             CENCELAR
           </button>
-          <button *ngIf="referencia == false"  type="button" class="btn btn-outline-danger" (click)="confirmApproval(confirm)">
+          <button *ngIf="referencia == false"  type="button" class="btn btn-outline-danger" (click)="confirmar(confirm)">
             DELETAR
           </button>
-          <button *ngIf="referencia == true"  type="button" class="btn btn-outline-danger" (click)="confirmApproval(confirm)">
+          <button *ngIf="referencia == true"  type="button" class="btn btn-outline-danger" (click)="confirmar(confirm)">
             CONFIRMAR
           </button>
         </div>
