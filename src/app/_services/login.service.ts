@@ -19,27 +19,12 @@ export class LoginService {
     ) { }
 
   baseURL = environment.baseURL +  '/Login';
-  jwtHelper = new JwtHelperService();
-  decodedToken: any;
-  user: User = new User();
-  role: string;
-  name: string;
+  
+
 
   login(model: any) {
     return this.http
-      .post(`${this.baseURL}`, model).pipe(
-        map((response: any) => {
-          const user = response; 
-          if (user) {
-            this.decodedToken = this.jwtHelper.decodeToken(user.token);
-            sessionStorage.setItem('token', user.token);
-            sessionStorage.setItem('user', JSON.stringify(user.user));
-            sessionStorage.setItem('email', this.decodedToken.email);
-            this.role = this.decodedToken.role;
-            this.name = this.decodedToken.unique_name;
-          }
-        })
-      );
+      .post(`${this.baseURL}`, model);
   }
 
 

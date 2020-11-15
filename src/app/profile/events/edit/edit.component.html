@@ -12,8 +12,14 @@
     </div>
     <!-- SVG separator -->
     <div class="separator separator-bottom separator-skew">
-      <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
-        xmlns="http://www.w3.org/2000/svg">
+      <svg
+        x="0"
+        y="0"
+        viewBox="0 0 2560 100"
+        preserveAspectRatio="none"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
       </svg>
     </div>
@@ -27,9 +33,13 @@
               <div class="d-flex justify-content-start">
                 <div class="order-lg-1">
                   <div clas s="picsum-img-wrapper col-md-3">
-                    <img src="https://img.icons8.com/fluent/96/000000/left.png" alt="Online"
-                      class="img-fluid rounded-circle" style="width: 80px;cursor: pointer;"
-                      [routerLink]="['/profile/events']">
+                    <img
+                      src="https://img.icons8.com/fluent/96/000000/left.png"
+                      alt="Online"
+                      class="img-fluid rounded-circle"
+                      style="width: 80px; cursor: pointer"
+                      [routerLink]="['/profile/events']"
+                    />
                   </div>
                 </div>
               </div>
@@ -38,142 +48,322 @@
               <div class="d-flex justify-content-end">
                 <div class="order-lg-1">
                   <div clas s="picsum-img-wrapper col-md-3">
-                    <img src="https://img.icons8.com/fluent/96/000000/help.png" alt="Online"
-                      class="img-fluid rounded-circle" style="width: 80px;cursor: pointer;"
-                      [routerLink]="['/profile/events']">
+                    <img
+                      src="https://img.icons8.com/fluent/96/000000/help.png"
+                      alt="Online"
+                      class="img-fluid rounded-circle"
+                      style="width: 80px; cursor: pointer"
+                      [routerLink]="['/profile/events']"
+                    />
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="text-center mt-5">
-            <ngb-carousel [showNavigationArrows]="true" [showNavigationIndicators]="true" interval="12000"
-              [keyboard]="true" [pauseOnHover]="true" [wrap]="true" [activeId]="'secondSlide'"
-              *ngIf="evento.images">
+            <ngb-carousel
+              [showNavigationArrows]="true"
+              [showNavigationIndicators]="true"
+              interval="12000"
+              [keyboard]="true"
+              [pauseOnHover]="true"
+              [wrap]="true"
+              [activeId]="'secondSlide'"
+              *ngIf="evento.images"
+            >
               <ng-template ngbSlide id="firstSlide">
                 <div class="row">
                   <div class="picsum-img-wrapper col-sm-12 col-4 mt-5 mt-sm-0">
-                    <img src="https://img.icons8.com/cute-clipart/128/000000/music.png" alt="Música"
-                      class="img-fluid rounded-circle" style="height: 120px; cursor: pointer" />
+                    <img
+                      src="https://img.icons8.com/cute-clipart/128/000000/music.png"
+                      alt="Música"
+                      class="img-fluid rounded-circle"
+                      style="height: 120px; cursor: pointer"
+                    />
                   </div>
                 </div>
               </ng-template>
             </ngb-carousel>
-            <input type="file" accept="image/*" (change)="onFileChanged($event)" style="display: none" #fileInput1
-              multiple>
-            <button class="btn btn-lg btn-info" type="button" (click)="fileInput1.click()">Alterar Imagens</button>
+            <input
+              type="file"
+              accept="image/*"
+              (change)="onFileChanged($event)"
+              style="display: none"
+              #fileInput1
+              multiple
+            />
+            <button
+              class="btn btn-lg btn-info"
+              type="button"
+              (click)="fileInput1.click()"
+            >
+              Alterar Imagens
+            </button>
             <label *ngIf="!evento.images">Ainda não há imagens</label>
-            <br><label>Insira no máximo 5</label>
-            <hr>
+            <br /><label>Insira no máximo 5</label>
+            <hr />
             <div class="border border-light rounded">
               <div class="form-row">
                 <div class="form-group col-md-12">
                   <label>Título do evento</label>
-                  <input type="text" name="titleEvent" class="form-control form-control-alternative"
-                    [(ngModel)]="evento.titleEvent" [ngModelOptions]="{standalone: true}" required minlength="3">
+                  <input
+                    type="text"
+                    name="titleEvent"
+                    class="form-control form-control-alternative"
+                    [(ngModel)]="evento.titleEvent"
+                    [ngModelOptions]="{ standalone: true }"
+                    required
+                    minlength="3"
+                  />
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group col-md-12">
                   <label>Descrição do evento</label>
-                  <textarea type="text" class="form-control form-control-alternative" [(ngModel)]="evento.description"
-                    [ngModelOptions]="{standalone: true}" required></textarea>
+                  <textarea
+                    type="text"
+                    class="form-control form-control-alternative"
+                    [(ngModel)]="evento.description"
+                    [ngModelOptions]="{ standalone: true }"
+                    required
+                  ></textarea>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group col-md-6">
                   <label for="sel1">Categoria</label>
-                  <select class="form-control" id="sel1" [(ngModel)]="evento.category">
-                    <option *ngFor="let opt of options" value="{{opt.id}}" [ngValue]="opt.id">{{opt.name}}</option>
+                  <select
+                    class="form-control"
+                    id="sel1"
+                    [(ngModel)]="evento.category"
+                  >
+                    <option
+                      *ngFor="let opt of options"
+                      value="{{ opt.id }}"
+                      [ngValue]="opt.id"
+                    >
+                      {{ opt.name }}
+                    </option>
                   </select>
                 </div>
                 <div class="form-group col-md-6">
                   <label>Qtd máxima de pessoas</label>
-                  <input type="number" placeholder="" class="form-control form-control-alternative"
-                    [(ngModel)]="evento.capacity" [ngModelOptions]="{standalone: true}" min="1" max="1000000">
+                  <input
+                    type="number"
+                    placeholder=""
+                    class="form-control form-control-alternative"
+                    [(ngModel)]="evento.capacity"
+                    [ngModelOptions]="{ standalone: true }"
+                    min="1"
+                    max="1000000"
+                  />
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group col-md-8">
                   <label>País</label>
-                  <input type="text" class="form-control form-control-alternative" [ngModel]="evento.address?.country" (ngModelChange)="evento.address.country = $event"
-                    [ngModelOptions]="{standalone: true}" required minlength="3" placeholder="">
+                  <input
+                    type="text"
+                    class="form-control form-control-alternative"
+                    [ngModel]="evento.address?.country"
+                    (ngModelChange)="evento.address.country = $event"
+                    [ngModelOptions]="{ standalone: true }"
+                    required
+                    minlength="3"
+                    placeholder=""
+                  />
                 </div>
                 <div class="form-group col-md-4">
                   <label>CEP</label>
-                  <input type="text" class="form-control form-control-alternative" [ngModel]="evento.address?.zipCode" (ngModelChange)="evento.address.zipCode = $event"
-                    [ngModelOptions]="{standalone: true}" required mask="00000-000" (change)="buscaCEP()"
-                    placeholder="">
+                  <input
+                    type="text"
+                    class="form-control form-control-alternative"
+                    [ngModel]="evento.address?.zipCode"
+                    (ngModelChange)="evento.address.zipCode = $event"
+                    [ngModelOptions]="{ standalone: true }"
+                    required
+                    mask="00000-000"
+                    (change)="buscaCEP()"
+                    placeholder=""
+                  />
                 </div>
                 <div class="form-group col-md-4">
                   <label>Estado</label>
-                  <input type="text" class="form-control form-control-alternative" [ngModel]="evento.address?.state"
-                    [ngModelOptions]="{standalone: true}" required minlength="2" placeholder="">
+                  <input
+                    type="text"
+                    class="form-control form-control-alternative"
+                    [ngModel]="evento.address?.state"
+                    [ngModelOptions]="{ standalone: true }"
+                    required
+                    minlength="2"
+                    placeholder=""
+                  />
                 </div>
                 <div class="form-group col-md-8">
                   <label>Cidade</label>
-                  <input type="text" class="form-control form-control-alternative" [ngModel]="evento.address?.city"
-                    [ngModelOptions]="{standalone: true}" placeholder="">
+                  <input
+                    type="text"
+                    class="form-control form-control-alternative"
+                    [ngModel]="evento.address?.city"
+                    [ngModelOptions]="{ standalone: true }"
+                    placeholder=""
+                  />
                 </div>
                 <div class="form-group col-md-8">
                   <label>Logradouro</label>
-                  <input type="text" class="form-control form-control-alternative" [ngModel]="evento.address?.street"
-                    [ngModelOptions]="{standalone: true}" placeholder="">
+                  <input
+                    type="text"
+                    class="form-control form-control-alternative"
+                    [ngModel]="evento.address?.street"
+                    [ngModelOptions]="{ standalone: true }"
+                    placeholder=""
+                  />
                 </div>
                 <div class="form-group col-md-4">
                   <label>Número</label>
-                  <input type="number" class="form-control form-control-alternative" [ngModel]="evento.address?.num"
-                    [ngModelOptions]="{standalone: true}" placeholder="">
+                  <input
+                    type="number"
+                    class="form-control form-control-alternative"
+                    [ngModel]="evento.address?.num"
+                    [ngModelOptions]="{ standalone: true }"
+                    placeholder=""
+                  />
                 </div>
                 <div class="form-group col-md-12">
                   <label>Complemento</label>
-                  <input type="text" class="form-control form-control-alternative"
-                    [ngModel]="evento.address?.complement" [ngModelOptions]="{standalone: true}" placeholder="">
+                  <input
+                    type="text"
+                    class="form-control form-control-alternative"
+                    [ngModel]="evento.address?.complement"
+                    [ngModelOptions]="{ standalone: true }"
+                    placeholder=""
+                  />
                 </div>
                 <div class="form-group col-md-4">
                   <label>Data de INÍCIO</label>
-                  <input type="text" class="form-control form-control-alternative" bsDatepicker
-                    [(ngModel)]="evento.dateStart" [ngModelOptions]="{standalone: true}"
-                    value="{{dateStart | DateFormatPipe}}" [bsConfig]="{ dateInputFormat : 'DD/MM/YYYY' }"
-                    placeholder="">
+                  <input
+                    type="text"
+                    class="form-control form-control-alternative"
+                    bsDatepicker
+                    [(ngModel)]="evento.dateStart"
+                    [ngModelOptions]="{ standalone: true }"
+                    value="{{ dateStart | DateFormatPipe }}"
+                    [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"
+                    placeholder=""
+                  />
                 </div>
                 <div class="form-group col-md-2">
                   <label>Hora INICIO</label>
-                  <input type="time" placeholder="" class="form-control form-control-alternative"
-                    value="{{hora1}}"
-                    (change)="updtHorario1($event)">
+                  <input
+                    type="time"
+                    placeholder=""
+                    class="form-control form-control-alternative"
+                    value="{{ hora1 }}"
+                    (change)="updtHorario1($event)"
+                  />
                 </div>
                 <div class="form-group col-md-4">
                   <label>Data do FIM</label>
-                  <input type="text" class="form-control form-control-alternative" bsDatepicker
-                    [(ngModel)]="evento.dateEnd" [ngModelOptions]="{standalone: true}"
-                    value="{{dateEnd | DateFormatPipe}}" [bsConfig]="{ dateInputFormat : 'DD/MM/YYYY' }" placeholder="">
+                  <input
+                    type="text"
+                    class="form-control form-control-alternative"
+                    bsDatepicker
+                    [(ngModel)]="evento.dateEnd"
+                    [ngModelOptions]="{ standalone: true }"
+                    value="{{ dateEnd | DateFormatPipe }}"
+                    [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"
+                    placeholder=""
+                  />
                 </div>
                 <div class="form-group col-md-2">
                   <label>Hora FIM</label>
-                  <input type="time" placeholder="" class="form-control form-control-alternative"
-                    (change)="updtHorario1($event)">
+                  <input
+                    type="time"
+                    placeholder=""
+                    class="form-control form-control-alternative"
+                    (change)="updtHorario1($event)"
+                  />
                 </div>
               </div>
-              <div *ngFor="let lot of this.evento.lots; let i = index;" class="h6 font-weight-300">
+              <div
+                *ngFor="let lot of this.evento.lots; let i = index"
+                class="h6 font-weight-300"
+              >
                 <div class="border border-light rounded">
                   <div class="form-row">
                     <div class="form-group col-md-5">
                       <div class="form-group">
                         <label>Data de início</label>
-                        <input type="text" class="form-control form-control-alternative" [(ngModel)]="lot.dateStart"
-                          [ngModelOptions]="{standalone: true}" required mask="00/00/0000" placeholder="00/00/0000">
+                        <input
+                          bsDatepicker
+                          type="text"
+                          class="form-control form-control-alternative"
+                          [(ngModel)]="lot.dateStart"
+                          [ngModelOptions]="{ standalone: true }"
+                          required
+                          placeholder="00/00/0000"
+                          value="{{ dateStart | DateFormatPipe }}"
+                          [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"
+                        />
                       </div>
                     </div>
                     <div class="form-group col-md-4">
                       <div class="form-group">
                         <label>Data de fim</label>
-                        <input type="text" class="form-control form-control-alternative" [(ngModel)]="lot.dateEnd"
-                          [ngModelOptions]="{standalone: true}" required mask="00/00/0000" placeholder="00/00/0000">
+                        <input
+                          bsDatepicker
+                          type="text"
+                          class="form-control form-control-alternative"
+                          [(ngModel)]="lot.dateEnd"
+                          [ngModelOptions]="{ standalone: true }"
+                          required
+                          placeholder="00/00/0000"
+                          value="{{ dateEnd | DateFormatPipe }}"
+                          [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="lot-category form-row col-12"
+                      *ngFor="
+                        let item of evento.lots[i].lotCategories;
+                        let j = index
+                      "
+                    >
+                      <h3 class="col-12">
+                        Categoria {{ j + 1 }} de Lote {{ i + 1 }}
+                      </h3>
+                      <div class="form-group col-md-5">
+                        <div class="form-group">
+                          <label>Descrição</label>
+                          <input
+                            type="text"
+                            class="form-control form-control-alternative"
+                            required
+                            [(ngModel)]="evento.lots[i].lotCategories[j].desc"
+                            [ngModelOptions]="{ standalone: true }"
+                          />
+                        </div>
+                      </div>
+                      <div class="form-group col-md-4">
+                        <div class="form-group">
+                          <label>Preço</label>
+                          <input
+                            type="text"
+                            class="form-control form-control-alternative"
+                            required
+                            [(ngModel)]="evento.lots[i].lotCategories[j].price"
+                            [ngModelOptions]="{ standalone: true }"
+                          />
+                        </div>
                       </div>
                     </div>
                     <div class="form-group col-md-4">
-                      <button class="btn btn-md btn-info" type="button" (click)="criarCategoriaLote(i)">
+                      <button
+                        class="btn btn-md btn-info"
+                        type="button"
+                        (click)="criarCategoriaLote(i)"
+                      >
                         <span class="btn-inner--icon">
                           <i class="fas fa-plus mr-2"></i>
                         </span>
@@ -181,7 +371,11 @@
                       </button>
                     </div>
                     <div class="form-group col-md-4 d-flex align-items-center">
-                      <button class="btn btn-sm btn-danger" type="button" (click)="excluirLote(modalConfirm, i)">
+                      <button
+                        class="btn btn-sm btn-danger"
+                        type="button"
+                        (click)="excluirLote(modalConfirm, i)"
+                      >
                         <span class="btn-inner--icon">
                           <i class="fas fa-times mr-2"></i>
                         </span>
@@ -192,7 +386,11 @@
                 </div>
               </div>
               <div class="border border-light rounded">
-                <button class="btn btn-lg btn-info" type="button" (click)="criarLote()">
+                <button
+                  class="btn btn-lg btn-info"
+                  type="button"
+                  (click)="criarLote()"
+                >
                   <span class="btn-inner--icon">
                     <i class="fas fa-plus mr-2"></i>
                   </span>
@@ -202,14 +400,18 @@
             </div>
           </div>
 
-
-          <div class="h6 mt-4"><i class="ni business_briefcase-24 mr-2"></i>
+          <div class="h6 mt-4">
+            <i class="ni business_briefcase-24 mr-2"></i>
           </div>
         </div>
         <div class="mt-5 py-5 border-top text-center">
           <div class="row justify-content-center">
             <div class="col-lg-9">
-              <button class="btn btn-lg btn-success" type="button" (click)="salvarAlteracoes(modalConfirm)">
+              <button
+                class="btn btn-lg btn-success"
+                type="button"
+                (click)="salvarAlteracoes(modalConfirm)"
+              >
                 SALVAR ALTERAÇÕES
               </button>
             </div>
@@ -220,37 +422,71 @@
   </section>
 </main>
 
-
-<div bsModal #modalConfirm="bs-modal" class="modal fade" tabindex="-1" role="dialog"
-  aria-labelledby="dialog-sizes-name1">
+<div
+  bsModal
+  #modalConfirm="bs-modal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="dialog-sizes-name1"
+>
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 *ngIf="reference == 0" id="dialog-sizes-name1" class="modal-title pull-left">DESEJA EXCLUIR ESTE ENDEREÇO?
+        <h4
+          *ngIf="reference == 0"
+          id="dialog-sizes-name1"
+          class="modal-title pull-left"
+        >
+          DESEJA EXCLUIR ESTE ENDEREÇO?
         </h4>
-        <h4 *ngIf="reference == 1" id="dialog-sizes-name1" class="modal-title pull-left">DESEJA EXCLUIR ESTE TELEFONE?
+        <h4
+          *ngIf="reference == 1"
+          id="dialog-sizes-name1"
+          class="modal-title pull-left"
+        >
+          DESEJA EXCLUIR ESTE TELEFONE?
         </h4>
-        <h4 *ngIf="reference == 2" id="dialog-sizes-name1" class="modal-title pull-left">DESEJA SALVAR AS ALTERAÇÕES?
+        <h4
+          *ngIf="reference == 2"
+          id="dialog-sizes-name1"
+          class="modal-title pull-left"
+        >
+          DESEJA SALVAR AS ALTERAÇÕES?
         </h4>
-        <button type="button" class="close pull-right" (click)="modalConfirm.hide()" aria-label="Close">
+        <button
+          type="button"
+          class="close pull-right"
+          (click)="modalConfirm.hide()"
+          aria-label="Close"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-
-      </div>
+      <div class="modal-body"></div>
       <div class="modal-footer d-flex">
         <button class="btn btn-secondary" (click)="modalConfirm.hide()">
           Fechar
         </button>
-        <button *ngIf="reference == 0" class="btn btn-primary ml-auto" (click)="confirmaExclusaoLote(modalConfirm)">
+        <button
+          *ngIf="reference == 0"
+          class="btn btn-primary ml-auto"
+          (click)="confirmaExclusaoLote(modalConfirm)"
+        >
           Sim, confirmar.
         </button>
-        <button *ngIf="reference == 1" class="btn btn-primary ml-auto"
-          (click)="confirmaExclusaoCategoriaLote(modalConfirm)">
+        <button
+          *ngIf="reference == 1"
+          class="btn btn-primary ml-auto"
+          (click)="confirmaExclusaoCategoriaLote(modalConfirm)"
+        >
           Sim, confirmar.
         </button>
-        <button *ngIf="reference == 2" class="btn btn-primary ml-auto" (click)="confirmaEdicao(modalConfirm)">
+        <button
+          *ngIf="reference == 2"
+          class="btn btn-primary ml-auto"
+          (click)="confirmaEdicao()"
+        >
           Sim, confirmar.
         </button>
       </div>
@@ -258,21 +494,38 @@
   </div>
 </div>
 
-
-<div bsModal #criar="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+<div
+  bsModal
+  #criar="bs-modal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="dialog-sizes-name1"
+>
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 id="dialog-sizes-name1" class="modal-title pull-left">CRIE SEU EVENTO</h4>
-        <button type="button" class="close pull-right" (click)="criar.hide()" aria-label="Close">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">
+          CRIE SEU EVENTO
+        </h4>
+        <button
+          type="button"
+          class="close pull-right"
+          (click)="criar.hide()"
+          aria-label="Close"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        Obrigatoriamente precisará de uma quantidade máxima <br>
+        Obrigatoriamente precisará de uma quantidade máxima <br />
       </div>
       <div class="modal-footer d-flex">
-        <button class="btn btn-secondary disabled" (click)="criar.hide()" [disabled]="eventProgress > 0">
+        <button
+          class="btn btn-secondary disabled"
+          (click)="criar.hide()"
+          [disabled]="eventProgress > 0"
+        >
           Fechar
         </button>
       </div>

@@ -34,6 +34,7 @@ export class EditComponent implements OnInit {
   now = new Date();
   dateStart = new Date(this.now.getFullYear(), this.now.getMonth(), this.now.getDate() + 1);
   dateEnd = new Date(this.now.getFullYear(), this.now.getMonth(), this.now.getDate() + 1);
+
   constructor(
     private correios: CorreiosService,
     private eventoService: EventoService,
@@ -133,6 +134,7 @@ export class EditComponent implements OnInit {
       this.evento.lots[indexLot].lotCategories = new Array();
       this.evento.lots[indexLot].lotCategories[0] = new LotCategory();
     }
+    console.log(this.evento.lots[indexLot])
   }
 
   confirmaExclusaoLote(template: any) {
@@ -214,11 +216,12 @@ export class EditComponent implements OnInit {
     this.evento.address.street = address.logradouro;
   }
 
-  async confirmaEdicao(template: any) {
+  async confirmaEdicao() {
     try {
+      console.log(this.evento)
       await this.eventoService.updateEvento(this.evento);
-      template.hide();
-      this.getEventFromUrl();
+      // template.hide();
+      // this.getEventFromUrl();
     } catch {
       console.log('Erro ao fazer o update');
     }

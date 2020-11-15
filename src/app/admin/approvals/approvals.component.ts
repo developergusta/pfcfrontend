@@ -62,11 +62,7 @@ export class ApprovalsAdminComponent implements OnInit {
           } else {
           this.toastr.success('Evento foi negado...');
           }
-        }, error => {
-          this.toastr.error(`Erro ao aprovar/negar: ${error}`);
-        }
-      );
-
+      } )
   }
 
   openModal(template: any) {

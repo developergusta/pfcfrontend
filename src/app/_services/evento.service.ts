@@ -81,7 +81,7 @@ export class EventoService {
   }
 
   updateEvento(evento: Evento) {
-    return this.http.put(`${this.baseURL}/${evento.eventId}`, evento);
+    return this.http.put(`${this.baseURL}/${evento.eventId}`, evento).toPromise();
   }
 
   aprovarEvento(evento: Evento) {

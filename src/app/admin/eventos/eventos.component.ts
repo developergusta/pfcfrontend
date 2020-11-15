@@ -97,7 +97,7 @@ export class EventosAdminComponent implements OnInit {
     template.show();
   }
 
-  salvarAlteracao(template: any) {
+  async salvarAlteracao(template: any) {
     if (this.eventForm.valid) {
       if (this.modoSalvar === 'post') {
         this.evento = Object.assign({}, this.eventForm.value);
@@ -117,16 +117,15 @@ export class EventosAdminComponent implements OnInit {
         this.evento = Object.assign({ id: this.evento.eventId }, this.eventForm.value);
 
         //this.uploadImagem();
-
-        this.eventoService.updateEvento(this.evento).subscribe(
-          () => {
-            template.hide();
+        try {
+          await this.eventoService.updateEvento(this.evento);
+         template.hide();
             this.getEventosAprovados();
             this.toastr.success('Editado com Sucesso!');
-          }, error => {
-            this.toastr.error(`Erro ao Editar: ${error}`);
-          }
-        );
+        } catch (error) {
+          this.toastr.error(`Erro ao Editar: ${error}`);
+        }
+        
       }
     }
   }
