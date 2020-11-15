@@ -26,7 +26,6 @@ registerLocaleData(ptBr);
 
 import { AppComponent } from './app.component';
 import { EventosComponent } from './eventos/eventos.component';
-import { UsuariosComponent } from './usuarios/usuarios.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { LoginComponent } from './login/login.component';
@@ -47,7 +46,6 @@ import { environment } from 'src/environments/environment';
    declarations: [
       AppComponent,
       EventosComponent,
-      UsuariosComponent,
       FooterComponent,
       NavbarComponent,
       LoginComponent,

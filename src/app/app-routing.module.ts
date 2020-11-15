@@ -14,7 +14,6 @@ import { EventosAdminComponent } from './admin/eventos/eventos.component';
 import { HomeComponent as HomeComponentAdmin } from './admin/home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
-import { UsuariosComponent } from './usuarios/usuarios.component';
 import { EventosComponent } from './eventos/eventos.component';
 
 import { Routes, RouterModule } from '@angular/router';
@@ -34,7 +33,6 @@ const routes: Routes = [
     ]
   },
   { path: 'eventos', component: EventosComponent },
-  { path: 'usuarios', component: UsuariosComponent },
   { path: 'register', component: RegisterComponent },
   {
     path: 'profile',

@@ -14,7 +14,7 @@ import { environment } from 'src/environments/environment';
 })
 export class UsuarioService {
 
-  baseURL = environment.baseURL +  '/Usuario';
+  baseURL = environment.baseURL + '/Usuario';
   jwtHelper = new JwtHelperService();
   decodedToken: any;
   user: User = new User();
@@ -23,12 +23,12 @@ export class UsuarioService {
   hoje = new Date();
 
   constructor(private http: HttpClient
-            , private toast: ToastrService
-            , private storage: AngularFireStorage
-              ) { }
+    , private toast: ToastrService
+    , private storage: AngularFireStorage
+  ) { }
 
 
-  getToken(): any{
+  getToken(): any {
     return sessionStorage.getItem('token');
   }
 
@@ -42,7 +42,7 @@ export class UsuarioService {
     return this.http.post(`${this.baseURL}`, model);
   }
 
-  getUserLogged(){
+  getUserLogged() {
     const userLogged = sessionStorage.getItem('user');
     return userLogged;
   }
@@ -53,30 +53,26 @@ export class UsuarioService {
   }
 
   async updateUser(user: User) {
-    debugger
     const result = this.http.put(`${this.baseURL}/${user.userId}`, user)
-    .toPromise().
-    then(
-        () => this.toast.success('Atualizado com sucesso')
-    ).catch(
-      () => this.toast.error('Erro ao atualizar')
-    )
-    ;
+      .toPromise()
+      .then(
+        () => this.toast.success('Atualizado com sucesso'))
+        .catch(
+        () => this.toast.error('Erro ao atualizar'));
     return result;
   }
 
   async deleteUser(id: number) {
-    const result = await this.http.delete(`${this.baseURL}/Delete/${id}`).toPromise() ;
+    const result = await this.http.delete(`${this.baseURL}/Delete/${id}`).toPromise();
     return result;
   }
 
-  async getUsersList(){
+  async getUsersList() {
     const result = this.http.get<User[]>(this.baseURL).toPromise();
-
     return result;
   }
 
-   getIdade(dataNasc: Date){
+  getIdade(dataNasc: Date) {
     const hoje = moment(this.hoje);
     const nasc = moment(dataNasc);
     const idade = moment.duration(hoje.diff(nasc));
@@ -84,7 +80,7 @@ export class UsuarioService {
     return Math.trunc(idade.asYears());
   }
 
-  async getUserById(id: number){
+  async getUserById(id: number) {
     const result = await this.http.get<User>(`${this.baseURL}/${id}`).toPromise();
     return result;
   }
@@ -95,8 +91,8 @@ export class UsuarioService {
     this.storage.upload(filePath, file);
   }
 
-  async getMyTickets(id: number){
-    const result = await this.http.get(`${this.baseURL}/MyTickets/${id}`).toPromise() ;
+  async getMyTickets(id: number) {
+    const result = await this.http.get(`${this.baseURL}/MyTickets/${id}`).toPromise();
     return result;
   }
 
@@ -141,4 +137,23 @@ export class UsuarioService {
     return token;
   }
 
+  async banUser(user: User) {
+    const result = this.http.put(`${this.baseURL}/Ban/${user.userId}`, user)
+      .toPromise()
+      .then(
+        () => this.toast.success('Atualizado com sucesso'))
+        .catch(
+        () => this.toast.error('Erro ao atualizar'));
+    return result;
+  }
+
+  async ReactivateUser(user: User) {
+    const result = this.http.put(`${this.baseURL}/Reactivate/${user.userId}`, user)
+      .toPromise()
+      .then(
+        () => this.toast.success('Atualizado com sucesso'))
+        .catch(
+        () => this.toast.error('Erro ao atualizar'));
+    return result;
+  }
 }
