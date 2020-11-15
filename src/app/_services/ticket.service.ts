@@ -18,9 +18,8 @@ export class TicketService {
     return result;
   }
 
-  async buyTicket(tickets: Ticket[]){
-    const result = await this.http.post(`${this.baseURL}`, tickets).toPromise();
-    console.log(result);
-    return result;
+  buyTicket(tickets: Ticket[]){
+   return this.http.post(`${this.baseURL}/Buy`, tickets).toPromise();
+    
   }
 }
