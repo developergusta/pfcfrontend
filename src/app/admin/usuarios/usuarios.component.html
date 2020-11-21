@@ -31,6 +31,7 @@
         <th>Endereço</th>
         <th>Data/cad.</th>
         <th>Email</th>
+        <th>Status</th>
         <th>Perfil</th>
         <th colspan="2">Opções</th>
       </tr>
@@ -51,20 +52,10 @@
         </td>
         <td *ngIf="user.addresses.length == 0">Endereço não informado
         </td>
-        <td>{{user.registerTime | date: 'fullTime': '-3000': 'pt-BR'}}</td>
+        <td>{{user.registerTime | date: 'long': '-0300': 'pt-BR'}}</td>
         <td>{{user.login.email}}</td>
+        <td>{{user.status}}</td>
         <td>{{user.login.perfil}}</td>
-        <!--td>
-          <div *ngIf="!user.lots.length">
-            Não Informado
-          </div>
-          <div *ngIf="user.lots.length === 1">
-            Lote único
-          </div>
-          <div *ngIf="user.lots.length > 1">
-            {{user.lots.length}}
-          </div>
-        </td-->
         <td>
           <div class="btn-group">
             <button class="btn btn-sm btn-success" placement="top" ngbTooltip="Edição Simples" tooltip="Edição Simples"
@@ -75,10 +66,16 @@
               ngbTooltip="Excluir" (click)="excludeUser(user, confirm)">
               <i class="fa fa-eraser"></i>
             </button>
-            <button [routerLink]="['/admin/usuario', user.userId, 'edit']" tooltip="Edição Detalhada" placement="top" ngbTooltip="Edição detalhada"
+            <!-- BANIR OU REATIVAR -->
+            <button *ngIf="user.status === 'ATIVO'" (click)="banUser(user, ban)" tooltip="Banir Usuário" placement="top" ngbTooltip="Banir Usuário"
               class="btn btn-sm btn-warning">
-              <i class="fa fa-edit"></i>
+              <i class="fas fa-ban"></i>
             </button>
+            <button *ngIf="user.status === 'BANIDO' " (click)="reactivateUser(user, reactivate)" tooltip="Reativar Usuário" placement="top" ngbTooltip="Reativar Usuário"
+              class="btn btn-sm btn-success">
+              <i class="fas fa-undo-alt"></i>
+            </button>
+            <!-- BANIR OU REATIVAR -->
           </div>
         </td>
         <td>
@@ -126,6 +123,8 @@
                   Nome deve ter no máximo 255 Caracters.
                 </div>
               </div>
+            </div>
+            <div class="form-row">
               <div class="form-group col-md-4">
                 <label>Data de nascimento</label>
                 <input type="text" class="form-control" formControlName="dateBirth" bsDatepicker
@@ -139,8 +138,23 @@
                 </div>
               </div>
               <div class="form-group col-md-8">
+                <label>RG do usuário</label>
+                <input type="text" class="form-control" formControlName="rg"
+                  [ngClass]="{'is-invalid': userForm.get('rg').errors && userForm.get('rg').touched}">
+                <div *ngIf="userForm.get('rg').hasError('required') && userForm.get('rg').touched"
+                  class="invalid-feedback">
+                  RG é obrigatório.
+                </div>
+                <div *ngIf="userForm.get('rg').hasError('maxlength') && userForm.get('rg').touched"
+                  class="invalid-feedback">
+                  RG deve ter no máximo 14 caracters.
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-5">
                 <label>CPF do usuário</label>
-                <input type="text" class="form-control" formControlName="cpf"
+                <input type="text" class="form-control" formControlName="cpf" mask="000.000.000.00"
                   [ngClass]="{'is-invalid': userForm.get('cpf').errors && userForm.get('cpf').touched}">
                 <div *ngIf="userForm.get('cpf').hasError('required') && userForm.get('cpf').touched"
                   class="invalid-feedback">
@@ -151,29 +165,7 @@
                   CPF deve ter no máximo 14 caracters.
                 </div>
               </div>
-            </div>
-            {{userForm.value | json}}
-            <div class="form-row">
-              <div class="form-group col-md-5" formGroupName="image">
-                <label>Imagem</label>
-                <table>
-                  <tr>
-                    <td>
-                      <button class="btn btn-info" (click)="file.click()">Selecionar imagem</button>
-                      <input type="file" #file placeholder="" (change)="onFileChange($event)"
-                        class="form-control is-invalid" formControlName="src"
-                        [ngClass]="{'is-invalid': userForm.get('image.src').errors && userForm.get('image.src').touched}" style="display: none;">
-                    </td>
-                  </tr>
-                </table>
-                <div *ngIf="userForm.get('image.src').hasError('required') && userForm.get('image.src').touched"
-                  class="invalid-feedback">
-                  Imagem é obrigatória
-                </div>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group col-md-12" formGroupName="login">
+              <div class="form-group col-md-7" formGroupName="login">
                 <label>Email</label>
                 <input type="text" placeholder="" class="form-control is-invalid" formControlName="email"
                   [ngClass]="{'is-invalid': userForm.get('login.email').errors && userForm.get('login.email').touched}">
@@ -190,26 +182,9 @@
                   Máximo de 255 caracteres
                 </div>
               </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group col-md-12" formGroupName="login">
-                <label>Senha</label>
-                <input type="password" placeholder="" class="form-control is-invalid" formControlName="pass"
-                  [ngClass]="{'is-invalid': userForm.get('login.pass').errors && userForm.get('login.pass').touched}">
-                <div *ngIf="userForm.get('login.pass').hasError('required')  && userForm.get('login.pass').touched"
-                  class="invalid-feedback">
-                  Senha é obrigatória
-                </div>
-                <div *ngIf="userForm.get('login.pass').hasError('maxLength') && userForm.get('login.pass').touched"
-                  class="invalid-feedback">
-                  Máximo de 200 caracteres
-                </div>
-                <div *ngIf="userForm.get('login.pass').hasError('minLength') && userForm.get('login.pass').touched"
-                  class="invalid-feedback">
-                  Mínimo de 5 caracteres
-                </div>
-              </div>
-            </div>
+            </div>   
+            {{userForm.value | json}}
+                     
           </form>
         </div>
         <div class="modal-footer d-flex">
@@ -229,7 +204,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title pull-left">
-            Deletando user
+            Deletando Usuário
           </h4>
           <button type="button" class="close pull-right" (click)="confirm.hide()" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -244,6 +219,58 @@
           </button>
           <button type="button" class="btn btn-outline-danger" (click)="confirmDelete(confirm)">
             DELETAR
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div bsModal #ban="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">
+            Banir usuário
+          </h4>
+          <button type="button" class="close pull-right" (click)="ban.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>{{bodyDeletarUsuario}}</p>
+        </div>
+        <div class="modal-footer btn-group d-flex">
+          <button type="button" class="btn btn-outline-primary" (click)="ban.hide()">
+            CENCELAR
+          </button>
+          <button type="button" class="btn btn-outline-danger" (click)="confirmBanUser(ban)">
+            BANIR
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div bsModal #reactivate="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">
+            Reativar usuário
+          </h4>
+          <button type="button" class="close pull-right" (click)="reactivate.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>{{bodyDeletarUsuario}}</p>
+        </div>
+        <div class="modal-footer btn-group d-flex">
+          <button type="button" class="btn btn-outline-danger" (click)="reactivate.hide()">
+            CENCELAR
+          </button>
+          <button type="button" class="btn btn-outline-success" (click)="confirmReactivateUser(reactivate)">
+            REATIVAR
           </button>
         </div>
       </div>

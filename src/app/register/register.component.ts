@@ -21,9 +21,7 @@ export class RegisterComponent implements OnInit {
   now = new Date();
   minDate = new Date(this.now.getFullYear() - 120, this.now.getMonth(), this.now.getDate());
   maxDate = new Date(this.now.getFullYear() - 14, this.now.getMonth(), this.now.getDate());
-  focus: any;
-  focus1: any;
-  focus2: any;
+  focus = [false, false, false, false, false];
   user: User = new User();
   constructor(
     // tslint:disable-next-line: max-line-length
@@ -38,10 +36,8 @@ export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
 
   createAcount(): any{
-    this.router.navigate(['login']);
-    if(this.registerForm.valid){
+    if (this.registerForm.valid){
       this.user = Object.assign({}, this.registerForm.value);
-      alert(JSON.stringify(this.user));
       this.userService.register(this.user).subscribe(
         () => {
           this.router.navigate(['/login']);
@@ -53,6 +49,9 @@ export class RegisterComponent implements OnInit {
       );
 
     }
+    else{
+      this.toastr.error('Você deve preencher todo formulário e concordar com os termos');
+    }
   }
 
   public validation(): any {
@@ -61,26 +60,11 @@ export class RegisterComponent implements OnInit {
       dateBirth: ['', Validators.required],
       cpf: ['', [Validators.required, Validators.maxLength(14)]],
       rg: ['', Validators.maxLength(12)],
-      /*image: this.fb.group({
-        src: ['', Validators.maxLength(255)]
-      }),
-      phone: this.fb.group({
-        number: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]],
-        type: 'celular'
-      }),
-      address: this.fb.group({
-        street: ['', [Validators.required, Validators.maxLength(255)]],
-        complement: ['', [Validators.maxLength(255)]],
-        zipCode: ['', [Validators.maxLength(20)]],
-        number: ['', [Validators.required, Validators.min(0), Validators.max(99999)]],
-        country: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(45)]],
-        state: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
-        city: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
-      }),*/
       login: this.fb.group({
         email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
         pass: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(200)]]
-      })
+      }),
+      termos: ['',[Validators.required]]
     });
   }
 }

@@ -17,6 +17,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CurrencyMaskModule } from "ng2-currency-mask";
 import { NgxMaskModule } from 'ngx-mask';
+import { CashbackAdminComponent } from './approvals/cashback/cashback.component';
 
 
 
@@ -30,6 +31,7 @@ import { NgxMaskModule } from 'ngx-mask';
     EditEventosAdminComponent,
     EditUsuariosAdminComponent,
     ApprovalsAdminComponent,
+    CashbackAdminComponent,
   ],
   exports: [
     HomeComponent,

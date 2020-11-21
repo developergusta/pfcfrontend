@@ -1,4 +1,4 @@
-import { Evento } from 'src/app/models/Evento';
+import { Evento } from './Evento';
 import { Ticket } from './Ticket';
 import { Image } from './Image';
 import { Address } from './Address';

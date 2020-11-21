@@ -3,8 +3,9 @@ import { User } from './../../models/User';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { EventoService } from 'src/app/_services/evento.service';
 import { UsuarioService } from 'src/app/_services/usuario.service';
+import { Ticket } from 'src/app/models/Ticket';
+import { TicketService } from 'src/app/_services/ticket.service';
 
 @Component({
   selector: 'app-tickets',
@@ -14,21 +15,27 @@ import { UsuarioService } from 'src/app/_services/usuario.service';
 export class TicketsComponent implements OnInit {
 
   user: User;
-  events: Evento[];
+  tickets: Ticket[];
   event: Evento;
   constructor(
-    private eventoService: EventoService,
+    private ticketService: TicketService,
     private router: Router,
     private userService: UsuarioService,
     private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
+    this.getUser();
+    this.getTickets();
   }
 
-  getEventInfo(eventId: number){
-    this.eventoService.getEventoById(eventId).then(
-      resp => this.event = resp
+  getUser(){
+    this.user = JSON.parse(this.userService.getUserLogged());
+  }
+
+  getTickets(){
+    this.ticketService.getTicketsByUserId(this.user.userId).then(
+      resp => this.tickets = resp
     );
   }
 

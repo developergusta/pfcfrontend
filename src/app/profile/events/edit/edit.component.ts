@@ -164,9 +164,6 @@ export class EditComponent implements OnInit {
     this.openModal(template);
   }
 
-  openModal(template: any) {
-    template.show();
-  }
 
   onFileChanged(event) {
     if (event.target.files && event.target.files.length) {
@@ -206,7 +203,6 @@ export class EditComponent implements OnInit {
       this.correios.consultaCep(cep).then(n => {
         this.populateAddress(n);
       });
-      // this.eventForm.get('address.city').setValue('abc');
     }
   }
 
@@ -214,6 +210,10 @@ export class EditComponent implements OnInit {
     this.evento.address.city = address.localidade;
     this.evento.address.state = address.uf;
     this.evento.address.street = address.logradouro;
+  }
+  
+  openModal(template: any) {
+    template.show();
   }
 
   async confirmaEdicao() {

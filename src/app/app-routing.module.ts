@@ -6,6 +6,7 @@ import { EditComponent as EditEventComponent } from './profile/events/edit/edit.
 import { ProfileComponent } from './profile/profile.component';
 
 import { ApprovalsAdminComponent } from './admin/approvals/approvals.component';
+import { CashbackAdminComponent } from './admin/approvals/cashback/cashback.component';
 import { EditUsuariosAdminComponent } from './admin/usuarios/editUsuarios/editUsuarios.component';
 import { EditEventosAdminComponent } from './admin/eventos/editEventos/editEventos.component';
 import { UsuariosAdminComponent } from './admin/usuarios/usuarios.component';
@@ -53,6 +54,7 @@ const routes: Routes = [
       { path: 'eventos', component: EventosAdminComponent },
       { path: 'evento/:id/edit', component: EditEventosAdminComponent },
       { path: 'approvals', component: ApprovalsAdminComponent },
+      { path: 'approvals/cashback', component: CashbackAdminComponent },
     ],
     canActivate: [AuthGuard]
   },

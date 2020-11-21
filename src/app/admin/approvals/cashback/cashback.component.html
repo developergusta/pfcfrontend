@@ -1,0 +1,97 @@
+<div class="position-relative">
+    <h2>
+      {{titulo}}
+    </h2>
+    <table class="table table-striped">
+      <thead class="thead-light">
+        <tr>
+          <th>ID</th>
+          <th>Valor</th>
+          <th>Evento</th>
+          <th>Descrição</th>
+          <th>Vis. Usuário</th>
+          <th>Vis. Evento</th>
+          <th>Lote</th>
+          <th colspan="2">Opções</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="cashbacks && cashbacks.length">
+        <tr *ngFor="let cashback of cashbacks">
+            <td>
+              <button class="btn btn-nfo" ngbTooltip="Visualizar imagens" placement="top">
+                <i class="fas fa-images"></i>
+              </button>
+            </td>
+            <td>{{evento.eventId}}</td>
+            <td>{{evento.titleEvent}}</td>
+            <td>{{evento.category}}</td>
+            <td>{{evento.address.city}} - {{evento.address.state}} </td>
+            <td>{{evento.dateStart | date: 'short': '-3000': 'pt-BR'}}</td>
+            <td>{{evento.capacity}}</td>
+            <td>
+              <div *ngIf="!evento.lots.length">
+                Não Informado
+              </div>
+              <div *ngIf="evento.lots.length === 1">
+                Lote único
+              </div>
+              <div *ngIf="evento.lots.length > 1">
+                {{evento.lots.length}}
+              </div>
+            </td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-sm btn-success" placement="top" ngbTooltip="Aprovar"
+                  tooltip="Aprovar" (click)="aprovarCashback(cashback, confirm, 'APROVAR')">
+                  <i class="fas fa-check"></i>
+                </button>
+                <button class="btn btn-sm btn-danger btn-tooltip" placement="top" tooltip="Negar" placement="top"
+                  ngbTooltip="Negar" (click)="negarCashback(cashback, confirm)">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </td>
+        </tr>
+      </tbody>
+      <tfoot *ngIf="!cashbacks || !cashbacks.length">
+        <tr>
+          <td colspan="7" class="text-center">
+            <h4>
+              Não há nenhum cashback registrado!
+            </h4>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  
+    <div bsModal #confirm="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title pull-left">
+              Deletando Evento
+            </h4>
+            <button type="button" class="close pull-right" (click)="confirm.hide()" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- <p>{{bodyDeletarEvento}}</p> -->
+          </div>
+          <div class="modal-footer btn-group d-flex">
+            <button type="button" class="btn btn-outline-primary" (click)="confirm.hide()">
+              CENCELAR
+            </button>
+            <button *ngIf="approve == false"  type="button" class="btn btn-outline-danger" (click)="confirmar(confirm)">
+              NEGAR
+            </button>
+            <button *ngIf="approve == true"  type="button" class="btn btn-outline-danger" (click)="confirmar(confirm)">
+              CONFIRMAR
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+  

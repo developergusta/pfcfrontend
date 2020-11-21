@@ -44,7 +44,7 @@
             <div class="col-lg-4 order-lg-1">
               <div class="card-profile-stats d-flex justify-content-center">
                 <div>
-                  <span class="heading">22</span>
+                  <span class="heading">{{user.tickets.length}}</span>
                   <span class="description">Meus Tickets</span>
                 </div>
                 <!-- <div>
@@ -97,8 +97,6 @@
     </div>
   </section>
 </main>
-
-
 
 <div bsModal #criar="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
   <div class="modal-dialog modal-lg">
@@ -243,4 +241,35 @@
       </div>
     </div>
   </div>
+</div>
+
+
+
+
+
+<div role="dialog"  aria-labelledby="dialog-sizes-name1">
+  <table class="table table-striped" id="extrato" #extrato *ngIf="lotCategories">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Movimentação</th>
+        <th scope="col">Horário</th>
+        <th scope="col">Valor</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">1</th>
+        <td>Saldo inicial de criação da conta</td>
+        <td>{{user.registerTime | DateTimeFormatPipe}}</td>
+        <td>+R$100,00</td>
+      </tr>
+      <tr *ngFor="let item of user.tickets; let i = index">
+        <th scope="row">{{i+2}}</th>
+        <td>Compra de ingresso</td>
+        <td>{{item.registerTime | DateTimeFormatPipe}}</td>
+        <td class="text-danger">- R$ {{lotCategories[i].priceCategory | number : '1.2-2' }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>

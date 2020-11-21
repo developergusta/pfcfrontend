@@ -138,22 +138,15 @@ export class UsuarioService {
   }
 
   async banUser(user: User) {
-    const result = this.http.put(`${this.baseURL}/Ban/${user.userId}`, user)
-      .toPromise()
-      .then(
-        () => this.toast.success('Atualizado com sucesso'))
-        .catch(
-        () => this.toast.error('Erro ao atualizar'));
+    const result = this.http.get(`${this.baseURL}/Ban/${user.userId}`)
+      .toPromise();
+        
     return result;
   }
 
   async ReactivateUser(user: User) {
-    const result = this.http.put(`${this.baseURL}/Reactivate/${user.userId}`, user)
-      .toPromise()
-      .then(
-        () => this.toast.success('Atualizado com sucesso'))
-        .catch(
-        () => this.toast.error('Erro ao atualizar'));
+    const result = this.http.get(`${this.baseURL}/Reactivate/${user.userId}`)
+      .toPromise();
     return result;
   }
 }

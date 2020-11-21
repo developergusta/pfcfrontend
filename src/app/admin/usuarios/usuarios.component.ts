@@ -19,13 +19,12 @@ export class UsuariosAdminComponent implements OnInit {
   titulo = 'Usuarios';
   dateBirth: Date;
   now = new Date();
+  dateRef = new Date(this.now.getFullYear(), this.now.getMonth(), this.now.getDate() + 1);
   minDate = new Date(this.now.getFullYear() - 120, this.now.getMonth(), this.now.getDate());
   maxDate = new Date(this.now.getFullYear() - 14, this.now.getMonth(), this.now.getDate());
 
   usuariosFiltrados: User[];
   users: User[];
-  user: User;
-  //addresses: Address[];
   usuario: User;
   modoSalvar = 'post';
 
@@ -53,6 +52,13 @@ export class UsuariosAdminComponent implements OnInit {
     } catch (error) {
       console.log(error);
     }
+  }  
+
+  async getUsuarios() {
+    const users = await this.userService.getUsersList();
+    users.forEach( u => u.dateBirth = new Date(u.dateBirth) )
+    console.log(users);
+    return users;
   }
 
   get filtroLista(): string {
@@ -70,21 +76,13 @@ export class UsuariosAdminComponent implements OnInit {
     );
   }
 
-  alternarImagem() {
-    this.mostrarImagem = !this.mostrarImagem;
-  }
-
-  async getUsuarios() {
-    const users = await this.userService.getUsersList();
-    console.log(users);
-    return users;
-  }
 
 
   editUser(usuario: User, template: any) {
     this.modoSalvar = 'put';
     this.openModal(template);
     console.log(usuario);
+    usuario.dateBirth = new Date(usuario.dateBirth);
     this.userForm.patchValue(usuario);
   }
 
@@ -99,6 +97,16 @@ export class UsuariosAdminComponent implements OnInit {
     this.bodyDeletarUsuario = `Tem certeza que deseja excluir o usuario ${usuario.name}, Código: ${usuario.userId} ?`;
   }
 
+  banUser(usuario: User, template: any) {
+    this.openModal(template);
+    this.usuario = usuario;
+  }
+
+  reactivateUser(usuario: User, template: any) {
+    this.openModal(template);
+    this.usuario = usuario;
+  }
+
   openModal(template: any) {
     this.userForm.reset();
     template.show();
@@ -109,8 +117,6 @@ export class UsuariosAdminComponent implements OnInit {
     if (this.userForm.valid) {
       if (this.modoSalvar === 'post') {
         this.usuario = Object.assign({}, this.usuario);
-
-        this.uploadImagem();
 
         this.userService.createAccount(this.usuario).then(
           (novousuario: User) => {
@@ -123,8 +129,6 @@ export class UsuariosAdminComponent implements OnInit {
 
       } else {
         this.usuario = Object.assign({ id: this.usuario.userId }, this.userForm.value);
-
-        this.uploadImagem();
 
         console.log(JSON.stringify(this.userForm.value))
         this.userService.updateUser(this.userForm.value).then(
@@ -140,29 +144,6 @@ export class UsuariosAdminComponent implements OnInit {
     }
   }
 
-  uploadImagem() {
-    this.dataAtual = new Date().getMilliseconds().toString();
-    // if (this.modoSalvar === 'post') {
-    //   const nomeArquivo = this.userForm.value.image.src.split('\\', 3);
-    //   this.userForm.value.image.src = nomeArquivo[2] + this.dataAtual;
-
-    //   this.userService.uploadFile(this.file)
-    //     .then(
-    //       () => {
-    //         this.dataAtual = new Date().getMilliseconds().toString();
-    //         this.getUsuarios();
-    //       }
-    //     );
-    // } else {
-    //   this.userForm.value.image.src = this.fileNameToUpdate;
-    //   this.userService.uploadFile(this.file)
-    //     .then(
-    //       () => {
-    //         this.getUsuarios();
-    //       }
-    //     );
-    // }
-  }
 
   confirmDelete(template: any) {
     this.userService.deleteUser(this.usuario.userId).then(
@@ -177,14 +158,30 @@ export class UsuariosAdminComponent implements OnInit {
     );
   }
 
+  confirmBanUser(template: any){
+    this.userService.banUser(this.usuario).then(
+      () => {
+        template.hide();
+        this.getUsuarios();
+        this.toastr.success(`Usuário ${this.usuario.name} banido...`);
+      }).catch( error => {
+        this.toastr.error('Erro ao tentar Deletar');
+        console.log(error);
+      }
+    );
+  }
 
-  onFileChange(event) {
-    const reader = new FileReader();
-
-    if (event.target.files && event.target.files.length) {
-      this.file = event.target.files;
-      console.log(this.file);
-    }
+  confirmReactivateUser(template: any){
+    this.userService.ReactivateUser(this.usuario).then(
+      () => {
+        template.hide();
+        this.getUsuarios();
+        this.toastr.success(`Usuário ${this.usuario.name}reativado com Sucesso`);
+      }).catch( error => {
+        this.toastr.error('Erro ao tentar Deletar');
+        console.log(error);
+      }
+    );;
   }
 
 
@@ -196,12 +193,12 @@ export class UsuariosAdminComponent implements OnInit {
       rg: ['', Validators.maxLength(13)],
       login: this.fb.group({
         email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
-        pass: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(200)]]
-      }),
-      image: this.fb.group({
-        src: ['', [Validators.required]],
-      }),
+      })
     });
+  }
+  
+  alternarImagem() {
+    this.mostrarImagem = !this.mostrarImagem;
   }
 
 }

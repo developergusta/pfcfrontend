@@ -21,9 +21,7 @@ export class ApprovalsAdminComponent implements OnInit {
   referencia: boolean;
 
   async ngOnInit() {
-
     try {
-      // this.validation();
       this.eventos = await this.getEventosPendentes();
     } catch (error) {
       console.log(error);
@@ -33,11 +31,9 @@ export class ApprovalsAdminComponent implements OnInit {
   async getEventosPendentes() {
     const result = await this.eventoService.getEventosPendentes();
     return result;
-    // localStorage.setItem('eventos', this.eventos.toString());
   }
 
   aprovarEvento(evento: Evento, template: any) {
-    debugger
     this.openModal(template);
     this.evento = evento;
     this.type = true;

@@ -75,6 +75,16 @@ export class EventoService {
     return result;
   }
 
+  async getLotCategoriesByTickets(tickets: Ticket[]) {
+    let lotCategories = new Array();
+    tickets.forEach( (tkt) => {
+      this.http.get<Evento>(`${this.baseURL}/LotCategoryByTicket/${tkt.lotCategoryId}`)
+        .toPromise()
+        .then( lotCateg => lotCategories.push(lotCateg));
+    });        
+    return lotCategories;
+  }
+
   postEvento(evento: Evento) {
     console.log(evento);
     return this.http.post(this.baseURL, evento);
@@ -93,6 +103,14 @@ export class EventoService {
   }
 
   deleteEvento(id: number) {
+    return this.http.delete(`${this.baseURL}/${id}`);
+  }
+
+  deleteLot(id: number) {
+    return this.http.delete(`${this.baseURL}/${id}`);
+  }
+
+  deleteLotCategory(id: number) {
     return this.http.delete(`${this.baseURL}/${id}`);
   }
 

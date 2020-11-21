@@ -22,11 +22,13 @@
     <div class="container">
       <div class="card card-profile shadow mt--300">
         <div class="px-4">
-          <div class="row d-flex justify-content-start">
-            <div class="col-lg-4 order-lg-1">
-              <div clas s="picsum-img-wrapper col-md-3">
-                <img src="https://img.icons8.com/fluent/96/000000/left.png" alt="Online"
-                  class="img-fluid rounded-circle" style="width: 80px;cursor: pointer;" [routerLink]="['/profile']">
+          <div class="row justify-content-center">
+            <div class="col-lg-12 order-lg-3 text-lg-right align-self-lg-center">
+              <div class="card-profile-actions py-4 mt-lg-0">
+                <a [routerLink]="['/profile']" class="btn btn-sm btn-default float-left">
+                  <img src="https://img.icons8.com/flat_round/64/000000/back--v1.png" width="16px"/> 
+                  Voltar ao perfil
+                </a>
               </div>
             </div>
           </div>

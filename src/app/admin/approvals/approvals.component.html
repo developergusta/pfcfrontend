@@ -2,21 +2,6 @@
   <h2>
     {{titulo}}
   </h2>
-  <!-- <div class="d-flex">
-    <div class="form-inline mr-auto">
-      <div class="form-group mb-2">
-        <label class="mr-2">Filtro:</label> <input type="text" class="form-control mr-2" placeholder="buscar"
-          [(ngModel)]="filtroLista">
-      </div>
-    </div>
-    <div>
-      <button class="btn btn-outline-primary" (click)="novoEvento(cadastro)">
-        <i class="fa fa-plus-circle"></i>&nbsp;
-        Novo Evento
-      </button>
-    </div>
-  </div> -->
-  <!-- <h3>Filtro: {{filtroLista}}</h3> -->
   <table class="table table-striped">
     <thead class="thead-light">
       <tr>
@@ -71,11 +56,11 @@
           </td>
       </tr>
     </tbody>
-    <tfoot *ngIf="!eventos">
+    <tfoot *ngIf="!eventos || !eventos.length">
       <tr>
         <td colspan="7" class="text-center">
           <h4>
-            Nenhum evento aprovado encontrado!
+            Não há nenhum evento para aprovar!
           </h4>
         </td>
       </tr>
