@@ -32,43 +32,36 @@
               </div>
             </div>
           </div>
-          <div class="text-center mt-5">
-            <div class="row" *ngFor="let item of tickets">
-              <div class="col-lg-12 order-lg-1">
-                <div class="card-profile-stats d-flex justify-content-center">
-                  <button class="btn btn-lg btn-info" type="button">
-                    <span class="btn-inner--icon">
-                      <i class="fas fa-ticket-alt mr-2"></i>
-                    </span>
-                    {{item.ticketId}}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
           <div class="mt-5 py-5 border-top text-center">
             <table class="table table-striped">
               <thead>
                 <tr>
                   <th scope="col">#</th>
-                  <th scope="col">Nome do evento</th>
+                  <th scope="col">Evento</th>
+                  <th scope="col">Categoria</th>
+                  <th scope="col">Data de compra</th>
                   <th scope="col">Opções</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let item of tickets">
-                  <th scope="row">1</th>
-                  <td>Mark</td>
+                <tr *ngFor="let item of tickets; let i = index">
+                  <th scope="row">{{i+1}}</th>
+                  <td>{{events[i].titleEvent}} - {{events[i].dateStart | DateTimeFormatPipe}}</td>
+                  <td>{{events[i].titleEvent}} - {{events[i].dateStart | DateTimeFormatPipe}}</td>
+                  <td>{{item.registerTime | DateTimeFormatPipe}}</td>
                   <td>
                     <button ngbTooltip="Abrir PDF" class="btn btn-lg btn-info" type="button">
                       <span class="btn-inner--icon">
                         <i class="fas fa-ticket-alt mr-2"></i>
                       </span>
+                      Ingresso
                     </button>
-                    <button ngbTooltip="Solicitar reembolso" class="btn btn-lg btn-danger" type="button">
+                    <button *ngIf="!cashbackIsSolicited[i]" ngbTooltip="Solicitar reembolso" class="btn btn-sm btn-danger" type="button"
+                      (click)="requestCashback(modalCashback, item)">
                       <span class="btn-inner--icon">
                         <i class="fas fa-window-close mr-2"></i>
                       </span>
+                      Solic. reembolso
                     </button>
                   </td>
                 </tr>
@@ -76,7 +69,6 @@
             </table>
             <div class="row justify-content-center">
               <div class="col-lg-9">
-                <input type="button" value="Download PDF" class="btn btn-lg btn-success">
                 <button class="btn btn-lg btn-info" type="button">
                   <span class="btn-inner--icon">
                     <i class="fas fa-ticket-alt mr-2"></i>
@@ -97,3 +89,32 @@
     </div>
   </section>
 </main>
+
+<div bsModal #modalCashback="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">DESEJA FAZER UMA REQUISIÇÃO DE CASHBACK PARA ESSE
+          INGRESSO?</h4>
+        <button type="button" class="close pull-right" (click)="modalCashback.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>Você deverá justificar a causa de requisitar o cashback</h5>
+        <div class="form-group col-md-12">
+          <textarea class="form-control" [(ngModel)]="formCashback"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer d-flex">
+        <button class="btn btn-secondary" (click)="modalCashback.hide()">
+          Fechar
+        </button>
+        <button class="btn btn-primary ml-auto" (click)="confirmRequestCashback(modalCashback)">
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

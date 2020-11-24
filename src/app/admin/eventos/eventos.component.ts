@@ -18,14 +18,15 @@ export class EventosAdminComponent implements OnInit {
   dateEnd: Date;
   eventosFiltrados: Evento[];
   eventos: Evento[];
+  eventsMostSold: Evento[];
   evento: Evento;
   modoSalvar = 'post';
+  hora1 = '';
 
-  imagemLargura = 50;
-  imagemMargem = 2;
   mostrarImagem = false;
   eventForm: FormGroup;
   bodyDeletarEvento = '';
+  optionsCateg = new Array();
 
   file: File;
   fileNameToUpdate: string;
@@ -35,19 +36,28 @@ export class EventosAdminComponent implements OnInit {
   _filtroLista = '';
 
   async ngOnInit() {
-
     try {
       this.validation();
-      const data = await this.getEventosAprovados();
-      data.forEach( (item, index, object) => {
-        if (item.status === 'PENDENTE'){
-          object.splice(index, 1);
-        }
-      });
-      this.eventos = data;
+      await this.getEventosAprovados();
+      await this.carregarOpcoesCategoria();
+      this.getHora1();
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async carregarOpcoesCategoria() {
+    this.optionsCateg = [
+      { id: 'Futebol', name: 'Futebol' },
+      { id: 'Basquete', name: 'Basquete' },
+      { id: 'OutrosEsportes', name: 'Outros Esportes' },
+      { id: 'MuseuExposicoes', name: 'Museu e Exposições' },
+      { id: 'Reveillon', name: 'Reveillón' },
+      { id: 'Musica', name: 'Música' },
+      { id: 'Infantil', name: 'Infantil' },
+      { id: 'CursosWorkshops', name: 'Cursos e Workshops' },
+      { id: 'Drive-in', name: 'Drive-In' },
+      { id: 'Online', name: 'Online' }];
   }
 
   get filtroLista(): string {
@@ -65,11 +75,32 @@ export class EventosAdminComponent implements OnInit {
     );
   }
 
-  getEventosAprovados() {
-    const result = this.eventoService.getEventosAprovados();
-    console.log(result);
-    return result;
-    // localStorage.setItem('eventos', this.eventos.toString());
+  async getEventosAprovados() {
+    this.eventos = await this.eventoService.getEventosAprovados();
+    this.eventos.forEach( (evt) => {
+      evt.dateStart = new Date(evt.dateStart);
+      evt.dateStart.setMonth(evt.dateStart.getMonth() - 1);
+      evt.dateEnd = new Date(evt.dateEnd);
+      evt.dateEnd.setMonth(evt.dateEnd.getMonth() - 1);
+    } );
+  }
+
+  async getEventsMostSold(){
+    this.eventsMostSold = await this.eventoService.getEventsMostSoldInYear()
+  }
+
+  updtHorario1(event: any) {
+    let hour = Number(event.target.value.substring(0, 2));
+    let minute = Number(event.target.value.substring(3, 5));
+
+    this.evento.dateStart.setHours(hour, minute);
+  }
+
+  updtHorario2(event: any) {
+    let hour = Number(event.target.value.substring(0, 2));
+    let minute = Number(event.target.value.substring(3, 5));
+
+    this.evento.dateEnd.setHours(hour, minute);
   }
 
   excluirEvento(evento: Evento, template: any) {
@@ -81,9 +112,6 @@ export class EventosAdminComponent implements OnInit {
   editarEvento(evento: Evento, template: any) {
     this.modoSalvar = 'put';
     this.openModal(template);
-    // this.evento = Object.assign({}, evento);
-    // this.fileNameToUpdate = evento.imagemURL.toString();
-    // this.evento.images. = '';
     this.eventForm.patchValue(evento);
   }
 
@@ -95,6 +123,21 @@ export class EventosAdminComponent implements OnInit {
   openModal(template: any) {
     this.eventForm.reset();
     template.show();
+  }
+
+  getHora1() {
+    const hora = this.evento.dateStart.getHours();
+    const minuto = this.evento.dateStart.getMinutes();
+    let retorno = '';
+    if (hora < 10) {
+      retorno += '0';
+    }
+    retorno += hora.toString() + ':';
+    if (minuto < 10) {
+      retorno += '0';
+    }
+    retorno += minuto.toString();
+    this.hora1 = retorno;
   }
 
   async salvarAlteracao(template: any) {
@@ -159,22 +202,7 @@ export class EventosAdminComponent implements OnInit {
         country: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(45)]],
         state: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
         city: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
-      }),
-      // user: this.fb.group({
-      //   userId: ['', Validators.required]
-      // })
+      })
     });
   }
-
-  /*public getPartidasLive() {
-    return this.http.get<User>(
-      'https://open.faceit.com/data/v4/championships/d6a6b4dc-bef5-4c62-ab71-494e6e6eef87/matches?type=ongoing&offset=0&limit=150',
-      {
-        headers: new HttpHeaders().set(
-          'Authorization',
-          'Bearer 2f52d9e7-2f15-472e-9210-ce91616d214e'
-        ),
-      }
-    );
-  }*/
 }

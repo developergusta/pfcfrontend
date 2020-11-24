@@ -149,13 +149,23 @@ export class EditComponent implements OnInit {
     }
   }
 
-  confirmaExclusaoEndereco(template: any) {
-    this.user.addresses.splice(this.index);
+  async confirmaExclusaoEndereco(template: any) {
+    if(this.user.addresses[this.index].addressId == 0){
+    this.user.addresses.splice(this.index);    
+    }
+    else{
+      await this.userService.deleteAddress(this.user.addresses[this.index].addressId)
+    }
     template.hide();
   }
 
-  confirmaExclusaoTelefone(template: any) {
+  async confirmaExclusaoTelefone(template: any) {
+    if(this.user.phones[this.index].phoneId == 0){
     this.user.phones.splice(this.index);
+    }
+    else{
+      await this.userService.deletePhone(this.user.phones[this.index].phoneId)
+    }
     template.hide();
   }
 
@@ -174,6 +184,15 @@ export class EditComponent implements OnInit {
   salvarAlteracoes(template: any) {
     this.reference = 2;
     this.openModal(template);
+  }
+
+  getTickets() {
+    if (this.user.tickets.length > 0) {
+      this.router.navigate(['./profile/tickets']);
+    }
+    else {
+      this.toastr.error('Você ainda não comprou nenhum ingresso');
+    }
   }
 
   openModal(template: any) {

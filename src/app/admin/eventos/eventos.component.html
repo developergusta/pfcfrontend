@@ -67,10 +67,6 @@
                 ngbTooltip="Excluir" (click)="excluirEvento(evento, confirm)">
                 <i class="fa fa-eraser"></i>
               </button>
-              <button [routerLink]="['/admin/evento', evento.eventId, 'edit']" tooltip="Edição Detalhada"
-                placement="top" ngbTooltip="Edição detalhada" class="btn btn-sm btn-warning">
-                <i class="fa fa-edit"></i>
-              </button>
             </div>
           </td>
       </tr>
@@ -90,13 +86,13 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 id="dialog-sizes-name1" class="modal-title pull-left">Large modal</h4>
+          <h4 id="dialog-sizes-name1" class="modal-title pull-left">Criando/Alterando evento</h4>
           <button type="button" class="close pull-right" (click)="cadastro.hide()" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <form [formGroup]="eventForm">
+          <form [formGroup]="eventForm" *ngIf="eventForm">
             <div class="form-row">
               <div class="form-group col-md-12">
                 <label>Título do evento</label>
@@ -114,8 +110,9 @@
               </div>
               <div class="form-group col-md-12">
                 <label>Descrição do evento</label>
-                <input type="text" class="form-control" formControlName="description"
+                <textarea type="text" class="form-control" formControlName="description"
                   [ngClass]="{'is-invalid': eventForm.get('description').errors && eventForm.get('description').touched}">
+                </textarea>
                 <div *ngIf="eventForm.get('description').hasError('required')
                 && eventForm.get('description').touched" class="invalid-feedback">
                   Descrição é obrigatória.
@@ -129,17 +126,9 @@
               </div>
               <div class="form-group col-md-12">
                 <label>Categoria</label>
-                <input type="text" class="form-control" formControlName="category"
-                  [ngClass]="{'is-invalid': eventForm.get('category').errors && eventForm.get('category').touched}">
-                <div *ngIf="eventForm.get('category').hasError('required') && eventForm.get('category').touched" class="invalid-feedback">
-                  Categoria é obrigatório.
-                </div>
-                <div *ngIf="eventForm.get('category').hasError('minlength') && eventForm.get('category').touched" class="invalid-feedback">
-                  Categoria deve ter no mínimo 4 Caracters.
-                </div>
-                <div *ngIf="eventForm.get('category').hasError('maxlength') && eventForm.get('category').touched" class="invalid-feedback">
-                  Categoria deve ter no máximo 50 Caracters.
-                </div>
+                <select class="form-control" id="sel1" formControlName="category">
+                  <option *ngFor="let opt of optionsCateg" [ngValue]="opt.id">{{opt.name}}</option>
+                </select>
               </div>
             </div>
             <div class="form-row">
@@ -176,7 +165,7 @@
                   CEP é obrigatório.
                 </div>
               </div>
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-4">
                 <label>Data / hora de INÍCIO</label>
                 <input type="text" class="form-control" formControlName="dateStart" bsDatepicker
                   value="{{dateStart | DateTimeFormatPipe}}" [(ngModel)]="dateStart"
@@ -187,7 +176,13 @@
                   Data e hora é obrigatório.
                 </div>
               </div>
-              <div class="form-group col-md-6">
+              
+              <div class="form-group col-md-2">
+                <label>Hora INICIO</label>
+                <input type="time" placeholder="" class="form-control form-control-alternative" value="{{ hora1 }}"
+                  (change)="updtHorario1($event)" />
+              </div>
+              <div class="form-group col-md-4">
                 <label>Data / Hora do FIM</label>
                 <input type="text" class="form-control" formControlName="dateEnd" bsDatepicker
                   value="{{dateEnd | DateTimeFormatPipe}}" [(ngModel)]="dateEnd"
@@ -198,10 +193,15 @@
                   Data e hora é obrigatório.
                 </div>
               </div>
+              <div class="form-group col-md-2">
+                <label>Hora FIM</label>
+                <input type="time" placeholder="" class="form-control form-control-alternative"
+                  (change)="updtHorario2($event)" />
+              </div>
             </div>
             <div class="form-row">
               <div class="form-group col-md-12">
-                <label>Qtd Pessoas</label>
+                <label>Capacidade máxima de pessoas</label>
                 <input type="text" placeholder="" class="form-control is-invalid" formControlName="capacity"
                   [ngClass]="{'is-invalid': eventForm.get('capacity').errors && eventForm.get('capacity').touched}">
                 <div *ngIf="eventForm.get('capacity').hasError('required') && eventForm.get('capacity').touched" class="invalid-feedback">
@@ -251,5 +251,23 @@
       </div>
     </div>
   </div>
+</div>
 
+
+<div role="dialog"  aria-labelledby="dialog-sizes-name1" class="modal fade" tabindex="-1">
+  <table class="table table-striped" id="extrato" #extrato *ngIf="eventsMostSold">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Evento</th>
+        <th scope="col">Quantidade de ingressos vendidos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of eventsMostSold; let i = index">
+        <th scope="row">i</th>
+        <td>{{item.titleEvent}}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>

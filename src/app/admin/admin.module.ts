@@ -1,7 +1,6 @@
 import { HomeModule } from './../home/home.module';
 import { ApprovalsAdminComponent } from './approvals/approvals.component';
 import { EditUsuariosAdminComponent } from './usuarios/editUsuarios/editUsuarios.component';
-import { EditEventosAdminComponent } from './eventos/editEventos/editEventos.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { AppRoutingModule } from './../app-routing.module';
 import { UsuariosAdminComponent } from './usuarios/usuarios.component';
@@ -28,7 +27,6 @@ import { CashbackAdminComponent } from './approvals/cashback/cashback.component'
     SidebarComponent,
     EventosAdminComponent,
     UsuariosAdminComponent,
-    EditEventosAdminComponent,
     EditUsuariosAdminComponent,
     ApprovalsAdminComponent,
     CashbackAdminComponent,
@@ -39,7 +37,6 @@ import { CashbackAdminComponent } from './approvals/cashback/cashback.component'
     NavbarAdminComponent,
     FooterAdminComponent,
     EventosAdminComponent,
-    EditEventosAdminComponent,
     UsuariosAdminComponent,
     EditUsuariosAdminComponent,
     ApprovalsAdminComponent,

@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Evento } from '../models/Evento';
 import { environment } from 'src/environments/environment';
+import { LotCategory } from '../models/LotCategory';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +14,10 @@ export class EventoService {
   baseURL = environment.baseURL + '/Event';
 
   constructor(private http: HttpClient,
-              private userService: UsuarioService) { }
+    private userService: UsuarioService) { }
 
 
-  async getEventosAprovados(){
+  async getEventosAprovados() {
     try {
       const result = await this.http.get<Evento[]>(`${this.baseURL}/Approved`).toPromise();
       console.log(result);
@@ -26,7 +27,7 @@ export class EventoService {
     }
   }
 
-  async getEventosPendentes(){
+  async getEventosPendentes() {
     try {
       const result = await this.http.get<Evento[]>(`${this.baseURL}/Pending`).toPromise();
       console.log(result);
@@ -36,7 +37,7 @@ export class EventoService {
     }
   }
 
-  async getEventosNegados(){
+  async getEventosNegados() {
     try {
       const result = await this.http.get<Evento[]>(`${this.baseURL}/Denied`).toPromise();
       console.log(result);
@@ -46,7 +47,12 @@ export class EventoService {
     }
   }
 
-  async getEventosByUserId(id: number){
+  async getEventsMostSoldInYear() {
+    const result = await this.http.get<Evento[]>(`${this.baseURL}/EventsMostSold`).toPromise();
+    return result;
+  }
+
+  async getEventosByUserId(id: number) {
     try {
       const result = await this.http.get<Evento[]>(`${this.baseURL}/EventsByUserId/${this.getUserIdLogged()}`).toPromise();
       console.log(result);
@@ -56,7 +62,7 @@ export class EventoService {
     }
   }
 
-   async getTodayEvent(){
+  async getTodayEvent() {
     try {
       const result = await this.http.get<Evento[]>(`${this.baseURL}/Today`).toPromise();
       console.log(result);
@@ -70,18 +76,23 @@ export class EventoService {
     return this.http.get<Evento[]>(`${this.baseURL}/getByTema/${tema}`);
   }
 
-  async getEventoById(id: number) {
+  async getEventoById(id: number) {    
     const result = await this.http.get<Evento>(`${this.baseURL}/${id}`).toPromise();
     return result;
   }
 
+  async getLotCategoriesById(id: number) {    
+    const result = await this.http.get<LotCategory>(`${this.baseURL}/LotCategory/${id}`).toPromise();
+    return result;
+  }  
+
   async getLotCategoriesByTickets(tickets: Ticket[]) {
     let lotCategories = new Array();
-    tickets.forEach( (tkt) => {
+    tickets.forEach((tkt) => {
       this.http.get<Evento>(`${this.baseURL}/LotCategoryByTicket/${tkt.lotCategoryId}`)
         .toPromise()
-        .then( lotCateg => lotCategories.push(lotCateg));
-    });        
+        .then(lotCateg => lotCategories.push(lotCateg));
+    });
     return lotCategories;
   }
 
@@ -114,16 +125,16 @@ export class EventoService {
     return this.http.delete(`${this.baseURL}/${id}`);
   }
 
-  getUserIdLogged(){
+  getUserIdLogged() {
     const userLogged = JSON.parse(window.sessionStorage.getItem('user'));
     return userLogged.userId;
   }
 
-  getSelectedEvent(eventId: string){
+  getSelectedEvent(eventId: string) {
     return this.http.get<Evento>(`${this.baseURL}/${eventId}`).toPromise();
   }
 
-  setSelectedEvent(eventObj: Evento){
+  setSelectedEvent(eventObj: Evento) {
     sessionStorage.setItem('eventSelected', JSON.stringify(eventObj));
   }
 

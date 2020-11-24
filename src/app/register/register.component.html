@@ -39,7 +39,7 @@
                     </div>
                     <input class="form-control form-control-alternative"
                       [ngClass]="{'is-invalid': registerForm.get('name').errors && registerForm.get('name').touched}"
-                      placeholder="Name" type="text" (focus)="focus[0]=true" (blur)="focus[0]=false"
+                      placeholder="Nome" type="text" (focus)="focus[0]=true" (blur)="focus[0]=false"
                       formControlName="name">
                       <div *ngIf="registerForm.get('name').hasError('required') && registerForm.get('name').touched" class="invalid-feedback">Campo obrigatório</div>
                       <div *ngIf="registerForm.get('name').hasError('minlength') && registerForm.get('name').touched" class="invalid-feedback">Mínimo 2 caracteres</div>

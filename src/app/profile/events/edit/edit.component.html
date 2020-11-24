@@ -44,13 +44,14 @@
             </div>
           </div>
           <div class="text-center mt-5">
+            <label *ngIf="!imagens">Ainda não há imagens</label>
             <ngb-carousel [showNavigationArrows]="true" [showNavigationIndicators]="true" interval="12000"
               [keyboard]="true" [pauseOnHover]="true" [wrap]="true" [activeId]="'secondSlide'" *ngIf="evento.images">
-              <ng-template ngbSlide id="firstSlide">
+              <ng-template ngbSlide id="{{i}}Slide" *ngFor="let img of evento.images; let i = index;">
                 <div class="row">
                   <div class="picsum-img-wrapper col-sm-12 col-4 mt-5 mt-sm-0">
-                    <img src="https://img.icons8.com/cute-clipart/128/000000/music.png" alt="Música"
-                      class="img-fluid rounded-circle" style="height: 120px; cursor: pointer" />
+                    <img src="{{img.src}}" alt="Música"
+                      class="img-fluid" style="height: 120px; cursor: pointer" />
                   </div>
                 </div>
               </ng-template>
@@ -60,7 +61,7 @@
             <button class="btn btn-lg btn-info" type="button" (click)="fileInput1.click()">
               Alterar Imagens
             </button>
-            <label *ngIf="!evento.images">Ainda não há imagens</label>
+            
             <br /><label>Insira no máximo 5</label>
             <hr />
             <div class="border border-light rounded">
@@ -81,7 +82,7 @@
               <div class="form-row">
                 <div class="form-group col-md-6">
                   <label for="sel1">Categoria</label>
-                  <select class="form-control" id="sel1" [(ngModel)]="evento.category">
+                  <select class="form-control form-control-alternative" id="sel1" [(ngModel)]="evento.category">
                     <option *ngFor="let opt of options" value="{{ opt.id }}" [ngValue]="opt.id">
                       {{ opt.name }}
                     </option>
@@ -152,8 +153,8 @@
                 </div>
                 <div class="form-group col-md-2">
                   <label>Hora FIM</label>
-                  <input type="time" placeholder="" class="form-control form-control-alternative"
-                    (change)="updtHorario1($event)" />
+                  <input type="time" placeholder="" class="form-control form-control-alternative" value="{{ hora2 }}"
+                    (change)="updtHorario2($event)" />
                 </div>
               </div>
               <div *ngFor="let lot of this.evento.lots; let i = index" class="h6 font-weight-300">
@@ -279,7 +280,7 @@
           (click)="confirmaExclusaoCategoriaLote(modalConfirm)">
           Sim, confirmar.
         </button>
-        <button *ngIf="reference == 2" class="btn btn-primary ml-auto" (click)="confirmaEdicao()">
+        <button *ngIf="reference == 2" class="btn btn-primary ml-auto" (click)="confirmaEdicao(modalConfirm)">
           Sim, confirmar.
         </button>
       </div>

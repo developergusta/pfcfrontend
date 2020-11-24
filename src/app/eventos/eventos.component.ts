@@ -1,8 +1,7 @@
 import { EventoService } from './../_services/evento.service';
 import { Evento } from './../models/Evento';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { BsModalService } from 'ngx-bootstrap/modal';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -12,9 +11,13 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class EventosComponent implements OnInit {
 
-  constructor(private eventoService: EventoService, private toastr: ToastrService, private modalService: BsModalService) { }
+  constructor(
+    private eventoService: EventoService, 
+    private toastr: ToastrService, 
+    private fb: FormBuilder) { }
 
   titulo = 'Eventos';
+  eventForm: FormGroup;
   focus1: boolean;
   dataEvento: string;
   eventosFiltrados: Evento[];
@@ -102,15 +105,23 @@ export class EventosComponent implements OnInit {
     );
   }
 
-  /*public getPartidasLive() {
-    return this.http.get<User>(
-      'https://open.faceit.com/data/v4/championships/d6a6b4dc-bef5-4c62-ab71-494e6e6eef87/matches?type=ongoing&offset=0&limit=150',
-      {
-        headers: new HttpHeaders().set(
-          'Authorization',
-          'Bearer 2f52d9e7-2f15-472e-9210-ce91616d214e'
-        ),
-      }
-    );
-  }*/
+  public validation(): any {
+    this.eventForm = this.fb.group({
+      titleEvent: ['', [Validators.required]],
+      category: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      capacity: ['', [Validators.required, Validators.max(1000000)]],
+      description: ['', [Validators.required, Validators.maxLength(1000)]],
+      dateStart: ['', Validators.required],
+      dateEnd: ['', Validators.required],
+      address: this.fb.group({
+        street: ['', [Validators.required, Validators.maxLength(255)]],
+        complement: ['', [Validators.maxLength(255)]],
+        zipCode: ['', [Validators.maxLength(20)]],
+        num: ['', [Validators.required, Validators.min(0), Validators.max(99999)]],
+        country: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(45)]],
+        state: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
+        city: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
+      })
+    });
+  }
 }

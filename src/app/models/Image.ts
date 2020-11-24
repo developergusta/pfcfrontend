@@ -3,5 +3,5 @@ export class Image {
 
   id?: number;
   alt?: string;
-  src: string;
+  src?: string;
 }

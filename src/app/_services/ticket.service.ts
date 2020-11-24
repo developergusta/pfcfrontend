@@ -24,11 +24,13 @@ export class TicketService {
 
   async getTicketsByUserId(id: number){
     const result = await this.http.get<Ticket[]>(`${this.baseURL}/User/${id}`).toPromise();
+    console.log(result);
     return result;
   }
 
-  async requestCashback(evento: Evento) {
-    return this.http.post(`${this.baseURL}/Cashback`, evento);
+  async requestCashback(ticket: Ticket) {
+    const result = await this.http.post(`${this.baseURL}/Cashback`, ticket).toPromise();
+    return result;
   }
 
   async aprovarCashback(evento: Evento) {

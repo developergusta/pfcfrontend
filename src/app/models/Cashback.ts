@@ -1,3 +1,5 @@
+import { Ticket } from './Ticket';
+
 export class Cashback {
     constructor() {}
 
@@ -6,4 +8,5 @@ export class Cashback {
     status?: string;
     dateSolicitation?: Date;
     dateCashback?: Date;
+    ticket?: Ticket;
 }

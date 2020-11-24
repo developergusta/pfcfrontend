@@ -1,12 +1,12 @@
 import { LotCategory } from './../../../models/LotCategory';
 import { Lot } from './../../../models/Lot';
 import { Evento } from 'src/app/models/Evento';
+import { Image } from 'src/app/models/Image';
 import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from 'src/app/_services/usuario.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { EventoService } from 'src/app/_services/evento.service';
-import { User } from 'src/app/models/User';
 import { FormGroup } from '@angular/forms';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { finalize } from 'rxjs/operators';
@@ -21,8 +21,10 @@ import { CorreiosService } from 'src/app/_services/correios.service';
 export class EditComponent implements OnInit {
 
   evento = new Evento();
+  imagens = 0;
   eventProgress = 0;
   hora1 = '';
+  hora2 = '';
   horarios = new Array();
   options = new Array();
   eventForm: FormGroup;
@@ -39,20 +41,20 @@ export class EditComponent implements OnInit {
     private correios: CorreiosService,
     private eventoService: EventoService,
     private route: ActivatedRoute,
-    private userService: UsuarioService,
     private toastr: ToastrService,
     private storage: AngularFireStorage
   ) { }
 
   async ngOnInit() {
     await this.getEventFromUrl();
-    this.carregarOpcoesCategoria();
+    await this.carregarOpcoesCategoria();
     this.getHora1();
+    this.getHora2();
     console.log(this.evento);
   }
 
 
-  carregarOpcoesCategoria() {
+  async carregarOpcoesCategoria() {
     this.options = [
       { id: 'Futebol', name: 'Futebol' },
       { id: 'Basquete', name: 'Basquete' },
@@ -85,15 +87,39 @@ export class EditComponent implements OnInit {
       this.evento.eventId = parseInt(params.id, 10);
     });
     this.evento = await this.eventoService.getEventoById(this.evento.eventId);
-    this.evento.dateStart = new Date(this.evento.dateStart);
-    this.evento.dateStart.setMonth(this.evento.dateStart.getMonth() - 1);
-    this.evento.dateEnd = new Date(this.evento.dateEnd);
-    this.evento.dateEnd.setMonth(this.evento.dateEnd.getMonth() - 1);
+    this.evento.dateStart = this.getDynamicDate(this.evento.dateStart);
+    this.evento.dateEnd = this.getDynamicDate(this.evento.dateEnd);
     if (!this.evento.lots.length) {
       this.evento.lots.push(new Lot());
-      this.evento.lots[0].lotCategories.push(new LotCategory());
+      this.evento.lots[0].dateStart = new Date(this.evento.dateStart);
+      this.evento.lots[0].dateEnd = new Date(this.evento.dateEnd);
+      this.evento.lots[0].lotCategories = [];
+      this.evento.lots[0].lotCategories.push(new LotCategory())
     }
-    console.log(this.evento.dateStart);
+    else {
+      this.evento.lots.forEach((lot, index) => {
+        if (lot.dateStart) {
+          lot.dateStart = new Date(lot.dateStart);
+        }
+        else if(index === 0){
+          lot.dateStart = new Date(this.evento.dateStart);
+        }
+        else{
+          lot.dateStart = new Date(this.evento.lots[index-1].dateStart);
+        }
+
+        if (lot.dateEnd){
+          lot.dateEnd = new Date(lot.dateEnd)
+        }
+        else if(index === 0){
+          lot.dateEnd = new Date(this.evento.dateEnd);
+        }
+        else{
+          lot.dateEnd = new Date(this.evento.lots[index-1].dateEnd);
+        }
+      });
+    }
+    this.imagens = this.evento.images.length;
   }
 
   getHora1() {
@@ -109,6 +135,27 @@ export class EditComponent implements OnInit {
     }
     retorno += minuto.toString();
     this.hora1 = retorno;
+  }
+
+  getHora2() {
+    const hora = this.evento.dateEnd.getHours();
+    const minuto = this.evento.dateEnd.getMinutes();
+    let retorno = '';
+    if (hora < 10) {
+      retorno += '0';
+    }
+    retorno += hora.toString() + ':';
+    if (minuto < 10) {
+      retorno += '0';
+    }
+    retorno += minuto.toString();
+    this.hora1 = retorno;
+  }
+
+  getDynamicDate(data: Date) {
+    data = new Date(data);
+    data.setMonth(data.getMonth() - 1);
+    return data;
   }
 
   criarLote() {
@@ -165,15 +212,22 @@ export class EditComponent implements OnInit {
   }
 
 
-  onFileChanged(event) {
+  onFileChanged(event: any) {
     if (event.target.files && event.target.files.length) {
       if (event.target.files.length > 5) {
         this.toastr.error('Só é permitido inserir no máximo 5 imagens por evento');
       } else {
-        debugger
+        if (this.evento.images === null || this.evento.images.length === 0) {
+          this.evento.images = [];
+        }
+
         for (let i = 0; i < event.target.files.length; i++) {
+          if (this.evento.images.length < event.target.files.length) {
+            this.evento.images.push(new Image());
+          }
           this.evento.images[i].src = event.target.files[i];
         }
+
         this.selectedFiles = event.target.files;
         this.uploadImagem();
       }
@@ -182,25 +236,24 @@ export class EditComponent implements OnInit {
   async uploadImagem() {
 
     for (let i = 0; i < this.selectedFiles.length; i++) {
-      const nomeArquivo = this.evento.eventId.toString();
+      const nomeArquivo = this.evento.eventId.toString() + '_' + i.toString();
 
       const file = this.selectedFiles[i];
       const filePath = 'event/' + this.evento.eventId.toString();
       const fileRef = this.storage.ref(`${filePath}/${nomeArquivo}`);
+
       const task = this.storage.upload(`${filePath}/${nomeArquivo}`, file);
 
-      
-
-      // task.snapshotChanges().pipe(
-      //   finalize(() => fileRef.getDownloadURL().subscribe(item => this.evento.images[i].src = item))
-      // ).subscribe();
+      task.snapshotChanges().pipe(
+        finalize(() => fileRef.getDownloadURL().subscribe(item => this.evento.images[i].src = item))
+      ).subscribe();
     }
   }
 
-  buscaCEP() {
+  async buscaCEP() {
     let cep = this.evento.address.zipCode;
     if (cep != null && cep !== '') {
-      this.correios.consultaCep(cep).then(n => {
+      await this.correios.consultaCep(cep).then(n => {
         this.populateAddress(n);
       });
     }
@@ -211,17 +264,24 @@ export class EditComponent implements OnInit {
     this.evento.address.state = address.uf;
     this.evento.address.street = address.logradouro;
   }
-  
+
+  getCorrectDate(dateObj: Date) {
+    dateObj = new Date(dateObj);
+    dateObj.setMonth(dateObj.getMonth() - 1);
+    return dateObj;
+  }
+
   openModal(template: any) {
     template.show();
   }
 
-  async confirmaEdicao() {
+  async confirmaEdicao(template: any) {
     try {
-      console.log(this.evento)
-      await this.eventoService.updateEvento(this.evento);
-      // template.hide();
-      // this.getEventFromUrl();
+      console.log(JSON.stringify(this.evento))
+      await this.eventoService.updateEvento(this.evento)
+        .then(() => this.toastr.success('Evento alterado com sucesso'));
+      template.hide();
+      this.getEventFromUrl();
     } catch {
       console.log('Erro ao fazer o update');
     }

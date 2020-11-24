@@ -43,12 +43,9 @@ export class UsuariosAdminComponent implements OnInit {
 
   async ngOnInit() {
     try {
-      // console.log(this.addresses);
       this.validation();
       this.users = await this.getUsuarios();
-      // let arrayControl = this.userForm.get('addresses') as FormArray;
-      // console.log(arrayControl);
-
+      
     } catch (error) {
       console.log(error);
     }
@@ -56,8 +53,10 @@ export class UsuariosAdminComponent implements OnInit {
 
   async getUsuarios() {
     const users = await this.userService.getUsersList();
-    users.forEach( u => u.dateBirth = new Date(u.dateBirth) )
-    console.log(users);
+    users.forEach( u => {
+      u.registerTime = new Date(u.registerTime)
+      u.registerTime.setHours(u.registerTime.getHours())
+    } )
     return users;
   }
 

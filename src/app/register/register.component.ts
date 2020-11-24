@@ -35,14 +35,14 @@ export class RegisterComponent implements OnInit {
 
   registerForm: FormGroup;
 
-  createAcount(): any{
+  async createAcount(): Promise<any>{
     if (this.registerForm.valid){
       this.user = Object.assign({}, this.registerForm.value);
-      this.userService.register(this.user).subscribe(
+      this.userService.createAccount(this.user).then(
         () => {
           this.router.navigate(['/login']);
           this.toastr.success('Cadastro Realizado');
-        }, error => {
+        }).catch( error => {
           this.toastr.error('erro no cadastro: ' + this.user);
           console.log(error);
         }

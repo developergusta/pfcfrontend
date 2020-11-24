@@ -27,7 +27,23 @@ export class UsuarioService {
     , private storage: AngularFireStorage
   ) { }
 
+  /** GET HTTP */
+  async getUsersList() {
+    const result = this.http.get<User[]>(this.baseURL).toPromise();
+    return result;
+  }
 
+  async getUserById(id: number) {
+    const result = await this.http.get<User>(`${this.baseURL}/${id}`).toPromise();
+    return result;
+  }  
+
+  async getMyTickets(id: number) {
+    const result = await this.http.get(`${this.baseURL}/MyTickets/${id}`).toPromise();
+    return result;
+  }
+  /** GET HTTP */
+  /** GET FUNCTIONS */
   getToken(): any {
     return sessionStorage.getItem('token');
   }
@@ -35,41 +51,11 @@ export class UsuarioService {
   getUserName(): string {
     this.name = this.jwtHelper.decodeToken(sessionStorage.getItem('token')).unique_name;
     return this.name;
-  }
-
-  register(model: any) {
-    console.log(model);
-    return this.http.post(`${this.baseURL}`, model);
-  }
+  }  
 
   getUserLogged() {
     const userLogged = sessionStorage.getItem('user');
     return userLogged;
-  }
-
-  async createAccount(account: any) {
-    const result = await this.http.post<any>(`${this.baseURL}`, account).toPromise();
-    return result;
-  }
-
-  async updateUser(user: User) {
-    const result = this.http.put(`${this.baseURL}/${user.userId}`, user)
-      .toPromise()
-      .then(
-        () => this.toast.success('Atualizado com sucesso'))
-        .catch(
-        () => this.toast.error('Erro ao atualizar'));
-    return result;
-  }
-
-  async deleteUser(id: number) {
-    const result = await this.http.delete(`${this.baseURL}/Delete/${id}`).toPromise();
-    return result;
-  }
-
-  async getUsersList() {
-    const result = this.http.get<User[]>(this.baseURL).toPromise();
-    return result;
   }
 
   getIdade(dataNasc: Date) {
@@ -78,24 +64,13 @@ export class UsuarioService {
     const idade = moment.duration(hoje.diff(nasc));
     console.log(Math.trunc(idade.asYears()));
     return Math.trunc(idade.asYears());
-  }
+  }  
 
-  async getUserById(id: number) {
-    const result = await this.http.get<User>(`${this.baseURL}/${id}`).toPromise();
-    return result;
+  getAuthorizationToken() {
+    const token = sessionStorage.getItem('token');
+    return token;
   }
-
-  uploadFile(event) {
-    const file = event.target.files[0];
-    const filePath = 'name-your-file-path-here';
-    this.storage.upload(filePath, file);
-  }
-
-  async getMyTickets(id: number) {
-    const result = await this.http.get(`${this.baseURL}/MyTickets/${id}`).toPromise();
-    return result;
-  }
-
+  
   getTokenExpirationDate(token: string): Date {
     const decoded: any = this.jwtHelper.decodeToken(token);
 
@@ -107,6 +82,65 @@ export class UsuarioService {
     date.setUTCSeconds(decoded.exp);
     return date;
   }
+  /** GET FUNCTIONS */
+
+  /** POST HTTP */  
+  async createAccount(account: any) {
+    const result = await this.http.post<any>(`${this.baseURL}`, account).toPromise();
+    return result;
+  }
+  /** POST HTTP **/  
+
+  /** PUT HTTP **/  
+  async updateUser(user: User) {
+    const result = this.http.put(`${this.baseURL}/${user.userId}`, user)
+      .toPromise()
+      .then(
+        () => this.toast.success('Atualizado com sucesso'))
+        .catch(
+        () => this.toast.error('Erro ao atualizar'));
+    return result;
+  }
+  
+  async banUser(user: User) {
+    const result = this.http.get(`${this.baseURL}/Ban/${user.userId}`)
+      .toPromise();
+        
+    return result;
+  }
+
+  async ReactivateUser(user: User) {
+    const result = this.http.get(`${this.baseURL}/Reactivate/${user.userId}`)
+      .toPromise();
+    return result;
+  }
+  /** PUT  **/ 
+
+  /** DELETE  **/ 
+  async deleteUser(id: number) {
+    const result = await this.http.delete(`${this.baseURL}/Delete/${id}`).toPromise();
+    return result;
+  }
+
+  async deleteAddress(addressId: number) {
+    const result = await this.http.delete(`${this.baseURL}/Address/Delete/${addressId}`).toPromise();
+    return result;
+  }
+
+  async deletePhone(phoneId: number) {
+    const result = await this.http.delete(`${this.baseURL}/Phone/Delete/${phoneId}`).toPromise();
+    return result;
+  }
+  /** DELETE  **/ 
+
+  /*** UPLOAD IMAGEM ***/
+  uploadFile(event) {
+    const file = event.target.files[0];
+    const filePath = 'name-your-file-path-here';
+    this.storage.upload(filePath, file);
+  }
+  /*** UPLOAD IMAGEM ***/
+
 
   isTokenExpired(token?: string): boolean {
     if (!token) {
@@ -130,23 +164,5 @@ export class UsuarioService {
     }
 
     return true;
-  }
-
-  getAuthorizationToken() {
-    const token = sessionStorage.getItem('token');
-    return token;
-  }
-
-  async banUser(user: User) {
-    const result = this.http.get(`${this.baseURL}/Ban/${user.userId}`)
-      .toPromise();
-        
-    return result;
-  }
-
-  async ReactivateUser(user: User) {
-    const result = this.http.get(`${this.baseURL}/Reactivate/${user.userId}`)
-      .toPromise();
-    return result;
   }
 }

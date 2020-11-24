@@ -20,6 +20,7 @@ import { LotCategory } from '../models/LotCategory';
 export class ProfileComponent implements OnInit {
 
   events: Evento[];
+  hora1 = '';
   hr1: {
     hour: 0,
     minute: 0
@@ -57,7 +58,7 @@ export class ProfileComponent implements OnInit {
   interval: any;
   eventProgress = 0;
   optionsCateg = new Array();
-  lotCategories: LotCategory[];
+  lotCategories: LotCategory[] = [];
 
 
   constructor(
@@ -70,13 +71,12 @@ export class ProfileComponent implements OnInit {
 
   async ngOnInit() {
     try {
+      await this.validation();
       await this.getUser();
-      this.validation();
       this.calculaIdade();
       await this.getEventos();
       await this.carregarOpcoesCategoria();
       await this.getLotCategories();
-      console.log(this.lotCategories)
     } catch (error) {
 
     }
@@ -110,22 +110,26 @@ export class ProfileComponent implements OnInit {
     this.evento.dateEnd.setHours(hour, minute);
   }
 
-  salvarAlteracao(template: any) {
-    // if (this.eventForm.valid) {
+  agendarEvento(template: any) {
     this.startTimer();
+    this.evento = this.eventForm.value;
     this.evento.user = this.userService.getUserLogged;
 
-    this.eventoService.postEvento(this.evento).subscribe(
-      (response) => {
-        this.evento = response;
-      }, error => {
-        this.toastr.error(`Erro ao Inserir: ${error}`);
-      }
-    );
-    // }
+    if (this.eventForm.valid) {
+      this.eventoService.postEvento(this.evento).subscribe(
+        (response) => {
+          this.evento = response;
+        }, error => {
+          this.toastr.error(`Erro ao Inserir: ${error}`);
+        }
+      );
+    }
+    else {
+      this.toastr.error('Você deve preencher todos os campos corretamente');
+    }
   }
 
-  public validation(): any {
+  public async validation() {
     this.eventForm = this.fb.group({
       titleEvent: [this.evento.titleEvent, [Validators.required]],
       category: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
@@ -142,9 +146,6 @@ export class ProfileComponent implements OnInit {
         state: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
         city: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
       }),
-      // user: this.fb.group({
-      //   userId: ['', Validators.required]
-      // })
     });
   }
 
@@ -161,7 +162,6 @@ export class ProfileComponent implements OnInit {
       this.correios.consultaCep(cep).then(n => {
         this.populateAddress(n);
       });
-      // this.eventForm.get('address.city').setValue('abc');
     }
   }
 
@@ -214,12 +214,11 @@ export class ProfileComponent implements OnInit {
 
   public openExtratoPDF(): void {
     let doc = new jsPDF();
-    console.log(doc)
     autoTable(doc, { html: '#extrato' });
     doc.save("extrato.pdf");
   }
 
-  async getEventos(){
+  async getEventos() {
     this.user.events = await this.eventoService.getEventosByUserId(this.user.userId);
   }
 
@@ -236,15 +235,15 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  getEventEditUrl(){
+  getEventEditUrl() {
     var url = `/profile/events/${this.evento.eventId}/edit`;
     return url;
   }
 
-  async getLotCategories(){
+  async getLotCategories() {
     this.lotCategories = await this.eventoService.getLotCategoriesByTickets(this.user.tickets);
   }
-  
+
 }
 
 ;

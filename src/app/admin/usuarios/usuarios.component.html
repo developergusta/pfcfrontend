@@ -44,7 +44,7 @@
         </td>
         <td>{{user.name}}</td>
         <td>{{user.cpf}}</td>
-        <td>{{user.dateBirth | date: 'shortDate': '-3000': 'pt-BR'}}</td>
+        <td>{{user.dateBirth | date: 'long'}}</td> 
         <td *ngIf="user.addresses.length > 0">
           <p *ngFor="let address of user.addresses">
             {{address.street}}, {{address.num}} {{address.city}} - {{address.state}}
@@ -52,7 +52,7 @@
         </td>
         <td *ngIf="user.addresses.length == 0">Endereço não informado
         </td>
-        <td>{{user.registerTime | date: 'long': '-0300': 'pt-BR'}}</td>
+        <td>{{user.registerTime | date: 'long'}}</td>
         <td>{{user.login.email}}</td>
         <td>{{user.status}}</td>
         <td>{{user.login.perfil}}</td>
