@@ -43,14 +43,14 @@
                   <th scope="col">Opções</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody *ngIf="tickets">
                 <tr *ngFor="let item of tickets; let i = index">
                   <th scope="row">{{i+1}}</th>
                   <td>{{events[i].titleEvent}} - {{events[i].dateStart | DateTimeFormatPipe}}</td>
                   <td>{{events[i].titleEvent}} - {{events[i].dateStart | DateTimeFormatPipe}}</td>
                   <td>{{item.registerTime | DateTimeFormatPipe}}</td>
                   <td>
-                    <button ngbTooltip="Abrir PDF" class="btn btn-lg btn-info" type="button">
+                    <button ngbTooltip="Abrir PDF" class="btn btn-lg btn-info" type="button" (click)="downloadTicket(item)">
                       <span class="btn-inner--icon">
                         <i class="fas fa-ticket-alt mr-2"></i>
                       </span>
@@ -67,22 +67,6 @@
                 </tr>
               </tbody>
             </table>
-            <div class="row justify-content-center">
-              <div class="col-lg-9">
-                <button class="btn btn-lg btn-info" type="button">
-                  <span class="btn-inner--icon">
-                    <i class="fas fa-ticket-alt mr-2"></i>
-                  </span>
-                  Meus Tickets
-                </button>
-                <button class="btn btn-lg btn-success" type="button">
-                  <span class="btn-inner--icon">
-                    <i class="fas fa-calendar-week mr-2"></i>
-                  </span>
-                  Criar Evento
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       </div>

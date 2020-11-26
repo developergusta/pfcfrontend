@@ -18,13 +18,9 @@ export class EventoService {
 
 
   async getEventosAprovados() {
-    try {
       const result = await this.http.get<Evento[]>(`${this.baseURL}/Approved`).toPromise();
-      console.log(result);
       return result;
-    } catch (error) {
-      console.log(error);
-    }
+   
   }
 
   async getEventosPendentes() {
@@ -105,12 +101,12 @@ export class EventoService {
     return this.http.put(`${this.baseURL}/${evento.eventId}`, evento).toPromise();
   }
 
-  aprovarEvento(evento: Evento) {
-    return this.http.put(`${this.baseURL}/Approve/${evento.eventId}`, evento);
+  async aprovarEvento(evento: Evento) {
+    return this.http.put(`${this.baseURL}/Approve/${evento.eventId}`, evento).toPromise();
   }
 
-  negarEvento(evento: Evento) {
-    return this.http.put(`${this.baseURL}/Deny/${evento.eventId}`, evento);
+  async negarEvento(evento: Evento) {
+    return this.http.put(`${this.baseURL}/Deny/${evento.eventId}`, evento).toPromise();
   }
 
   deleteEvento(id: number) {

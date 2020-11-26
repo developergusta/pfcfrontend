@@ -64,6 +64,7 @@ import { environment } from 'src/environments/environment';
       AppRoutingModule,
       BsDatepickerModule.forRoot(),
       NgbModule,
+      CurrencyMaskModule,
       HttpClientModule,
       FormsModule,
       ReactiveFormsModule,

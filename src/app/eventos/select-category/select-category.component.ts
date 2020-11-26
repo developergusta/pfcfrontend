@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgbTabset } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { Evento } from 'src/app/models/Evento';
 import { Lot } from 'src/app/models/Lot';
 import { Ticket } from 'src/app/models/Ticket';
+import { User } from 'src/app/models/User';
 import { EventoService } from 'src/app/_services/evento.service';
 import { TicketService } from 'src/app/_services/ticket.service';
 import { UsuarioService } from 'src/app/_services/usuario.service';
@@ -19,8 +21,8 @@ export class SelectCategoryComponent implements OnInit {
   page1 = 3;
   evento: Evento;
   lot: Lot;
-  selectedLotCategory;
-  loggedUser;
+  selectedLotCategory: any;
+  loggedUser: User = new User();
   quantity = 1;
 
   @ViewChild('tabs')
@@ -28,12 +30,15 @@ export class SelectCategoryComponent implements OnInit {
 
 
   constructor(
-    private eventoService: EventoService, private route: ActivatedRoute, private userService: UsuarioService, private ticketService: TicketService) { }
+    private eventoService: EventoService, 
+    private route: ActivatedRoute, 
+    private toastr: ToastrService, 
+    private userService: UsuarioService, 
+    private ticketService: TicketService) { }
 
   ngOnInit(): void {
     this.getEventSelected();
     this.getLoggedUser();
-    //this.startTimer();
   }
 
   async getEventSelected(){
@@ -61,7 +66,11 @@ export class SelectCategoryComponent implements OnInit {
     for(let i = 0; i < this.quantity; i++){
       tickets.push(ticket);
     }
-    this.ticketService.buyTicket(tickets);
+    this.ticketService.buyTicket(tickets)
+      .then()
+      .catch((err) => {
+        this.toastr.error(err.error)
+      });
   }
 
 }

@@ -15,6 +15,7 @@ export class User {
   cpf?: string;
   rg?: string;
   status?: string;
+  credit?: number;
   imageId?: number;
   image?: Image;
   login?: Login;

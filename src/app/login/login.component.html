@@ -16,26 +16,17 @@
           <div class="card bg-secondary shadow border-0">
             <div class="card-header bg-white pb-5">
               <div class="text-muted text-center mb-3">
-                <small>Entre com</small>
+                <small></small>
               </div>
-              <div class="btn-wrapper text-center">
-                <a href="javascript:void(0)" class="btn btn-neutral btn-icon">
-                  <span class="btn-inner--icon">
-                    <img src="./assets/img/icons/common/github.svg">
-                  </span>
-                  <span class="btn-inner--text">Github</span>
-                </a>
-                <a href="javascript:void(0)" class="btn btn-neutral btn-icon">
-                  <span class="btn-inner--icon">
-                    <img src="./assets/img/icons/common/google.svg">
-                  </span>
-                  <span class="btn-inner--text">Google</span>
+              <div class="d-flex justify-content-center">
+                <a [routerLink]="['/home']">
+                  <img src="./assets/img/logo/ticket2u_logo.png" width="200px"/>
                 </a>
               </div>
             </div>
             <div class="card-body px-lg-5 py-lg-5">
               <div class="text-center text-muted mb-4">
-                <small>Ou entre com suas credenciais</small>
+                <small>Entre com suas credenciais</small>
               </div>
               <form class="form-signin" [formGroup]="registerForm" (ngSubmit)="login()">
                 <div class="form-group mb-3" [ngClass]="{'focused':focus===true}" formGroupName="login">

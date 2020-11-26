@@ -48,11 +48,10 @@ export class LoginComponent implements OnInit {
             sessionStorage.setItem('user', JSON.stringify(user.user));
             sessionStorage.setItem('email', decodedToken.email);
             const role = decodedToken.role;
-            const name = decodedToken.unique_name;
             this.toast.success('Você está logado');
           console.log(role)
           if (role === 'ADMINISTRADOR'){
-            this.router.navigate(['/admin/home']);
+            this.router.navigate(['/admin/usuarios']);
           }
           else if (role === 'USUARIO'){
             this.router.navigate(['/profile']);
@@ -70,7 +69,7 @@ export class LoginComponent implements OnInit {
   public validation(): any{
     this.registerForm = this.fb.group({
       login: this.fb.group({
-        email: ['', [Validators.required, /*Validators.email, */Validators.maxLength(255)]],
+        email: ['', [Validators.required, Validators.maxLength(255)]],
         pass: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(200)]]
       })
     });

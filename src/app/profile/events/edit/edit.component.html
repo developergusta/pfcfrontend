@@ -50,8 +50,7 @@
               <ng-template ngbSlide id="{{i}}Slide" *ngFor="let img of evento.images; let i = index;">
                 <div class="row">
                   <div class="picsum-img-wrapper col-sm-12 col-4 mt-5 mt-sm-0">
-                    <img src="{{img.src}}" alt="Música"
-                      class="img-fluid" style="height: 120px; cursor: pointer" />
+                    <img src="{{img.src}}" alt="Música" class="img-fluid" style="height: 120px; cursor: pointer" />
                   </div>
                 </div>
               </ng-template>
@@ -61,95 +60,194 @@
             <button class="btn btn-lg btn-info" type="button" (click)="fileInput1.click()">
               Alterar Imagens
             </button>
-            
+
             <br /><label>Insira no máximo 5</label>
             <hr />
-            <div class="border border-light rounded">
+
+            <form [formGroup]="eventForm" *ngIf="eventForm">
               <div class="form-row">
                 <div class="form-group col-md-12">
                   <label>Título do evento</label>
-                  <input type="text" name="titleEvent" class="form-control form-control-alternative"
-                    [(ngModel)]="evento.titleEvent" [ngModelOptions]="{ standalone: true }" required minlength="3" />
+                  <input type="text" class="form-control form-control-alternative" formControlName="titleEvent"
+                    [ngClass]="{'is-invalid': eventForm.get('titleEvent').errors && eventForm.get('titleEvent').touched}">
+                  <div *ngIf="eventForm.get('titleEvent').hasError('required') && eventForm.get('titleEvent').touched"
+                    class="invalid-feedback">
+                    Título é obrigatório.
+                  </div>
+                  <div *ngIf="eventForm.get('titleEvent').hasError('minlength') && eventForm.get('titleEvent').touched"
+                    class="invalid-feedback">
+                    Título deve ter no mínimo 4 Caracters.
+                  </div>
+                  <div *ngIf="eventForm.get('titleEvent').hasError('maxlength') && eventForm.get('titleEvent').touched"
+                    class="invalid-feedback">
+                    Título deve ter no máximo 50 Caracters.
+                  </div>
                 </div>
-              </div>
-              <div class="form-row">
                 <div class="form-group col-md-12">
                   <label>Descrição do evento</label>
-                  <textarea type="text" class="form-control form-control-alternative" [(ngModel)]="evento.description"
-                    [ngModelOptions]="{ standalone: true }" required></textarea>
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group col-md-6">
-                  <label for="sel1">Categoria</label>
-                  <select class="form-control form-control-alternative" id="sel1" [(ngModel)]="evento.category">
-                    <option *ngFor="let opt of options" value="{{ opt.id }}" [ngValue]="opt.id">
-                      {{ opt.name }}
-                    </option>
-                  </select>
-                </div>
-                <div class="form-group col-md-6">
-                  <label>Qtd máxima de pessoas</label>
-                  <input type="number" placeholder="" class="form-control form-control-alternative"
-                    [(ngModel)]="evento.capacity" [ngModelOptions]="{ standalone: true }" min="1" max="1000000" />
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group col-md-8">
-                  <label>País</label>
-                  <input type="text" class="form-control form-control-alternative" [ngModel]="evento.address?.country"
-                    (ngModelChange)="evento.address.country = $event" [ngModelOptions]="{ standalone: true }" required
-                    minlength="3" placeholder="" />
-                </div>
-                <div class="form-group col-md-4">
-                  <label>CEP</label>
-                  <input type="text" class="form-control form-control-alternative" [ngModel]="evento.address?.zipCode"
-                    (ngModelChange)="evento.address.zipCode = $event" [ngModelOptions]="{ standalone: true }" required
-                    mask="00000-000" (change)="buscaCEP()" placeholder="" />
-                </div>
-                <div class="form-group col-md-4">
-                  <label>Estado</label>
-                  <input type="text" class="form-control form-control-alternative" [ngModel]="evento.address?.state"
-                    [ngModelOptions]="{ standalone: true }" required minlength="2" placeholder="" />
-                </div>
-                <div class="form-group col-md-8">
-                  <label>Cidade</label>
-                  <input type="text" class="form-control form-control-alternative" [ngModel]="evento.address?.city"
-                    [ngModelOptions]="{ standalone: true }" placeholder="" />
-                </div>
-                <div class="form-group col-md-8">
-                  <label>Logradouro</label>
-                  <input type="text" class="form-control form-control-alternative" [ngModel]="evento.address?.street"
-                    [ngModelOptions]="{ standalone: true }" placeholder="" />
-                </div>
-                <div class="form-group col-md-4">
-                  <label>Número</label>
-                  <input type="number" class="form-control form-control-alternative" [ngModel]="evento.address?.num"
-                    [ngModelOptions]="{ standalone: true }" placeholder="" />
+                  <textarea type="text" class="form-control form-control-alternative" formControlName="description"
+                    [ngClass]="{'is-invalid': eventForm.get('description').errors && eventForm.get('description').touched}">
+                  </textarea>
+                  <div *ngIf="eventForm.get('description').hasError('required')
+                  && eventForm.get('description').touched" class="invalid-feedback">
+                    Descrição é obrigatória.
+                  </div>
+                  <div
+                    *ngIf="eventForm.get('description').hasError('minlength') && eventForm.get('description').touched"
+                    class="invalid-feedback">
+                    Descrição deve ter no mínimo 4 Caracters.
+                  </div>
+                  <div
+                    *ngIf="eventForm.get('description').hasError('maxlength') && eventForm.get('description').touched"
+                    class="invalid-feedback">
+                    Descrição deve ter no máximo 1000 Caracters.
+                  </div>
                 </div>
                 <div class="form-group col-md-12">
+                  <label>Categoria</label>
+                  <select class="form-control form-control-alternative" id="sel1" formControlName="category">
+                    <option *ngFor="let opt of optionsCateg" [ngValue]="opt.id">{{opt.name}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6" formGroupName="address">
+                  <label>País</label>
+                  <input type="text" class="form-control form-control-alternative" formControlName="country"
+                    [ngClass]="{'is-invalid': eventForm.get('address.country').errors && eventForm.get('address.country').touched}"
+                    placeholder="">
+                  <div
+                    *ngIf="eventForm.get('address.country').hasError('required') && eventForm.get('address.country').touched"
+                    class="invalid-feedback">
+                    País é obrigatório.
+                  </div>
+                  <div
+                    *ngIf="eventForm.get('address.country').hasError('minlength') && eventForm.get('address.country').touched"
+                    class="invalid-feedback">
+                    País deve ter no mínimo 3 caracteres.
+                  </div>
+                  <div
+                    *ngIf="eventForm.get('address.country').hasError('maxlength') && eventForm.get('address.country').touched"
+                    class="invalid-feedback">
+                    País deve ter no máximo 45 caracteres.
+                  </div>
+                </div>
+                <div class="form-group col-md-6" formGroupName="address">
+                  <label>CEP</label>
+                  <input type="text" class="form-control form-control-alternative" formControlName="zipCode"
+                    mask="00000-000" (change)="buscaCEP()"
+                    [ngClass]="{'is-invalid': eventForm.get('address.zipCode').errors && eventForm.get('address.zipCode').touched}"
+                    placeholder="">
+                  <div
+                    *ngIf="eventForm.get('address.zipCode').hasError('required') && eventForm.get('address.zipCode').touched"
+                    class="invalid-feedback">
+                    CEP é obrigatório.
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-4" formGroupName="address">
+                  <label>Estado</label>
+                  <input type="text" class="form-control form-control-alternative" formControlName="state"
+                    [ngClass]="{'is-invalid': eventForm.get('address.state').errors && eventForm.get('address.state').touched}"
+                    placeholder="">
+                  <div
+                    *ngIf="eventForm.get('address.state').hasError('required') && eventForm.get('address.state').touched"
+                    class="invalid-feedback">
+                    Estado é obrigatório.
+                  </div>
+                  <div
+                    *ngIf="eventForm.get('address.state').hasError('minlength') && eventForm.get('address.state').touched"
+                    class="invalid-feedback">
+                    Estado deve ter no mínimo 2 caracteres.
+                  </div>
+                  <div
+                    *ngIf="eventForm.get('address.state').hasError('maxlength') && eventForm.get('address.state').touched"
+                    class="invalid-feedback">
+                    Estado deve ter no máximo 255 caracteres.
+                  </div>
+                </div>
+                <div class="form-group col-md-8" formGroupName="address">
+                  <label>Cidade</label>
+                  <input type="text" class="form-control form-control-alternative" formControlName="city"
+                    [ngClass]="{'is-invalid': eventForm.get('address.city').errors && eventForm.get('address.city').touched}"
+                    placeholder="">
+                  <div
+                    *ngIf="eventForm.get('address.city').hasError('required') && eventForm.get('address.city').touched"
+                    class="invalid-feedback">
+                    Cidade é obrigatório.
+                  </div>
+                  <div
+                    *ngIf="eventForm.get('address.city').hasError('minlength') && eventForm.get('address.city').touched"
+                    class="invalid-feedback">
+                    Cidade deve ter no mínimo 2 caracteres.
+                  </div>
+                  <div
+                    *ngIf="eventForm.get('address.city').hasError('maxlength') && eventForm.get('address.city').touched"
+                    class="invalid-feedback">
+                    Cidade deve ter no máximo 255 caracteres.
+                  </div>
+                </div>
+                <div class="form-group col-md-8" formGroupName="address">
+                  <label>Logradouro</label>
+                  <input type="text" class="form-control form-control-alternative" formControlName="street"
+                    [ngClass]="{'is-invalid': eventForm.get('address.street').errors && eventForm.get('address.street').touched}"
+                    placeholder="">
+                  <div
+                    *ngIf="eventForm.get('address.street').hasError('required') && eventForm.get('address.street').touched"
+                    class="invalid-feedback">
+                    Logradouro é obrigatório.
+                  </div>
+                </div>
+                <div class="form-group col-md-4" formGroupName="address">
+                  <label>Número</label>
+                  <input type="number" class="form-control form-control-alternative" formControlName="num"
+                    [ngClass]="{'is-invalid': eventForm.get('address.num').errors && eventForm.get('address.num').touched}"
+                    placeholder="">
+                  <div *ngIf="eventForm.get('address.num').hasError('required') && eventForm.get('address.num').touched"
+                    class="invalid-feedback">
+                    Número é obrigatório.
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-12" formGroupName="address">
                   <label>Complemento</label>
-                  <input type="text" class="form-control form-control-alternative"
-                    [ngModel]="evento.address?.complement" [ngModelOptions]="{ standalone: true }" placeholder="" />
+                  <input type="text" class="form-control form-control-alternative" formControlName="complement"
+                    [ngClass]="{'is-invalid': eventForm.get('address.complement').errors && eventForm.get('address.complement').touched}"
+                    placeholder="">
                 </div>
+              </div>
+              <div class="form-row">
                 <div class="form-group col-md-4">
-                  <label>Data de INÍCIO</label>
-                  <input type="text" class="form-control form-control-alternative" bsDatepicker
-                    [(ngModel)]="evento.dateStart" [ngModelOptions]="{ standalone: true }"
-                    value="{{ dateStart | DateFormatPipe }}" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"
-                    placeholder="" />
+                  <label>Data / hora de INÍCIO</label>
+                  <input type="text" class="form-control form-control-alternative" formControlName="dateStart"
+                    bsDatepicker [bsConfig]="{ dateInputFormat : 'DD/MM/YYYY' }"
+                    [ngClass]="{'is-invalid': eventForm.get('dateStart').errors && eventForm.get('dateStart').touched}"
+                    placeholder="">
+                  <div *ngIf="eventForm.get('dateStart').hasError('required') && eventForm.get('dateStart').touched"
+                    class="invalid-feedback">
+                    Data e hora é obrigatório.
+                  </div>
                 </div>
+
                 <div class="form-group col-md-2">
                   <label>Hora INICIO</label>
                   <input type="time" placeholder="" class="form-control form-control-alternative" value="{{ hora1 }}"
                     (change)="updtHorario1($event)" />
                 </div>
                 <div class="form-group col-md-4">
-                  <label>Data do FIM</label>
-                  <input type="text" class="form-control form-control-alternative" bsDatepicker
-                    [(ngModel)]="evento.dateEnd" [ngModelOptions]="{ standalone: true }"
-                    value="{{ dateEnd | DateFormatPipe }}" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }"
-                    placeholder="" />
+                  <label>Data / Hora do FIM</label>
+                  <input type="text" class="form-control form-control-alternative" formControlName="dateEnd"
+                    bsDatepicker [bsConfig]="{ dateInputFormat : 'DD/MM/YYYY' }"
+                    [ngClass]="{'is-invalid': eventForm.get('dateEnd').errors && eventForm.get('dateEnd').touched}"
+                    placeholder="">
+                  <div *ngIf="eventForm.get('dateEnd').hasError('required') && eventForm.get('dateEnd').touched"
+                    class="invalid-feedback">
+                    Data e hora é obrigatório.
+                  </div>
                 </div>
                 <div class="form-group col-md-2">
                   <label>Hora FIM</label>
@@ -157,79 +255,106 @@
                     (change)="updtHorario2($event)" />
                 </div>
               </div>
-              <div *ngFor="let lot of this.evento.lots; let i = index" class="h6 font-weight-300">
-                <div class="border border-light rounded">
-                  <div class="form-row">
-                    <div class="form-group col-md-5">
-                      <div class="form-group">
-                        <label>Data de início</label>
-                        <input bsDatepicker type="text" class="form-control form-control-alternative"
-                          [(ngModel)]="lot.dateStart" [ngModelOptions]="{ standalone: true }" required
-                          placeholder="00/00/0000" value="{{ dateStart | DateFormatPipe }}"
-                          [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
-                      </div>
-                    </div>
-                    <div class="form-group col-md-4">
-                      <div class="form-group">
-                        <label>Data de fim</label>
-                        <input bsDatepicker type="text" class="form-control form-control-alternative"
-                          [(ngModel)]="lot.dateEnd" [ngModelOptions]="{ standalone: true }" required
-                          placeholder="00/00/0000" value="{{ dateEnd | DateFormatPipe }}"
-                          [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
-                      </div>
-                    </div>
-                    <div class="lot-category form-row col-12" *ngFor="
-                        let item of evento.lots[i].lotCategories;
-                        let j = index
-                      ">
-                      <h3 class="col-12">
-                        Categoria {{ j + 1 }} de Lote {{ i + 1 }}
-                      </h3>
-                      <div class="form-group col-md-5">
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                  <label>Capacidade máxima de pessoas</label>
+                  <input type="number" placeholder="" class="form-control form-control-alternative is-invalid"
+                    formControlName="capacity"
+                    [ngClass]="{'is-invalid': eventForm.get('capacity').errors && eventForm.get('capacity').touched}">
+                  <div *ngIf="eventForm.get('capacity').hasError('required') && eventForm.get('capacity').touched"
+                    class="invalid-feedback">
+                    Capacidade máxima é obrigatória
+                  </div>
+                  <div *ngIf="eventForm.get('capacity').hasError('max') && eventForm.get('capacity').touched"
+                    class="invalid-feedback">
+                    Máximo de pessoas é de 1.000.000 (um milhão)
+                  </div>
+                </div>
+              </div>
+              <div formArrayName="lots">
+                <div *ngFor="let lot of getLot(eventForm); let i=index">
+                  <div class="border border-light rounded" [formGroupName]="i">
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
                         <div class="form-group">
-                          <label>Descrição</label>
-                          <input type="text" class="form-control form-control-alternative" required
-                            [(ngModel)]="evento.lots[i].lotCategories[j].desc"
-                            [ngModelOptions]="{ standalone: true }" />
+                          <label>Data de início</label>
+                          <input bsDatepicker type="text" class="form-control form-control-alternative"
+                            formControlName="dateStart" required placeholder="00/00/0000" [minDate]="now" [maxDate]="evento.dateEnd"
+                            [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
+                        </div>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <div class="form-group">
+                          <label>Data de fim</label>
+                          <input bsDatepicker type="text" class="form-control form-control-alternative"
+                            formControlName="dateEnd" required placeholder="00/00/0000" [minDate]="now" [maxDate]="evento.dateEnd"
+                            [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div formArrayName="lotCategories" *ngIf="lotCategories[i]" class="col-md-12">
+                        <div class="lot-category " *ngFor="let lotCateg of lotCategories[i].controls; let j = index;">
+                          <div [formGroupName]="j">
+                            <h3 class="col-12">
+                              Categoria {{ j + 1 }} de Lote {{ i + 1 }}
+                            </h3>
+                            <div class="form-row">
+                              <div class="form-group col-md-6">
+                                <div class="form-group">
+                                  <label>Descrição do lote</label>
+                                  <input type="text" class="form-control form-control-alternative" required
+                                    formControlName="desc" />
+                                </div>
+                              </div>
+                              <div class="form-group col-md-6">
+                                <div class="form-group">
+                                  <label>Preço</label>
+                                  <input type="text" class="form-control form-control-alternative" required currencyMask
+                                    formControlName="priceCategory"
+                                    [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" />
+                                </div>
+                              </div>
+                            </div>
+                            <button class="btn btn-sm btn-danger" type="button"
+                              (click)="excluirCategoriaLote(modalConfirm, i, j)">
+                              <span class="btn-inner--icon">
+                                <i class="fas fa-times mr-2"></i>
+                              </span>
+                              Excluir Categoria
+                            </button>
+                          </div>
                         </div>
                       </div>
                       <div class="form-group col-md-4">
-                        <div class="form-group">
-                          <label>Preço</label>
-                          <input type="text" class="form-control form-control-alternative" required
-                            [(ngModel)]="evento.lots[i].lotCategories[j].priceCategory"
-                            [ngModelOptions]="{ standalone: true }" />
-                        </div>
+                        <button class="btn btn-md btn-info" type="button" (click)="criarCategoriaLote(i)">
+                          <span class="btn-inner--icon">
+                            <i class="fas fa-plus mr-2"></i>
+                          </span>
+                          Adicionar Categoria de Lote
+                        </button>
                       </div>
-                    </div>
-                    <div class="form-group col-md-4">
-                      <button class="btn btn-md btn-info" type="button" (click)="criarCategoriaLote(i)">
-                        <span class="btn-inner--icon">
-                          <i class="fas fa-plus mr-2"></i>
-                        </span>
-                        Adicionar Categoria de Lote
-                      </button>
-                    </div>
-                    <div class="form-group col-md-4 d-flex align-items-center">
-                      <button class="btn btn-sm btn-danger" type="button" (click)="excluirLote(modalConfirm, i)">
-                        <span class="btn-inner--icon">
-                          <i class="fas fa-times mr-2"></i>
-                        </span>
-                        Excluir Lote
-                      </button>
+                      <div class="form-group col-md-8 d-flex flex-row-reverse">
+                        <button class="btn btn-sm btn-danger" type="button" (click)="excluirLote(modalConfirm, i)">
+                          <span class="btn-inner--icon">
+                            <i class="fas fa-times mr-2"></i>
+                          </span>
+                          Excluir Lote
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="border border-light rounded">
-                <button class="btn btn-lg btn-info" type="button" (click)="criarLote()">
+                <button class="btn btn-lg btn-info" type="button" (click)="addLot(null)">
                   <span class="btn-inner--icon">
                     <i class="fas fa-plus mr-2"></i>
                   </span>
                   Adicionar Lote
                 </button>
               </div>
-            </div>
+            </form>
           </div>
 
           <div class="h6 mt-4">
@@ -310,7 +435,6 @@
     </div>
   </div>
 </div>
-
 <div bsModal #ajuda="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -333,7 +457,8 @@
           <li>ATENÇÃO!</li>
           <ul>
             <li>Caso seu evento não tenha categoria de lote, não será aprovado pelo administrador</li>
-            <li>Caso já seja aprovado e você exclua todos lotes e categorias de lote, será impossível outros usuários comprarem ingressos e todo seu relatório será comprometido. </li>
+            <li>Caso já seja aprovado e você exclua todos lotes e categorias de lote, será impossível outros usuários
+              comprarem ingressos e todo seu relatório será comprometido. </li>
           </ul>
         </ul>
       </div>

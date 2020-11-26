@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   baseURL: 'https://ticket2u.azurewebsites.net',
+  // baseURL: 'http://localhost:5000',
   firebase: {
     apiKey: "AIzaSyBPcqcnIFtJY7UYMdry75FWGltLITY5WXg",
     authDomain: "pfc-ticket2u.firebaseapp.com",

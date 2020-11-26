@@ -16,6 +16,7 @@ export class CashbackAdminComponent implements OnInit {
 
   titulo = 'Cashbacks para aprovar';
   cashbacks: Cashback[] = [];
+  cashback: Cashback = new Cashback();
   user: User;
   evento: Evento;
   eventos: Evento[];
@@ -37,7 +38,12 @@ export class CashbackAdminComponent implements OnInit {
   }
 
   async getCashbacks() {
-    this.cashbacks = await this.ticketService.getCashbackList()
+    this.cashbacks = await this.ticketService.getCashbackList();
+    this.cashbacks.forEach((cashB, index, array) => {
+      if (cashB.dateCashback) {
+        array.splice(index)
+      }
+    })
   }
 
   async getUserById(id: number) {
@@ -52,15 +58,15 @@ export class CashbackAdminComponent implements OnInit {
     );
   }
 
-  aprovarCashback(evento: Evento, template: any) {
+  aprovarCashback(cashback: Cashback, template: any) {
     this.openModal(template);
-    this.evento = evento;
+    this.cashback = cashback;
     this.approve = true;
   }
 
-  negarCashback(evento: Evento, template: any) {
+  negarCashback(cashback: Cashback, template: any) {
     this.openModal(template);
-    this.evento = evento;
+    this.cashback = cashback;
     this.approve = false;
   }
 
@@ -70,18 +76,28 @@ export class CashbackAdminComponent implements OnInit {
 
   confirmar(template: any) {
     if (this.approve) {
-      this.ticketService.aprovarCashback(this.evento).then(
-        () => {
-          template.hide();
-          this.toastr.success('Aprovado com Sucesso!');
-        })
+      this.ticketService.aprovarCashback(this.cashback)
+        .then(
+          () => {
+            template.hide();
+            this.toastr.success('Aprovado com Sucesso!');
+          })
+        .catch(
+          error => {
+            template.hide()
+          }
+        )
     }
     else {
-      this.ticketService.negarCashback(this.evento).then(
-        () => {
-          template.hide();
-          this.toastr.warning('Cashback negado!');
-        })
+      this.ticketService.negarCashback(this.cashback)
+        .then(
+          () => {
+            template.hide();
+            this.toastr.warning('Cashback negado!');
+          })
+        .catch(
+          error => template.hide()
+        )
     }
   }
 }

@@ -1,5 +1,6 @@
 import { EventoService } from './../_services/evento.service';
 import { Evento } from './../models/Evento';
+import { Image } from './../models/Image';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -12,8 +13,8 @@ import { ToastrService } from 'ngx-toastr';
 export class EventosComponent implements OnInit {
 
   constructor(
-    private eventoService: EventoService, 
-    private toastr: ToastrService, 
+    private eventoService: EventoService,
+    private toastr: ToastrService,
     private fb: FormBuilder) { }
 
   titulo = 'Eventos';
@@ -25,6 +26,7 @@ export class EventosComponent implements OnInit {
   evento: Evento;
   modoSalvar = 'post';
   menorPreco: number;
+  now = new Date();
 
   imagemLargura = 50;
   imagemMargem = 2;
@@ -40,23 +42,21 @@ export class EventosComponent implements OnInit {
   _filtroLista = '';
 
   async ngOnInit() {
-    try {
-    this.eventos = await this.getEventos();
-   
+
+    await this.getEventos();
+
     this.getMenorValor(1);
-    } catch (error) {
-      console.log(error);
-    }
+
   }
 
-  getMenorValor(id: number){
-    this.eventos.find( x => x.eventId = id )
-      .lots.find( x => x.dateStart < new Date() && x.dateEnd > new Date() )
-      .lotCategories.forEach( lotCateg => {
-        if ( lotCateg.priceCategory > this.menorPreco){
+  getMenorValor(id: number) {
+    this.eventos.find(x => x.eventId = id)
+      .lots.find(x => x.dateStart < new Date() && x.dateEnd > new Date())
+      .lotCategories.forEach(lotCateg => {
+        if (lotCateg.priceCategory > this.menorPreco) {
           this.menorPreco = lotCateg.priceCategory;
         }
-    });
+      });
     return this.menorPreco;
   }
 
@@ -68,17 +68,38 @@ export class EventosComponent implements OnInit {
     this.eventosFiltrados = this.filtroLista ? this.filtrarEventos(this.filtroLista) : this.eventos;
   }
 
-  filtrarEventos(filtrarPor: string): Evento[] {
+  filtrarEventos(event: any): Evento[] {
+    let filtrarPor = event.value;
     filtrarPor = filtrarPor.toLocaleLowerCase();
     return this.eventos.filter(
-      evento => evento.category.toLocaleLowerCase().indexOf(filtrarPor) !== -1
+      evento => evento.titleEvent.toLocaleLowerCase().indexOf(filtrarPor) !== -1
     );
   }
 
   async getEventos() {
-    const events = await this.eventoService.getEventosAprovados();
-    console.log(events);
-    return events;
+
+    await this.eventoService.getEventosAprovados().then(
+      events => this.eventos = events
+    );
+
+    console.log(this.eventos)
+    this.eventos.forEach((x) => {
+      if (!x.images.length || x.images === null) {
+        let img = new Image();
+        img.src = 'https://image.flaticon.com/icons/png/512/2558/2558944.png';
+        x.images.push(img);
+      }
+    });
+
+
+
+    this.eventos.forEach((item, index, array) => {
+      console.log(index)
+      if (this.now > new Date(item.dateEnd)) {
+        array.splice(index)
+      }
+    })
+
   }
 
   excluirEvento(evento: Evento, template: any) {
@@ -88,7 +109,6 @@ export class EventosComponent implements OnInit {
   }
 
   openModal(template: any) {
-    //this.registerForm.reset();
     template.show();
   }
 

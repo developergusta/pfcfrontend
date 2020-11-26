@@ -17,4 +17,5 @@ export class Evento {
   lots?: Lot[];
   address?: Address;
   user?: User;
+  userId?: number;
 }

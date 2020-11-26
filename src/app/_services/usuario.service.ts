@@ -53,7 +53,7 @@ export class UsuarioService {
     return this.name;
   }  
 
-  getUserLogged() {
+  async getUserLogged() {
     const userLogged = sessionStorage.getItem('user');
     return userLogged;
   }

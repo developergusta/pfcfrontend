@@ -19,9 +19,9 @@ import { Cashback } from 'src/app/models/Cashback';
 })
 export class TicketsComponent implements OnInit {
 
-  user: User;
-  tickets: Ticket[] = [];
-  events: Evento[] = [];
+  user: User = new User();
+  tickets: Ticket[] = new Array();
+  events: Evento[] = new Array();
   lotCategories: LotCategory[] = [];
   event: Evento;
   formCashback: string = '';
@@ -36,7 +36,7 @@ export class TicketsComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.getUser();
+    await this.getUser();
     await this.getTickets();
     for (let index = 0; index < this.tickets.length; index++) {
       await this.getEventsByIds(index);
@@ -44,8 +44,8 @@ export class TicketsComponent implements OnInit {
     }
   }
 
-  getUser() {
-    this.user = JSON.parse(this.userService.getUserLogged());
+  async getUser() {
+    this.user = JSON.parse(await this.userService.getUserLogged());
   }
 
   async getTickets() {
@@ -72,12 +72,24 @@ export class TicketsComponent implements OnInit {
   public async downloadTicket(ticket: Ticket) {
     let evento = await this.eventService.getEventoById(ticket.eventId);
     let doc = new jsPDF();
-    doc.setFontSize(22);
+    doc.setFontSize(25);
     doc.text(`Ingresso - ${evento.titleEvent}`, 20, 20);
 
     const pipe = new DatePipe('pt-BR');
     doc.setFontSize(16);
-    doc.text(`DE ${pipe.transform(evento.dateStart, 'short')} À ${pipe.transform(evento.dateEnd, 'short')}`, 20, 30);
+    doc.text(`DE ${pipe.transform(evento.dateStart, 'short')} À ${pipe.transform(evento.dateEnd, 'short')}`, 20, 35);
+    let dataBuy = new DatePipe('pt-BR').transform(ticket.registerTime, 'dd/MM/yyyy hh:mm');
+    doc.text(`Comprado às - ${dataBuy}`, 20, 45);
+    doc.text(`Comprador - ${this.user.name}`, 20, 55);
+    doc.text(`RG - ${this.user.rg}`, 20, 65);
+    doc.text(`CPF - ${this.user.cpf}`, 20, 75);
+    let dataNasc = new DatePipe('pt-BR').transform(this.user.dateBirth, 'dd/MM/yyyy');
+    let imgData = '../../../assets/img/logo/ticket2u_logo.png'
+    doc.text(`Data de nascimento - ${dataNasc}`, 20, 85);
+
+    doc.setFontSize(12);
+    doc.text(`Não esqueça de apresentar os documentos no local do evento`, 40, 105);
+    doc.addImage(imgData, 'JPEG', 60, 215, 90, 55)
     doc.save("voucher.pdf");
   }
 

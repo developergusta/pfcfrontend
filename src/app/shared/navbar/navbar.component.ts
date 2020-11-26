@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { Location, PopStateEvent } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
+import { User } from 'src/app/models/User';
 
 @Component({
   selector: 'app-navbar',
@@ -15,7 +16,7 @@ export class NavbarComponent implements OnInit {
   public perfil = false;
   private lastPoppedUrl: string;
   private yScrollStack: number[] = [];
-  loggedUser;
+  loggedUser: User = new User();
 
   constructor(public location: Location, private router: Router, private toastr: ToastrService, public userService: UsuarioService ) {
   }
@@ -75,8 +76,9 @@ export class NavbarComponent implements OnInit {
   }
 
   async getLoggedUser() {
-    const user = await this.userService.getUserLogged();
-    this.loggedUser = JSON.parse(user);
+    const userSession = JSON.parse(sessionStorage.getItem('user'));
+    const user = await this.userService.getUserById(userSession.userId);
+    this.loggedUser = user
   }
 
   entrar() {

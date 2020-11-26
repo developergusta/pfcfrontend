@@ -1,9 +1,6 @@
-import { TicketService } from './../../_services/ticket.service';
 import { User } from 'src/app/models/User';
 import { Evento } from 'src/app/models/Evento';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { EventoService } from 'src/app/_services/evento.service';
 import { UsuarioService } from 'src/app/_services/usuario.service';
 
@@ -14,23 +11,21 @@ import { UsuarioService } from 'src/app/_services/usuario.service';
 })
 export class EventsComponent implements OnInit {
 
-  user: User;
+  user: User = new User();
   events: Evento[];
   constructor(
     private eventoService: EventoService,
-    private router: Router,
     private userService: UsuarioService,
-    private ticketService: TicketService,
   ) { }
 
-  ngOnInit(): void {
-    this.getUser();
+  async ngOnInit() {
+    await this.getUser();
     this.getEventos();
   }
 
-  getUser(){
-    const user = this.userService.getUserLogged();
-    this.user = JSON.parse(user);
+  async getUser(){
+    const userSession = JSON.parse(sessionStorage.getItem('user'));
+    this.user = await this.userService.getUserById(userSession.userId);
   }
 
   async getEventos(){

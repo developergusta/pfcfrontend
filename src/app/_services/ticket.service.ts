@@ -33,12 +33,13 @@ export class TicketService {
     return result;
   }
 
-  async aprovarCashback(evento: Evento) {
-    return this.http.put(`${this.baseURL}/Cashback/1`, evento).toPromise();
+  async aprovarCashback(cashback: Cashback) { 
+    console.log(JSON.stringify(cashback))
+    return this.http.put(`${this.baseURL}/Cashback/1`, cashback).toPromise();
   }
 
-  async negarCashback(evento: Evento) {
-    return this.http.put(`${this.baseURL}/Cashback/0`, evento).toPromise();
+  async negarCashback(cashback: Cashback) {    
+    return this.http.put(`${this.baseURL}/Cashback/0`, cashback).toPromise();
   }
   
 }

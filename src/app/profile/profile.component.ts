@@ -1,12 +1,13 @@
 import { EventoService } from './../_services/evento.service';
 import { ToastrService } from 'ngx-toastr';
 import { User } from './../models/User';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CorreiosService } from '../_services/correios.service';
 import { Router } from '@angular/router';
 import { UsuarioService } from '../_services/usuario.service';
 import { Evento } from '../models/Evento';
+import { Image } from '../models/Image';
 import * as moment from 'moment';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -30,7 +31,7 @@ export class ProfileComponent implements OnInit {
     minute: 0
   };
   time = { hour: 13, minute: 30 };
-  user: User = new User();
+  user = new User();
   enderecoBuscado: any;
   now = new Date();
   idade: number;
@@ -51,7 +52,7 @@ export class ProfileComponent implements OnInit {
       state: '',
       street: '',
       userId: this.user.userId
-    }
+    } 
   };
   eventos: Evento[];
   eventForm: FormGroup;
@@ -96,31 +97,40 @@ export class ProfileComponent implements OnInit {
       { id: 'Online', name: 'Online' }];
   }
 
+  showData(){
+    debugger
+    console.log(JSON.stringify(this.eventForm.get('dateEnd').value));
+  }
+
   updtHorario1(event: any) {
     let hour = Number(event.target.value.substring(0, 2));
     let minute = Number(event.target.value.substring(3, 5));
 
-    this.evento.dateStart.setHours(hour, minute);
+    this.eventForm.controls['dateStart'].setValue(new Date(this.dateStart.setHours(hour, minute)));
+    console.log(this.dateStart)
+
   }
 
   updtHorario2(event: any) {
     let hour = Number(event.target.value.substring(0, 2));
     let minute = Number(event.target.value.substring(3, 5));
 
-    this.evento.dateEnd.setHours(hour, minute);
+    this.eventForm.controls['dateEnd'].setValue(new Date(this.dateEnd.setHours(hour, minute)));
   }
 
-  agendarEvento(template: any) {
-    this.startTimer();
-    this.evento = this.eventForm.value;
-    this.evento.user = this.userService.getUserLogged;
 
-    if (this.eventForm.valid) {
+  agendarEvento() {
+    this.evento = Object.assign({}, this.eventForm.value);
+    this.evento.userId = this.user.userId;
+    if (this.eventForm.valid) {      
+      this.startTimer();
+      console.log(JSON.stringify(this.evento))
       this.eventoService.postEvento(this.evento).subscribe(
         (response) => {
           this.evento = response;
         }, error => {
-          this.toastr.error(`Erro ao Inserir: ${error}`);
+          this.toastr.error(`Erro ao agendar: ${error.error}`);
+          clearInterval(this.interval);
         }
       );
     }
@@ -157,7 +167,7 @@ export class ProfileComponent implements OnInit {
   }
 
   buscaCEP() {
-    let cep = this.evento.address.zipCode;
+    let cep = this.eventForm.get('address.zipCode').value;
     if (cep != null && cep !== '') {
       this.correios.consultaCep(cep).then(n => {
         this.populateAddress(n);
@@ -166,9 +176,9 @@ export class ProfileComponent implements OnInit {
   }
 
   populateAddress(address: any) {
-    this.evento.address.city = address.localidade;
-    this.evento.address.state = address.uf;
-    this.evento.address.street = address.logradouro;
+    this.eventForm.controls['address'].get('city').setValue(address.localidade)
+    this.eventForm.controls['address'].get('state').setValue(address.uf)
+    this.eventForm.controls['address'].get('street').setValue(address.logradouro)
   }
 
   createModalEvent(template: any) {
@@ -192,6 +202,7 @@ export class ProfileComponent implements OnInit {
 
 
   async getUser() {
+    this.user.image = new Image();
     this.user = JSON.parse(window.sessionStorage.getItem('user'));
     this.user = await this.userService.getUserById(this.user.userId);
     this.user.dateBirth = new Date(this.user.dateBirth);
@@ -200,7 +211,9 @@ export class ProfileComponent implements OnInit {
   }
 
   getFirstAddress() {
+    if(this.user.addresses){
     return this.user.addresses[0];
+    }
   }
 
   getTickets() {

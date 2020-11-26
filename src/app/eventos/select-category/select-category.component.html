@@ -5,17 +5,11 @@
   <div class="row justify-content-between align-items-center">
     <div class="col-lg-6 mb-6 mb-lg-0">
       <div class="mb-3">
-        <small class="text-uppercase font-weight-bold"
-          >Selecione o tipo de ingresso</small
-        >
+        <small class="text-uppercase font-weight-bold" *ngIf="lot">Selecione o tipo de ingresso</small>
+        <small class="text-uppercase font-weight-bold" *ngIf="!lot">Este evento não está disponível para compra</small>
       </div>
-      <ngb-tabset
-        #tabs
-        [justify]="'center'"
-        class="custom-tab-content flex-column flex-md-row"
-        type="pills"
-        *ngIf="lot"
-      >
+      <ngb-tabset #tabs [justify]="'center'" class="custom-tab-content flex-column flex-md-row" type="pills"
+        *ngIf="lot">
         <ngb-tab id="tab-category">
           <ng-template ngbTabTitle>
             <i class="ni ni-bell-55 mr-2"></i> Categoria
@@ -25,11 +19,7 @@
               Lote {{ lot.dateStart | date: "EEE dd/MM" }} -
               {{ lot.dateEnd | date: "EEE dd/MM" }}
             </h5>
-            <div
-              class="card card-categories"
-              *ngFor="let item of lot.lotCategories"
-              (click)="confirmOrder(item)"
-            >
+            <div class="card card-categories" *ngFor="let item of lot.lotCategories" (click)="confirmOrder(item)">
               <div class="card-body">
                 <p class="card-text">
                   {{ item.desc }} - R${{ item.priceCategory | number: "1.2-2" }}
@@ -56,15 +46,8 @@
                 </div>
                 <div class="quantity">
                   <div class="form-group">
-                    <select
-                      class="form-control"
-                      id="quantity"
-                      [(ngModel)]="quantity"
-                    >
-                      <option
-                        [value]="q"
-                        *ngFor="let q of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
-                      >
+                    <select class="form-control" id="quantity" [(ngModel)]="quantity">
+                      <option [value]="q" *ngFor="let q of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
                         {{ q }}
                       </option>
                     </select>
@@ -90,18 +73,12 @@
                   }}
                 </div>
               </div>
-              <button
-                class="btn btn-lg btn-slack btn-icon mb-3 mb-sm-0 mt-3"
-                [disabled]="
+              <button class="btn btn-lg btn-slack btn-icon mb-3 mb-sm-0 mt-3" [disabled]="
                   loggedUser.credit -
                     selectedLotCategory.priceCategory * quantity <
                   0
-                "
-                (click)="buyTickets()"
-              >
-                <span class="btn-inner--icon"
-                  ><i class="fa fa-ticket"></i
-                ></span>
+                " (click)="buyTickets()">
+                <span class="btn-inner--icon"><i class="fa fa-ticket"></i></span>
                 <span class="btn-inner--text">{{
                   loggedUser.credit -
                     selectedLotCategory.priceCategory * quantity <
@@ -116,23 +93,10 @@
       </ngb-tabset>
     </div>
     <div class="col-lg-6 mb-lg-auto">
-      <div
-        class="rounded shadow-lg overflow-hidden transform-perspective-right"
-      >
+      <div class="rounded shadow-lg overflow-hidden transform-perspective-right">
         <ngb-carousel interval="2000">
-          <ng-template ngbSlide>
-            <img
-              class="img-fluid"
-              src="assets/img/theme/img-1-1200x1000.jpg"
-              alt="First slide"
-            />
-          </ng-template>
-          <ng-template ngbSlide>
-            <img
-              class="img-fluid"
-              src="assets/img/theme/img-2-1200x1000.jpg"
-              alt="Second slide"
-            />
+          <ng-template ngbSlide *ngFor="let item of evento.images; let i = index">
+            <img class="img-fluid" src="{{item.src}}" alt="slide {{i}}" />
           </ng-template>
         </ngb-carousel>
       </div>

@@ -48,17 +48,31 @@ export class ApprovalsAdminComponent implements OnInit {
 
   }
 
-  confirmar(template: any) {
-      this.eventoService.aprovarEvento(this.evento).subscribe(
-        () => {
-          template.hide();
-          this.getEventosPendentes();
-          if (this.type){
-          this.toastr.success('Aprovado com Sucesso!');
-          } else {
-          this.toastr.success('Evento foi negado...');
-          }
-      } )
+  async confirmar(template: any) {
+    if (this.type) {
+      await this.eventoService.aprovarEvento(this.evento)
+        .then(
+          () => {
+            template.hide();
+            this.getEventosPendentes();
+              this.toastr.success('Aprovado com Sucesso!');
+          })
+        .catch((error) => {
+          this.toastr.warning('O email não foi enviado')
+        });
+    }
+    else {
+      await this.eventoService.negarEvento(this.evento)
+        .then(
+          () => {
+            template.hide();
+            this.getEventosPendentes();
+            this.toastr.success('Evento foi negado...');
+          })
+        .catch((error) => {
+          this.toastr.warning('O email não foi enviado')
+        })
+    }
   }
 
   openModal(template: any) {
