@@ -13,14 +13,12 @@ import { LotCategory } from '../models/LotCategory';
 export class EventoService {
   baseURL = environment.baseURL + '/Event';
 
-  constructor(private http: HttpClient,
-    private userService: UsuarioService) { }
+  constructor(private http: HttpClient) { }
 
 
   async getEventosAprovados() {
       const result = await this.http.get<Evento[]>(`${this.baseURL}/Approved`).toPromise();
-      return result;
-   
+      return result;   
   }
 
   async getEventosPendentes() {
@@ -113,12 +111,14 @@ export class EventoService {
     return this.http.delete(`${this.baseURL}/${id}`);
   }
 
-  deleteLot(id: number) {
-    return this.http.delete(`${this.baseURL}/${id}`);
+  async deleteLot(id: number) {
+    const result = await this.http.delete(`${this.baseURL}/Lot/Delete/${id}`).toPromise()
+    return result;
   }
 
-  deleteLotCategory(id: number) {
-    return this.http.delete(`${this.baseURL}/${id}`);
+  async deleteLotCategory(id: number) {
+    const result = await this.http.delete(`${this.baseURL}/LotCategory/Delete/${id}`).toPromise();
+    return result;
   }
 
   getUserIdLogged() {

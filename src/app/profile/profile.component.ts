@@ -72,11 +72,11 @@ export class ProfileComponent implements OnInit {
 
   async ngOnInit() {
     try {
+      await this.carregarOpcoesCategoria();
       await this.validation();
       await this.getUser();
       this.calculaIdade();
       await this.getEventos();
-      await this.carregarOpcoesCategoria();
       await this.getLotCategories();
     } catch (error) {
 
@@ -207,7 +207,7 @@ export class ProfileComponent implements OnInit {
     this.user = await this.userService.getUserById(this.user.userId);
     this.user.dateBirth = new Date(this.user.dateBirth);
     this.user.dateBirth.setMonth(this.evento.dateStart.getMonth() - 1);
-    console.log(this.user);
+    console.log(this.user.addresses);
   }
 
   getFirstAddress() {

@@ -55,7 +55,6 @@ export class EditComponent implements OnInit {
     await this.validation();
     await this.carregarLots();
     await this.carregarOpcoesCategoria();
-    console.log(this.eventForm.controls);
   }
 
 
@@ -92,10 +91,10 @@ export class EditComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.evento.eventId = parseInt(params.id, 10);
     });
+
     this.evento = await this.eventoService.getEventoById(this.evento.eventId);
     this.evento.dateStart = new Date(this.evento.dateStart);
     this.evento.dateEnd = new Date(this.evento.dateEnd);
-
     this.imagens = this.evento.images.length;
   }
 
@@ -138,12 +137,16 @@ export class EditComponent implements OnInit {
     else {
       this.evento.lots.forEach((lot, index) => {
         this.addLot(lot);
+        lot.lotCategories.forEach(lotCateg => {
+          this.criarCategoriaLote(index, lotCateg)
+        });
       });
     }
   }
 
   async getHora1() {
 
+    this.evento.dateStart.setHours(this.evento.dateStart.getHours()-3);
     const hora = this.evento.dateStart.getHours();
     const minuto = this.evento.dateStart.getMinutes();
     let retorno = '';
@@ -159,6 +162,7 @@ export class EditComponent implements OnInit {
   }
 
   async getHora2() {
+    this.evento.dateEnd.setHours(this.evento.dateEnd.getHours()-3);
     const hora = this.evento.dateEnd.getHours();
     const minuto = this.evento.dateEnd.getMinutes();
     let retorno = '';
@@ -173,27 +177,26 @@ export class EditComponent implements OnInit {
     this.hora2 = retorno;
   }
 
-  async getDynamicDate(data: Date) {
-
-    data = new Date(data);
-    data.setMonth(data.getMonth() + 1);
-    return data;
-  }
 
   /** LOTE **/
   getLot(form: any) {
     return form.controls.lots.controls;
   }
 
+  addLotOnObject() {
+
+  }
 
   addLot(lot: any): void {
     this.lots = this.eventForm.get('lots') as FormArray;
+    // adicionando no FormArray
     this.lots.push(this.createLot(lot));
   }
 
   createLot(lot: any): FormGroup {
     if (lot === null) {
       return this.fb.group({
+        lotId: 0,
         dateStart: ['', Validators.required],
         dateEnd: ['', Validators.required],
         lotCategories: this.fb.array([])
@@ -201,8 +204,9 @@ export class EditComponent implements OnInit {
     }
     else {
       return this.fb.group({
-        dateStart: [lot.dateStart, Validators.required],
-        dateEnd: [lot.dateEnd, Validators.required],
+        lotId: lot.lotId,
+        dateStart: [new Date(lot.dateStart), Validators.required],
+        dateEnd: [new Date(lot.dateEnd), Validators.required],
         lotCategories: this.fb.array([])
       });
     }
@@ -212,11 +216,27 @@ export class EditComponent implements OnInit {
     this.lots = this.eventForm.get('lots') as FormArray;
     this.lots.removeAt(this.indexLot);
     template.hide();
+    if (this.indexLot !== -1) {
+      debugger
+      let lotId = this.evento.lots[this.indexLot].lotId;
+      this.eventoService.deleteLot(lotId)
+        .then( () => {
+          this.toastr.success('Lote excluído com sucesso')
+        })
+        .catch( err => {
+          this.toastr.error(err.message);
+        })
+    }
   }
 
   excluirLote(template: any, index: number) {
+    if (this.evento.lots[index]) {
+      this.indexLot = index;
+    }
+    else {
+      this.indexLot = -1;
+    }
     this.reference = 0;
-    this.indexLot = index;
     this.openModal(template);
   }
 
@@ -226,15 +246,14 @@ export class EditComponent implements OnInit {
 
 
   /******** CATEGORIA DE LOTE *******/
-  getLotCategory(i) {
-    const control = this.lots.controls[i].get('lotCategories') as FormArray
-    console.log(control)
+  getLotCategory(i: any) {
     return this.lots.controls[i].get('lotCategories') as FormArray;
   }
 
   newLotCategory(lotCateg: any): FormGroup {
     if (lotCateg === null) {
       return this.fb.group({
+        lotCategoryId: 0,
         desc: ['', [Validators.required]],
         priceCategory: [0, Validators.required]
       });
@@ -242,6 +261,7 @@ export class EditComponent implements OnInit {
 
     else {
       return this.fb.group({
+        lotCategoryId: lotCateg.lotCategoryId,
         desc: [lotCateg.desc, Validators.required],
         priceCategory: [lotCateg.priceCategory, [Validators.required, Validators.min(0)]]
       });
@@ -249,10 +269,9 @@ export class EditComponent implements OnInit {
 
   }
 
-  criarCategoriaLote(indexLot: number) {
+  criarCategoriaLote(indexLot: number, value: any) {
     this.lotCategories[indexLot] = this.lots.controls[indexLot].get('lotCategories') as FormArray;
-    this.lotCategories[indexLot].push(this.newLotCategory(null));
-
+    this.lotCategories[indexLot].push(this.newLotCategory(value));
   }
 
 
@@ -317,7 +336,6 @@ export class EditComponent implements OnInit {
         }))
       ).subscribe();
     }
-    console.log(this.evento.images)
   }
 
   newImage(img: string) {
@@ -360,7 +378,7 @@ export class EditComponent implements OnInit {
       capacity: [this.evento.capacity, [Validators.required, Validators.max(1000000)]],
       description: [this.evento.description, [Validators.required, Validators.maxLength(1000)]],
       dateStart: [this.evento.dateStart, Validators.required],
-      dateEnd: [this.evento.dateStart, Validators.required],
+      dateEnd: [this.evento.dateEnd, Validators.required],
       address: this.fb.group({
         street: [this.evento.address.street, [Validators.required, Validators.maxLength(255)]],
         complement: [this.evento.address.complement, [Validators.maxLength(255)]],

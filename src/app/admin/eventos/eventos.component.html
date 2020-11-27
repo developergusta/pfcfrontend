@@ -10,7 +10,11 @@
       </div>
     </div>
     <div>
-      <button class="btn btn-outline-primary" (click)="novoEvento(cadastro)">
+      <button class="btn btn-outline-primary" (click)="extrairRelatorio()">
+        &nbsp;
+        Extrair relatório de eventos mais vendidos
+      </button>
+      <button class="btn btn-outline-success" (click)="novoEvento(cadastro)">
         <i class="fa fa-plus-circle"></i>&nbsp;
         Novo Evento
       </button>
@@ -265,9 +269,13 @@
     </thead>
     <tbody>
       <tr *ngFor="let item of eventsMostSold; let i = index">
-        <th scope="row">i</th>
+        <th scope="row">{{i+1}}</th>
         <td>{{item.titleEvent}}</td>
+        <td>{{item.tickets.length}}</td>
       </tr>
     </tbody>
   </table>
 </div>
+
+
+

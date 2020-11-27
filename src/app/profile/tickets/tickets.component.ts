@@ -20,13 +20,14 @@ import { Cashback } from 'src/app/models/Cashback';
 export class TicketsComponent implements OnInit {
 
   user: User = new User();
-  tickets: Ticket[] = new Array();
-  events: Evento[] = new Array();
+  tickets: Ticket[] = [];
+  events: Evento[] = [];
   lotCategories: LotCategory[] = [];
   event: Evento;
   formCashback: string = '';
   ticket: Ticket;
   cashbackIsSolicited: boolean[] = [];
+  isLoading = true;
   constructor(
     private ticketService: TicketService,
     private router: Router,
@@ -39,7 +40,7 @@ export class TicketsComponent implements OnInit {
     await this.getUser();
     await this.getTickets();
     for (let index = 0; index < this.tickets.length; index++) {
-      await this.getEventsByIds(index);
+      await this.getEventById(index);
       await this.getLotCategoriesByIds(index);
     }
   }
@@ -49,17 +50,28 @@ export class TicketsComponent implements OnInit {
   }
 
   async getTickets() {
-    await this.ticketService.getTicketsByUserId(this.user.userId).then(
-      resp => this.tickets = resp
-    );
-    this.tickets.forEach((tkt, index) => {
-      if(tkt.cashback){
-        this.cashbackIsSolicited[index] = true;
-      }
-    });
+    try {
+      await this.ticketService.getTicketsByUserId(this.user.userId).then(
+        resp => {
+          this.tickets = resp
+        }
+      ); 
+      console.log(this.tickets)
+      this.tickets.forEach((tkt, index) => {
+        if (tkt.cashback) {
+          this.cashbackIsSolicited[index] = true;
+        }
+      });
+    } catch (error) {
+      console.log(error)
+    }
+    finally{
+      this.isLoading = false;
+    }
+    
   }
 
-  async getEventsByIds(index: number) {
+  async getEventById(index: number) {
     let evento = await this.eventService.getEventoById(this.tickets[index].eventId);
     this.events.push(evento);
   }
@@ -93,7 +105,7 @@ export class TicketsComponent implements OnInit {
     doc.save("voucher.pdf");
   }
 
-  requestCashback(template: any, tkt: Ticket){
+  requestCashback(template: any, tkt: Ticket) {
     this.ticket = tkt;
     this.openModal(template);
   }
@@ -103,13 +115,13 @@ export class TicketsComponent implements OnInit {
     this.ticket.cashback.cashbackId = 0;
     this.ticket.cashback.description = this.formCashback;
     await this.ticketService.requestCashback(this.ticket)
-      .then( () => {
-        this.toastr.success('Sua solicitação foi enviada a um administrador, aguarde que iremos entrar em contato') 
-      }).catch( error => {
+      .then(() => {
+        this.toastr.success('Sua solicitação foi enviada a um administrador, aguarde que iremos entrar em contato')
+      }).catch(error => {
         this.toastr.error('erro na solicitação: ' + this.user);
         console.log(error);
       }
-    );
+      );
     template.hide();
     console.log(JSON.stringify(this.ticket));
   }

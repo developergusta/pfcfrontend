@@ -21,6 +21,7 @@ export class NavbarComponent implements OnInit {
   constructor(public location: Location, private router: Router, private toastr: ToastrService, public userService: UsuarioService ) {
   }
 
+  
   // tslint:disable-next-line: typedef
   async ngOnInit() {
     this.router.events.subscribe((event) => {

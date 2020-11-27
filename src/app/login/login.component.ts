@@ -16,57 +16,57 @@ export class LoginComponent implements OnInit {
   focus1;
   model: any = {};
   constructor(
-      private usuarioService: UsuarioService,
-      private loginService: LoginService
+    private usuarioService: UsuarioService,
+    private loginService: LoginService
     , public router: Router
-    , private toast: ToastrService
+    , private toastr: ToastrService
     , private fb: FormBuilder) { }
 
   registerForm: FormGroup;
 
   ngOnInit(): void {
     this.validation();
-    if (window.sessionStorage.getItem('token') != null){
+    if (window.sessionStorage.getItem('token') != null) {
       this.router.navigate(['/home']);
       setInterval(() => {
         window.location.reload(); // atualiza a página após 3 segundos
-       }, 2000);
+      }, 2000);
     }
   }
 
   login(): any {
-    if (this.registerForm.valid){
+    if (this.registerForm.valid) {
       this.model = Object.assign({}, this.registerForm.value);
       this.loginService.login(this.model)
-      .subscribe(
-        (response) => {
-           const user: any = response; 
-          if (user) {
-            const jwtHelper = new JwtHelperService();
-            const decodedToken = jwtHelper.decodeToken(user.token);
-            sessionStorage.setItem('token', user.token);
-            sessionStorage.setItem('user', JSON.stringify(user.user));
-            sessionStorage.setItem('email', decodedToken.email);
-            const role = decodedToken.role;
-            this.toast.success('Você está logado');
-          console.log(role)
-          if (role === 'ADMINISTRADOR'){
-            this.router.navigate(['/admin/usuarios']);
+        .subscribe(
+          (response) => {
+            const user: any = response;
+            if (user) {
+              const jwtHelper = new JwtHelperService();
+              const decodedToken = jwtHelper.decodeToken(user.token);
+              sessionStorage.setItem('token', user.token);
+              sessionStorage.setItem('user', JSON.stringify(user.user));
+              sessionStorage.setItem('email', decodedToken.email);
+              const role = decodedToken.role;
+              this.toastr.success('Você está logado');
+              
+              if (role === 'ADMINISTRADOR') {
+                this.router.navigate(['/admin/usuarios']);
+              }
+              else if (role === 'USUARIO') {
+                this.router.navigate(['/profile']);
+              }
+            }
+
+          },
+          (err) => {
+            this.toastr.error(err.error);
           }
-          else if (role === 'USUARIO'){
-            this.router.navigate(['/profile']);
-          }
-          }
-          
-        },
-        () => {
-          this.toast.error('Email ou senha incorretos');
-        }
-      );
+        );
     }
   }
 
-  public validation(): any{
+  public validation(): any {
     this.registerForm = this.fb.group({
       login: this.fb.group({
         email: ['', [Validators.required, Validators.maxLength(255)]],

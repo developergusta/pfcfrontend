@@ -129,7 +129,8 @@ export class UsuarioService {
 
   async deletePhone(phoneId: number) {
     const result = await this.http.delete(`${this.baseURL}/Phone/Delete/${phoneId}`).toPromise();
-    return result;
+    debugger
+    return result
   }
   /** DELETE  **/ 
 

@@ -33,7 +33,7 @@
             </div>
           </div>
           <div class="mt-5 py-5 border-top text-center">
-            <table class="table table-striped">
+            <table class="table table-striped" *ngIf="!isLoading">
               <thead>
                 <tr>
                   <th scope="col">#</th>
@@ -43,20 +43,20 @@
                   <th scope="col">Opções</th>
                 </tr>
               </thead>
-              <tbody *ngIf="tickets">
+              <tbody *ngIf="tickets.length">
                 <tr *ngFor="let item of tickets; let i = index">
                   <th scope="row">{{i+1}}</th>
                   <td>{{events[i].titleEvent}} - {{events[i].dateStart | DateTimeFormatPipe}}</td>
-                  <td>{{events[i].titleEvent}} - {{events[i].dateStart | DateTimeFormatPipe}}</td>
+                  <td>{{lotCategories[i].desc}} - {{lotCategories[i].priceCategory | number}}</td>
                   <td>{{item.registerTime | DateTimeFormatPipe}}</td>
                   <td>
-                    <button ngbTooltip="Abrir PDF" class="btn btn-lg btn-info" type="button" (click)="downloadTicket(item)">
+                    <button ngbTooltip="Abrir PDF" class="btn btn-lg btn-info" type="button" (click)="downloadTicket(item)" >
                       <span class="btn-inner--icon">
                         <i class="fas fa-ticket-alt mr-2"></i>
                       </span>
                       Ingresso
                     </button>
-                    <button *ngIf="!cashbackIsSolicited[i]" ngbTooltip="Solicitar reembolso" class="btn btn-sm btn-danger" type="button"
+                    <button *ngIf="!cashbackIsSolicited[i]" ngbTooltip="Solicitar reembolso" class="btn btn-sm btn-danger" type="button" 
                       (click)="requestCashback(modalCashback, item)">
                       <span class="btn-inner--icon">
                         <i class="fas fa-window-close mr-2"></i>

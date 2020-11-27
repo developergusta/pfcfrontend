@@ -55,10 +55,11 @@ export class ApprovalsAdminComponent implements OnInit {
           () => {
             template.hide();
             this.getEventosPendentes();
-              this.toastr.success('Aprovado com Sucesso!');
+            this.toastr.success('Aprovado com Sucesso!');
           })
         .catch((error) => {
           this.toastr.warning('O email não foi enviado')
+          this.getEventosPendentes();
         });
     }
     else {

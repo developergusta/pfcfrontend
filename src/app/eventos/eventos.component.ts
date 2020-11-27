@@ -26,7 +26,7 @@ export class EventosComponent implements OnInit {
   evento: Evento;
   modoSalvar = 'post';
   menorPreco: number;
-  now = new Date();
+  now: Date;
 
   imagemLargura = 50;
   imagemMargem = 2;
@@ -43,9 +43,39 @@ export class EventosComponent implements OnInit {
 
   async ngOnInit() {
 
-    await this.getEventos();
+    try {
+      this.now = new Date();
+      this.eventos = await this.getEventos();
+      this.filterEventsOcurreds();
+    } catch (error) {
+
+    }
 
     this.getMenorValor(1);
+  }
+
+
+
+  async getEventos() {
+    this.eventos = await this.eventoService.getEventosAprovados();
+
+    console.log(this.eventos)
+    this.eventos.forEach((evts) => {
+      if (!evts.images.length || evts.images === null) {
+        let img = new Image();
+        img.src = 'https://image.flaticon.com/icons/png/512/2558/2558944.png';
+        evts.images.push(img);
+      }
+    });
+
+    return this.eventos;
+  }
+
+  filterEventsOcurreds() {
+
+    this.eventos = this.eventos.filter(
+      evento => new Date(evento.dateEnd) >= this.now
+    );
 
   }
 
@@ -75,54 +105,9 @@ export class EventosComponent implements OnInit {
       evento => evento.titleEvent.toLocaleLowerCase().indexOf(filtrarPor) !== -1
     );
   }
-
-  async getEventos() {
-
-    await this.eventoService.getEventosAprovados().then(
-      events => this.eventos = events
-    );
-
-    console.log(this.eventos)
-    this.eventos.forEach((x) => {
-      if (!x.images.length || x.images === null) {
-        let img = new Image();
-        img.src = 'https://image.flaticon.com/icons/png/512/2558/2558944.png';
-        x.images.push(img);
-      }
-    });
-
-
-
-    this.eventos.forEach((item, index, array) => {
-      console.log(index)
-      if (this.now > new Date(item.dateEnd)) {
-        array.splice(index)
-      }
-    })
-
-  }
-
-  excluirEvento(evento: Evento, template: any) {
-    this.openModal(template);
-    this.evento = evento;
-    this.bodyDeletarEvento = `Tem certeza que deseja excluir o Evento: ${evento.category}, Código: ${evento.eventId}`;
-  }
-
+  
   openModal(template: any) {
     template.show();
-  }
-
-  confirmeDelete(template: any) {
-    this.eventoService.deleteEvento(this.evento.eventId).subscribe(
-      () => {
-        template.hide();
-        this.getEventos();
-        this.toastr.success('Deletado com Sucesso');
-      }, error => {
-        this.toastr.error('Erro ao tentar Deletar');
-        console.log(error);
-      }
-    );
   }
 
   public validation(): any {

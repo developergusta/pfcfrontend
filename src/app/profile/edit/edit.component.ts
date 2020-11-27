@@ -12,6 +12,7 @@ import { Evento } from 'src/app/models/Evento';
 import * as moment from 'moment';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { finalize } from 'rxjs/operators';
+import { Image } from 'src/app/models/Image';
 
 @Component({
   selector: 'app-edit',
@@ -42,7 +43,6 @@ export class EditComponent implements OnInit {
 
   constructor(
     private correios: CorreiosService,
-    private eventoService: EventoService,
     private router: Router,
     private userService: UsuarioService,
     private fb: FormBuilder,
@@ -52,18 +52,17 @@ export class EditComponent implements OnInit {
 
   async ngOnInit() {
     try {
+      await this.carregarOpcoesTelefone();
       await this.getUser();
       this.validation();
-      this.user.dateBirth = new Date(this.user.dateBirth);
       this.calculaIdade();
       this.fileNameToUpdate = this.user.image.src.toString();
-      this.carregarOpcoesTelefone();
     } catch (error) {
       console.log(error);
     }
   }
 
-  carregarOpcoesTelefone() {
+  async carregarOpcoesTelefone() {
     this.options = [
       { id: 1, name: 'Residencial' },
       { id: 2, name: 'Celular' },
@@ -73,7 +72,14 @@ export class EditComponent implements OnInit {
   async getUser() {
     this.user = JSON.parse(window.sessionStorage.getItem('user'));
     this.user = await this.userService.getUserById(this.user.userId);
-    console.log(this.user)
+
+    if(!this.user.image){
+      let img = new Image();
+      img.src = 'https://toppng.com/uploads/preview/circled-user-icon-user-pro-icon-11553397069rpnu1bqqup.png'
+      this.user.image = img;
+    }
+    
+    this.user.dateBirth = new Date(this.user.dateBirth);
   }
 
 
@@ -94,9 +100,6 @@ export class EditComponent implements OnInit {
         state: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
         city: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
       }),
-      // user: this.fb.group({
-      //   userId: ['', Validators.required]
-      // })
     });
   }
 
@@ -113,7 +116,6 @@ export class EditComponent implements OnInit {
       this.correios.consultaCep(cep).then(addr => {
         this.populateAddress(addr, i);
       });
-      // this.eventForm.get('address.city').setValue('abc');
     }
   }
 
@@ -165,6 +167,11 @@ export class EditComponent implements OnInit {
     }
     else{
       await this.userService.deletePhone(this.user.phones[this.index].phoneId)
+        .then(() => 
+          this.toastr.success('Telefone Excluído com sucesso'))
+        .catch((err) => {
+          this.toastr.error(err.message);
+        })
     }
     template.hide();
   }
@@ -226,6 +233,7 @@ export class EditComponent implements OnInit {
 
   async confirmaEdicao(template: any) {
     try {
+      console.log(JSON.stringify(this.user))
       await this.userService.updateUser(this.user);
       template.hide();
       this.getUser();

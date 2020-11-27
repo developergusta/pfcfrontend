@@ -9,16 +9,31 @@ import { EventoService } from 'src/app/_services/evento.service';
 })
 export class FeaturedSectionComponent implements OnInit {
   eventos: Evento[];
+  now = new Date();
 
-  constructor(private _eventoService: EventoService) { }
+  constructor(private eventoService: EventoService) { }
 
-  ngOnInit(): void {
-    this.getTodayEvent();
+  async ngOnInit() {
+    var week = new Date(this.now);
+    week.setDate(week.getDate() + 70);
+    await this.getEventsToShow(week);
   }
 
-  async getTodayEvent() {
-    const result:any = await this._eventoService.getTodayEvent();
-    this.eventos = result;
+
+  async getEventsToShow(week: Date) {
+    this.eventos = await this.eventoService.getEventosAprovados();
+    this.eventos.forEach( x => {
+      if(new Date(x.dateStart) > this.now && new Date(x.dateStart) < week){
+        x.dateStart
+      }
+      else{
+        console.log('no')
+      }
+    })
+    this.eventos = this.eventos.filter(x => 
+      new Date(x.dateStart) > this.now && new Date(x.dateStart) < week
+    )
+    
   }
 
 }

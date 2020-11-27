@@ -3,6 +3,8 @@ import { EventoService } from 'src/app/_services/evento.service';
 import { ToastrService } from 'ngx-toastr';
 import { Evento } from 'src/app/models/Evento';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-eventos-admin',
@@ -39,6 +41,7 @@ export class EventosAdminComponent implements OnInit {
     try {
       this.validation();
       await this.getEventosAprovados();
+      await this.getEventsMostSold();
       await this.carregarOpcoesCategoria();
       this.getHora1();
     } catch (error) {
@@ -86,7 +89,8 @@ export class EventosAdminComponent implements OnInit {
   }
 
   async getEventsMostSold(){
-    this.eventsMostSold = await this.eventoService.getEventsMostSoldInYear()
+    this.eventsMostSold = await this.eventoService.getEventsMostSoldInYear();
+    console.log(this.eventsMostSold);
   }
 
   updtHorario1(event: any) {
@@ -138,6 +142,12 @@ export class EventosAdminComponent implements OnInit {
     }
     retorno += minuto.toString();
     this.hora1 = retorno;
+  }
+
+  extrairRelatorio(){
+    let doc = new jsPDF();
+    autoTable(doc, { html: '#extrato' });
+    doc.save("relatorio.pdf");
   }
 
   async salvarAlteracao(template: any) {

@@ -39,7 +39,8 @@
                 <a [routerLink]="['/profile/edit']" class="btn btn-sm btn-default float-right">
                   Editar perfil
                 </a>
-                <a *ngIf="user.events" [routerLink]="['/profile/events']" class="btn btn-sm btn-danger float-right">
+                <a *ngIf="user.events.length" [routerLink]="['/profile/events']"
+                  class="btn btn-sm btn-danger float-right">
                   Meus Eventos
                 </a>
               </div>
@@ -53,13 +54,14 @@
               </div>
             </div>
           </div>
-          <div class="text-center mt-5">
+          <div class="text-center mt-5" *ngIf="user">
             <h3>{{user.name}}
               <span class="font-weight-light">, {{idade}}</span>
             </h3>
-            <div class="h6 font-weight-300" *ngIf="user.addresses"><i
-                class="ni location_pin mr-2"></i>{{user.addresses[0].city}},
-              {{user.addresses[0].country}}</div>
+            <div class="h6 font-weight-300" *ngIf="user.addresses">
+              <i class="ni location_pin mr-2"></i>
+              <p *ngIf="user.addresses.length">{{user.addresses[0].city}},
+              {{user.addresses[0].country}}</p></div>
             <div class="h6 mt-4"><i class="ni business_briefcase-24 mr-2"></i>_
             </div>
             <div><i class="ni education_hat mr-2"></i>Usuário novo</div>

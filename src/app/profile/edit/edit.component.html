@@ -26,7 +26,10 @@
             <div class="col-lg-3 order-lg-2">
               <div class="card-profile-image">
                 <a href="javascript:void(0)">
-                  <img src="{{user.image.src}}" class="rounded-circle">
+                  <img src="{{user.image.src}}" class="rounded-circle" *ngIf="user.image">
+                  <img
+                    src="https://toppng.com/uploads/preview/circled-user-icon-user-pro-icon-11553397069rpnu1bqqup.png"
+                    class="rounded-circle" *ngIf="!user.image">
                 </a>
               </div>
             </div>
@@ -39,22 +42,14 @@
             <div class="col-lg-4 order-lg-1">
               <div class="card-profile-stats d-flex justify-content-center">
                 <div>
-                  <span class="heading">22</span>
+                  <span class="heading" *ngIf="user.tickets">{{user.tickets.length}}</span>
                   <span class="description" (click)="getTickets()">Meus Tickets</span>
                 </div>
-                <!-- <div>
-                  <span class="heading">10</span>
-                  <span class="description">Photos</span>
-                </div>
-                <div>
-                  <span class="heading">89</span>
-                  <span class="description">Comments</span>
-                </div> -->
               </div>
             </div>
           </div>
           <div class="text-center mt-5">
-            <input type="file" accept="image/*" (change)="onFileChanged($event)" style="display: none" #fileInput [(ngModel)]="user.image.src">
+            <input type="file" accept="image/*" (change)="onFileChanged($event)" style="display: none" #fileInput [(ngModel)]="user.image.src" >
             <button class="btn btn-lg btn-info" type="button" (click)="fileInput.click()">Alterar Imagem</button>
             <hr>
             <div class="form-row">

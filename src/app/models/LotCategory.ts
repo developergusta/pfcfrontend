@@ -1,7 +1,7 @@
 export class LotCategory{
   constructor() { }
 
-  id?: number;
+  lotCategoryId?: number;
   desc?: string;
   priceCategory: number;
   lotId?: number;

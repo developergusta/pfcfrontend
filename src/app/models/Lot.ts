@@ -2,7 +2,7 @@ import { LotCategory } from './LotCategory';
 export class Lot {
   constructor() {}
 
-  id?: number;
+  lotId?: number;
   dateStart?: Date;
   dateEnd?: Date;
   eventId?: number;

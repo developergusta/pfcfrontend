@@ -2,11 +2,35 @@
   <hr />
 </section>
 <div class="container py-md">
+  <div class="desc-evento">
+    <ngb-tabset #tabs [justify]="'center'" class="custom-tab-content flex-column flex-md-row" type="pills" *ngIf="lot">
+      <ngb-tab id="tab-category">
+        <ng-template ngbTabTitle>
+          <i class="fas fa-calendar-day mr-2" *ngIf="evento"></i> {{evento.titleEvent}}  -  {{evento.category}}
+        </ng-template>
+        <ng-template ngbTabContent>
+          <h5>
+            Início: {{ evento.dateStart | date: "short" }}
+          </h5>
+          <h5>
+            Término: {{ evento.dateEnd | date: "short" }}
+          </h5>
+          <p>{{evento.description}}</p>
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+  </div>
+
+  <br>
+  <br>
+  <br>
+
   <div class="row justify-content-between align-items-center">
     <div class="col-lg-6 mb-6 mb-lg-0">
       <div class="mb-3">
         <small class="text-uppercase font-weight-bold" *ngIf="lot">Selecione o tipo de ingresso</small>
-        <small class="text-uppercase font-weight-bold" *ngIf="!lot">Este evento não está disponível para compra</small>
+        <small class="text-uppercase font-weight-bold" *ngIf="!lot"><br><br>Este evento não está disponível para
+          compra</small>
       </div>
       <ngb-tabset #tabs [justify]="'center'" class="custom-tab-content flex-column flex-md-row" type="pills"
         *ngIf="lot">
@@ -31,7 +55,7 @@
         </ngb-tab>
         <ngb-tab [disabled]="!selectedLotCategory" id="tab-confirm">
           <ng-template ngbTabTitle>
-            <i class="ni ni-calendar-grid-58 mr-2"></i> Confirmar
+            <i class="fas fa-check-double mr-2"></i> Confirmar
             <span *ngIf="selectedLotCategory">{{
               selectedLotCategory.desc
             }}</span>
@@ -95,9 +119,10 @@
     <div class="col-lg-6 mb-lg-auto">
       <div class="rounded shadow-lg overflow-hidden transform-perspective-right">
         <ngb-carousel interval="2000">
-          <ng-template ngbSlide *ngFor="let item of evento.images; let i = index">
-            <img class="img-fluid" src="{{item.src}}" alt="slide {{i}}" />
-          </ng-template>
+          <!-- <div *ngIf="evento.images"> -->
+            <ng-template ngbSlide *ngFor="let item of evento.images; let i = index">
+              <img class="img-fluid" src="{{item.src}}" alt="slide {{i}}" />
+            </ng-template>
         </ngb-carousel>
       </div>
     </div>

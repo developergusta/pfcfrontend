@@ -175,7 +175,7 @@ export class UsuariosAdminComponent implements OnInit {
       () => {
         template.hide();
         this.getUsuarios();
-        this.toastr.success(`Usuário ${this.usuario.name}reativado com Sucesso`);
+        this.toastr.success(`Usuário ${this.usuario.name} reativado com Sucesso`);
       }).catch( error => {
         this.toastr.error('Erro ao tentar Deletar');
         console.log(error);

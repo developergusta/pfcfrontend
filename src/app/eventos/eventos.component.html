@@ -6,18 +6,10 @@
     <div class="form-group" [ngClass]="{ focused: focus1 === true }">
       <div class="input-group input-group-alternative mb-4">
         <div class="input-group-prepend">
-          <span class="input-group-text"
-            ><i class="ni ni-zoom-split-in"></i
-          ></span>
+          <span class="input-group-text"><i class="ni ni-zoom-split-in"></i></span>
         </div>
-        <input
-          class="form-control"
-          placeholder="Estou procurando o evento..."
-          type="text"
-          (focus)="focus1 = true"
-          (blur)="focus1 = false"
-          (change)="filtrarEventos($event)"
-        />
+        <input class="form-control" placeholder="Estou procurando o evento..." type="text" (focus)="focus1 = true"
+          (blur)="focus1 = false" (change)="filtrarEventos($event)" />
       </div>
     </div>
   </div>
@@ -28,15 +20,11 @@
       <div class="col col-lg-4 mb-5" *ngFor="let item of eventos">
         <div class="property-card">
           <a [routerLink]="['/eventos/' + item.eventId + '/category']">
-            <div
-              class="property-image"
-              [style.backgroundImage]="'url(' + item.images[0].src + ')'"
-            >
+            <div class="property-image" [style.backgroundImage]="'url(' + item.images[0].src + ')'">
               <div class="property-image-title">
-                <!-- Optional <h5>Card Title</h5> If you want it, turn on the CSS also. -->
               </div>
-            </div></a
-          >
+            </div>
+          </a>
           <div class="property-description">
             <h5>{{ item.titleEvent }}</h5>
             <!-- <p>{{Math.min( item.lot.map(x => x.) )}}</p> -->
@@ -44,7 +32,6 @@
           </div>
           <a href="#">
             <div class="property-social-icons">
-              <!-- I would usually put multipe divs inside here set to flex. Some people might use Ul li. Multiple Solutions -->
             </div>
           </a>
         </div>
