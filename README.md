@@ -12,5 +12,6 @@
 ## Front-end:
 <ul>
   <li>Angular 10.0</li>
+  <li>Typescript</li>
 </ul>
 
