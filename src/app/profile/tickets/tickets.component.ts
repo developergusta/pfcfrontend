@@ -27,22 +27,27 @@ export class TicketsComponent implements OnInit {
   formCashback: string = '';
   ticket: Ticket;
   cashbackIsSolicited: boolean[] = [];
-  isLoading = true;
   constructor(
     private ticketService: TicketService,
-    private router: Router,
     private userService: UsuarioService,
     private eventService: EventoService,
     private toastr: ToastrService
   ) { }
 
   async ngOnInit() {
-    await this.getUser();
-    await this.getTickets();
-    for (let index = 0; index < this.tickets.length; index++) {
-      await this.getEventById(index);
-      await this.getLotCategoriesByIds(index);
+    try {
+      await this.getUser();
+      await this.getTickets();
+      for (let index = 0; index < this.tickets.length; index++) {
+        await this.getEventById(index);
+        await this.getLotCategoriesByIds(index);
+      }
+      console.log(this.tickets.length)
+      console.log(this.lotCategories.length)
+    } catch (error) {
+
     }
+
   }
 
   async getUser() {
@@ -55,7 +60,7 @@ export class TicketsComponent implements OnInit {
         resp => {
           this.tickets = resp
         }
-      ); 
+      );
       console.log(this.tickets)
       this.tickets.forEach((tkt, index) => {
         if (tkt.cashback) {
@@ -65,10 +70,6 @@ export class TicketsComponent implements OnInit {
     } catch (error) {
       console.log(error)
     }
-    finally{
-      this.isLoading = false;
-    }
-    
   }
 
   async getEventById(index: number) {
@@ -77,8 +78,13 @@ export class TicketsComponent implements OnInit {
   }
 
   async getLotCategoriesByIds(index: number) {
-    let lotCateg = await this.eventService.getLotCategoriesByTickets(this.tickets);
-    lotCateg.forEach(x => this.lotCategories.push(x));
+    this.user.tickets.forEach(x => this.eventService.getLotCategoryByTicket(x)
+      .then(result => {
+        this.lotCategories.push(result);
+      })
+      .catch(err => {
+        this.lotCategories.push(new LotCategory());
+      }));
   }
 
   public async downloadTicket(ticket: Ticket) {
@@ -118,7 +124,7 @@ export class TicketsComponent implements OnInit {
       .then(() => {
         this.toastr.success('Sua solicitação foi enviada a um administrador, aguarde que iremos entrar em contato')
       }).catch(error => {
-        this.toastr.error('erro na solicitação: ' + this.user);
+        this.toastr.error('erro na solicitação');
         console.log(error);
       }
       );

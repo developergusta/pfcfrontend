@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Evento } from 'src/app/models/Evento';
+import { Image } from 'src/app/models/Image';
 import { EventoService } from 'src/app/_services/evento.service';
 
 @Component({
@@ -15,7 +16,7 @@ export class FeaturedSectionComponent implements OnInit {
 
   async ngOnInit() {
     var week = new Date(this.now);
-    week.setDate(week.getDate() + 70);
+    week.setDate(week.getDate() + 40);
     await this.getEventsToShow(week);
   }
 
@@ -32,7 +33,16 @@ export class FeaturedSectionComponent implements OnInit {
     })
     this.eventos = this.eventos.filter(x => 
       new Date(x.dateStart) > this.now && new Date(x.dateStart) < week
-    )
+    );
+    
+
+    this.eventos.forEach((evts) => {
+      if (!evts.images.length || evts.images === null) {
+        let img = new Image();
+        img.src = 'https://image.flaticon.com/icons/png/512/2558/2558944.png';
+        evts.images.push(img);
+      }
+    });
     
   }
 

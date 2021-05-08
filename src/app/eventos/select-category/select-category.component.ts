@@ -51,7 +51,6 @@ export class SelectCategoryComponent implements OnInit {
       this.evento.images.push(img);
     }
 
-    console.log(this.evento)
   }
 
   confirmOrder(selectedLotCategory: number) {
@@ -65,8 +64,7 @@ export class SelectCategoryComponent implements OnInit {
   }
 
   async buyTickets() {
-    debugger
-    let token = JSON.parse(sessionStorage.getItem('token'));
+    let token = sessionStorage.getItem('token');
     if (token) {      
       const ticket = new Ticket();
       ticket.eventId = this.evento.eventId;
@@ -82,7 +80,7 @@ export class SelectCategoryComponent implements OnInit {
           this.toastr.success('Ingressos comprados com sucesso! Acesse seu perfil para baixar os vouchers!')
         })
         .catch((err) => {
-          this.toastr.error(err.error)
+          this.toastr.warning('O ingresso foi adquirido! porém não foi possível o envio do email.')
         });
     }
     else {

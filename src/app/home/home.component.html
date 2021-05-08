@@ -147,7 +147,7 @@
             </div>
             <div class="form-group col-md-6" formGroupName="address">
               <label>Estado</label>
-              <input type="text" class="form-control" formControlName="state"
+              <input type="text" class="form-control" formControlName="state" disabled
                 [ngClass]="{'is-invalid': eventForm.get('address.state').errors && eventForm.get('address.state').touched}"
                 placeholder="">
               <div *ngIf="eventForm.get('address.state').hasError('required') && eventForm.get('address.state').touched"
@@ -165,7 +165,7 @@
             </div>
             <div class="form-group col-md-6" formGroupName="address">
               <label>Cidade</label>
-              <input type="text" class="form-control" formControlName="city"
+              <input type="text" class="form-control" formControlName="city" disabled
                 [ngClass]="{'is-invalid': eventForm.get('address.city').errors && eventForm.get('address.city').touched}"
                 placeholder="">
               <div *ngIf="eventForm.get('address.city').hasError('required') && eventForm.get('address.city').touched"

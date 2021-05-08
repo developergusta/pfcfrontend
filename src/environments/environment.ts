@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  baseURL: 'https://ticket2u.azurewebsites.net',
-  // baseURL: 'http://localhost:5000',
+  // baseURL: 'https://ticket2u.azurewebsites.net',
+  baseURL: 'http://localhost:5000',
   firebase: {
     apiKey: "AIzaSyBPcqcnIFtJY7UYMdry75FWGltLITY5WXg",
     authDomain: "pfc-ticket2u.firebaseapp.com",
@@ -16,7 +16,7 @@ export const environment = {
     appId: "1:940072732852:web:04dc3f93f600c35ef02fe1",
     measurementId: "G-P10810CJV5"
   }
-};
+}; 
 
 /*
  * For easier debugging in development mode, you can import the following file

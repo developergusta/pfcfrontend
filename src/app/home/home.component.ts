@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { EventoService } from './../_services/evento.service';
 import { Component, OnInit } from '@angular/core';
 import { Evento } from '../models/Evento';
+import { Image } from '../models/Image';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -18,52 +19,68 @@ export class HomeComponent implements OnInit {
   evento: Evento;
   eventos: Evento[];
   eventForm: FormGroup;
+  optionsCateg = new Array();
   now = new Date();
   dateStart = new Date(this.now.getFullYear() - 120, this.now.getMonth(), this.now.getDate());
   dateEnd = new Date(this.now.getFullYear() - 14, this.now.getMonth(), this.now.getDate());
 
   constructor(
-              private correios: CorreiosService,
-              private eventoService: EventoService,
-              private router: Router,
-              private userService: UsuarioService,
-              private fb: FormBuilder,
-              private toastr: ToastrService) { }
+    private correios: CorreiosService,
+    private eventoService: EventoService,
+    private router: Router,
+    private userService: UsuarioService,
+    private fb: FormBuilder,
+    private toastr: ToastrService) { }
 
   async ngOnInit() {
     try {
-      this.getEventos();
-      this.validation();
+      await this.validation();
+      await this.getEventos();
+      await this.carregarOpcoesCategoria();
     } catch (error) {
 
     }
   }
 
-  getEventos() {
-    this.eventoService.getEventosAprovados().then(
+  async getEventos() {
+    await this.eventoService.getEventosAprovados().then(
       response => {
         this.eventos = response;
         console.log(this.eventos);
-        }).catch( error => {
-          console.log(error);
-        }
-    );
+      }).catch(error => {
+        console.log(error);
+      }
+      );
+  }
+
+  async carregarOpcoesCategoria() {
+    this.optionsCateg = [
+      { id: 'Futebol', name: 'Futebol' },
+      { id: 'Basquete', name: 'Basquete' },
+      { id: 'OutrosEsportes', name: 'Outros Esportes' },
+      { id: 'MuseuExposicoes', name: 'Museu e Exposições' },
+      { id: 'Reveillon', name: 'Reveillón' },
+      { id: 'Musica', name: 'Música' },
+      { id: 'Infantil', name: 'Infantil' },
+      { id: 'CursosWorkshops', name: 'Cursos e Workshops' },
+      { id: 'Drive-in', name: 'Drive-In' },
+      { id: 'Online', name: 'Online' }];
   }
 
   salvarAlteracao(template: any) {
     if (this.eventForm.valid) {
-        this.evento = this.eventForm.value;
-        this.evento.user = this.userService.getUserLogged;
+      this.evento = this.eventForm.value;
+      this.evento.user = this.userService.getUserLogged;
 
-        this.eventoService.postEvento(this.evento).subscribe(
-          () => {
-            template.hide();
-            //this.getEventosAprovados();
-            this.toastr.success('Inserido com Sucesso!');
-          }, error => {
-            this.toastr.error(`Erro ao Inserir: ${error}`);
-          }
-        );
+      this.eventoService.postEvento(this.evento).subscribe(
+        () => {
+          template.hide();
+          //this.getEventosAprovados();
+          this.toastr.success('Inserido com Sucesso!');
+        }, error => {
+          this.toastr.error(`Erro ao Inserir: ${error}`);
+        }
+      );
     }
   }
 
@@ -90,27 +107,27 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  buscaCEP(){
+  buscaCEP() {
     let cep = this.eventForm.get('address.zipCode').value;
-    if (cep != null && cep !== ''){
-      this.correios.consultaCep(cep).then( n => {
+    if (cep != null && cep !== '') {
+      this.correios.consultaCep(cep).then(n => {
         this.populateAddress(n);
       });
       // this.eventForm.get('address.city').setValue('abc');
     }
   }
 
-  populateAddress(address: any){
+  populateAddress(address: any) {
     this.eventForm.get('address.city').setValue(address.localidade);
     this.eventForm.get('address.state').setValue(address.uf);
     this.eventForm.get('address.street').setValue(address.logradouro);
   }
 
-  createModalEvent(template: any){
-    if (this.userService.isUserLoggedIn()){
+  createModalEvent(template: any) {
+    if (this.userService.isUserLoggedIn()) {
       this.novoEvento(template);
     }
-    else{
+    else {
       this.toastr.warning('Você precisa estar logado para criar um evento');
       this.router.navigate(['/login']);
     }

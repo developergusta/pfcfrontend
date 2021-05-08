@@ -217,7 +217,6 @@ export class EditComponent implements OnInit {
     this.lots.removeAt(this.indexLot);
     template.hide();
     if (this.indexLot !== -1) {
-      debugger
       let lotId = this.evento.lots[this.indexLot].lotId;
       this.eventoService.deleteLot(lotId)
         .then( () => {

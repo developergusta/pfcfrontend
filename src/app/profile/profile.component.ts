@@ -52,7 +52,7 @@ export class ProfileComponent implements OnInit {
       state: '',
       street: '',
       userId: this.user.userId
-    } 
+    }
   };
   eventos: Evento[];
   eventForm: FormGroup;
@@ -72,8 +72,9 @@ export class ProfileComponent implements OnInit {
 
   async ngOnInit() {
     try {
-      await this.carregarOpcoesCategoria();
+
       await this.validation();
+      await this.carregarOpcoesCategoria();
       await this.getUser();
       this.calculaIdade();
       await this.getEventos();
@@ -97,8 +98,7 @@ export class ProfileComponent implements OnInit {
       { id: 'Online', name: 'Online' }];
   }
 
-  showData(){
-    debugger
+  showData() {
     console.log(JSON.stringify(this.eventForm.get('dateEnd').value));
   }
 
@@ -122,7 +122,7 @@ export class ProfileComponent implements OnInit {
   agendarEvento() {
     this.evento = Object.assign({}, this.eventForm.value);
     this.evento.userId = this.user.userId;
-    if (this.eventForm.valid) {      
+    if (this.eventForm.valid) {
       this.startTimer();
       console.log(JSON.stringify(this.evento))
       this.eventoService.postEvento(this.evento).subscribe(
@@ -211,8 +211,8 @@ export class ProfileComponent implements OnInit {
   }
 
   getFirstAddress() {
-    if(this.user.addresses){
-    return this.user.addresses[0];
+    if (this.user.addresses) {
+      return this.user.addresses[0];
     }
   }
 
@@ -254,9 +254,15 @@ export class ProfileComponent implements OnInit {
   }
 
   async getLotCategories() {
-    this.lotCategories = await this.eventoService.getLotCategoriesByTickets(this.user.tickets);
+
+    this.user.tickets.forEach(x => this.eventoService.getLotCategoryByTicket(x)
+      .then(result => {
+        this.lotCategories.push(result);
+      })
+      .catch(err => {
+        this.lotCategories.push(new LotCategory());
+      }));
   }
 
 }
 
-;

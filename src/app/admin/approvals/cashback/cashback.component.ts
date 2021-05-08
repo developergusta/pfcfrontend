@@ -33,15 +33,19 @@ export class CashbackAdminComponent implements OnInit {
 
   async ngOnInit() {
     await this.getCashbacks();
+    // await this.filterCashbacks();
 
     console.log(this.cashbacks)
   }
 
   async getCashbacks() {
-    this.cashbacks = await this.ticketService.getCashbackList();
-    this.cashbacks.forEach((cashB, index, array) => {
+    this.cashbacks = await this.ticketService.getCashbackList(); 
+  }
+
+  async filterCashbacks(){
+    this.cashbacks.forEach((cashB, index) => {
       if (cashB.dateCashback) {
-        array.splice(index)
+        this.cashbacks.splice(index)
       }
     })
   }

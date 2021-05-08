@@ -17,8 +17,9 @@ export class EventoService {
 
 
   async getEventosAprovados() {
-      const result = await this.http.get<Evento[]>(`${this.baseURL}/Approved`).toPromise();
-      return result;   
+    const result = await this.http.get<Evento[]>(`${this.baseURL}/Approved`).toPromise();
+    console.log(result)
+    return result;
   }
 
   async getEventosPendentes() {
@@ -70,24 +71,19 @@ export class EventoService {
     return this.http.get<Evento[]>(`${this.baseURL}/getByTema/${tema}`);
   }
 
-  async getEventoById(id: number) {    
+  async getEventoById(id: number) {
     const result = await this.http.get<Evento>(`${this.baseURL}/${id}`).toPromise();
     return result;
   }
 
-  async getLotCategoriesById(id: number) {    
+  async getLotCategoriesById(id: number) {
     const result = await this.http.get<LotCategory>(`${this.baseURL}/LotCategory/${id}`).toPromise();
     return result;
-  }  
+  }
 
-  async getLotCategoriesByTickets(tickets: Ticket[]) {
-    let lotCategories = new Array();
-    tickets.forEach((tkt) => {
-      this.http.get<Evento>(`${this.baseURL}/LotCategoryByTicket/${tkt.lotCategoryId}`)
-        .toPromise()
-        .then(lotCateg => lotCategories.push(lotCateg));
-    });
-    return lotCategories;
+  async getLotCategoryByTicket(ticket: Ticket) {
+    const result = this.http.get<LotCategory>(`${this.baseURL}/LotCategoryByTicket/${ticket.lotCategoryId}`).toPromise()
+    return result;
   }
 
   postEvento(evento: Evento) {

@@ -39,10 +39,12 @@
                 <a [routerLink]="['/profile/edit']" class="btn btn-sm btn-default float-right">
                   Editar perfil
                 </a>
+                <div *ngIf="user.events">
                 <a *ngIf="user.events.length" [routerLink]="['/profile/events']"
                   class="btn btn-sm btn-danger float-right">
                   Meus Eventos
                 </a>
+              </div>
               </div>
             </div>
             <div class="col-lg-4 order-lg-1">
@@ -381,7 +383,8 @@
         <th scope="row">{{i+2}}</th>
         <td>Compra de ingresso</td>
         <td>{{item.registerTime | DateTimeFormatPipe}}</td>
-        <td class="text-danger">- R$ {{lotCategories[i].priceCategory | number : '1.2-2' }}</td>
+        <td class="text-danger" *ngIf="lotCategories[i]">- R$ {{lotCategories[i].priceCategory | number : '1.2-2' }}</td>
+        <td class="text-danger" *ngIf="!lotCategories[i]">- Esta categoria de lote foi excluída </td>
       </tr>
     </tbody>
   </table>
