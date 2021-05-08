@@ -1,6 +1,8 @@
 # Projeto de conclusão de curso - Universidade Mogi das Cruzes - Sistemas de Informação
 
-## Conclusão do curso: 2020 ✅
+## Conclusão do curso: dezembro/2020 ✅
+
+### Sistema feito para realizar a gestão de venda de ingressos (CRUD completo), permitindo que não só administradores criem eventos, mas também demais usuários cadastrados, apenas sendo necessário a aprovação de um administrador para que o evento seja publicado aos demais usuários que acessarem o site.
 
 # Tecnologias Usadas:
 ## Back-end:
